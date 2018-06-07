@@ -19,9 +19,5 @@ namespace TownsAndWarriors {
 		public override void InitializeShape() {
 			throw new NotImplementedException();
 		}
-
-		public override void DrawOnGameCell(int x, int y) {
-			throw new NotImplementedException();
-		}
 	}
 }

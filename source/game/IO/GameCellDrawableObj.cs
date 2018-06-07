@@ -4,6 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
 namespace TownsAndWarriors {
 	public abstract class GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
@@ -21,12 +31,19 @@ namespace TownsAndWarriors {
 
 		public abstract void InitializeShape();
 
-		public void SetGrid(System.Windows.Controls.Grid a) => grid = a;
+		public virtual void SetGrid(System.Windows.Controls.Grid a) => grid = a;
 		//public void SetPoint(int X, int Y){x = X; y = Y; }
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public abstract void DrawOnGameCell(int x, int y);
-	//	public void DrawOnGameCell() {
+		public virtual void DrawOnGameCell(int x, int y) {
+			if (shape == null)
+				InitializeShape();
+			Grid.SetRow(shape, y);
+			Grid.SetColumn(shape, x);
+			grid.Children.Remove(shape);
+			grid.Children.Add(shape);
+		}
+		//public void DrawOnGameCell() {
 		//}
 	}
 }

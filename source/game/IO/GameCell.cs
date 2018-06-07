@@ -28,13 +28,5 @@ namespace TownsAndWarriors {
 			else
 				shape.Fill = Brushes.Black;
 		}
-
-		public override void DrawOnGameCell(int x, int y) {
-			if (shape == null)
-				InitializeShape();
-			Grid.SetRow(shape, y);
-			Grid.SetColumn(shape, x);
-			grid.Children.Add(shape);
-		}
 	}
 }
