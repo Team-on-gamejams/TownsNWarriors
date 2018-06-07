@@ -5,29 +5,50 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors {
-	public class GameMap {
+	public partial class GameMap {
 		//---------------------------------------------- Fields ----------------------------------------------
+		int sizeX, sizeY;
 		List<List<GameCell>> map;
+		List<BasicSity> sities;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public GameMap(int sizeX, int sizeY) {
+		private GameMap(int SizeX, int SizeY) {
+			sizeX = SizeX; sizeY = SizeY;
 			map = new List<List<GameCell>>(sizeY);
 			for (int i = 0; i < sizeY; ++i) {
-				map[i] = new List<GameCell>(sizeX);
+				map.Add(new List<GameCell>(sizeX));
 				for (int j = 0; j < sizeX; ++j)
-					map[i][j] = new GameCell();
+					map[i].Add(new GameCell());
 			}
+
+			sities = new List<BasicSity>(settings.locateMemorySizeForTowns);
 		}
 
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		void GenerateRandomMap(int seed) {
+		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY) {
+			GameMap m = new GameMap(SizeX, SizeY);
 			Random rnd = new Random(seed);
+
+			for (int i = 0; i < m.sizeX; ++i)
+				m.map[0][i].IsOpenLeft = m.map[0][i].IsOpenRight = true;
+			for (int i = 0; i < m.sizeY; ++i)
+				m.map[i][m.sizeX - 1].IsOpenTop = m.map[i][m.sizeX - 1].IsOpenBottom = true;
+
+			m.map[0][0].IsOpenLeft = m.map[0][m.sizeX - 1].IsOpenRight = false;
+			m.map[0][0].IsOpenTop = m.map[m.sizeY - 1][m.sizeX - 1].IsOpenBottom = false;
+
+			m.sities.Add(new BasicSity());
+			m.sities.Add(new BasicSity());
+
+			m.map[0][0].Sity = m.sities[0];
+			m.map[m.sizeY - 1][m.sizeX - 1].Sity = m.sities[1];
+
+
+			return m;
 		}
-
-
 	}
 }
