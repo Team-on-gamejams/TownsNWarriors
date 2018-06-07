@@ -10,26 +10,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.window;
-
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.window {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for GameWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window {
-		public MainWindow() {
+	public partial class GameWindow : Window {
+		public GameWindow() {
 			InitializeComponent();
-			this.KeyDown += (a,b)=> {
-				GameWindow gameWindow = new GameWindow();
-				gameWindow.Show();
-				this.Close();
-
-				Game game = new Game(gameWindow);
-				game.Play();
-			};
 		}
 	}
 }

@@ -13,44 +13,37 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TownsAndWarriors.window;
 
 namespace TownsAndWarriors {
-	public class Game {
+	public abstract class GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
-		GameMap gameMap;
-		Grid mainGrid;
+		protected System.Windows.Controls.Grid grid;
+		protected System.Windows.Shapes.Shape shape;
+		//protected int x, y;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow) {
-			mainGrid = IOWindow.mainGameGrid;
+		public GameCellDrawableObj() {
 
-			int x = 5, y = 4;
-			for(int i = 0; i < x; ++i)
-				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-			for (int i = 0; i < y; ++i)
-				mainGrid.RowDefinitions.Add(new RowDefinition());
-
-			gameMap = GameMap.GenerateRandomMap(0, x, y);
 		}
 
+		public abstract void InitializeShape();
+
+		public virtual void SetGrid(System.Windows.Controls.Grid a) => grid = a;
+		//public void SetPoint(int X, int Y){x = X; y = Y; }
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public void Play() {
-			Init();
-			Loop();
+		public virtual void DrawOnGameCell(int x, int y) {
+			if (shape == null)
+				InitializeShape();
+			Grid.SetRow(shape, y);
+			Grid.SetColumn(shape, x);
+			grid.Children.Remove(shape);
+			grid.Children.Add(shape);
 		}
-
-		void Init() {
-			gameMap.DrawStatic(mainGrid);
-		}
-
-		void Loop() {
-			gameMap.UpdateMap();
-		}
-
+		//public void DrawOnGameCell() {
+		//}
 	}
 }

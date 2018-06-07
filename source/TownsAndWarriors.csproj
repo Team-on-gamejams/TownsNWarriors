@@ -69,6 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="window\GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -77,12 +81,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="game\sities\BasicSity.cs" />
-    <Compile Include="game\units\BasicUnit.cs" />
+    <Compile Include="game\IO\BasicSity.cs" />
+    <Compile Include="game\IO\BasicUnit.cs" />
+    <Compile Include="game\IO\GameCell.cs" />
+    <Compile Include="game\IO\GameMap.cs" />
+    <Compile Include="game\sity\BasicSity.cs" />
+    <Compile Include="game\unit\BasicUnit.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\map\GameCell.cs" />
-    <Compile Include="game\map\GameCellDrawableObj.cs" />
+    <Compile Include="game\IO\GameCellDrawableObj.cs" />
     <Compile Include="game\map\GameMap.cs" />
+    <Compile Include="game\settings\settings.cs" />
+    <Compile Include="window\GameWindow.xaml.cs">
+      <DependentUpon>GameWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

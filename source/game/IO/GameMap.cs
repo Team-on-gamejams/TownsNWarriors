@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,23 +14,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.window;
-
 namespace TownsAndWarriors {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window {
-		public MainWindow() {
-			InitializeComponent();
-			this.KeyDown += (a,b)=> {
-				GameWindow gameWindow = new GameWindow();
-				gameWindow.Show();
-				this.Close();
+	public partial class GameMap {
+		public void DrawStatic(Grid grid) {
+			for (int i = 0; i < sizeY; ++i)
+				for (int j = 0; j < sizeX; ++j) {
+					map[i][j].SetGrid(grid);
+					map[i][j].DrawOnGameCell(j, i);
+					if(map[i][j].Sity != null) {
+						map[i][j].Sity.SetGrid(grid);
+						map[i][j].Sity.DrawOnGameCell(j, i);
 
-				Game game = new Game(gameWindow);
-				game.Play();
-			};
+					}
+				}
+		}
+
+		public void UpdateMap() {
+
 		}
 	}
 }

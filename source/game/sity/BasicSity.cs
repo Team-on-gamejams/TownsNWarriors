@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors {
-	public class BasicSity : GameCellDrawableObj {
+	public partial class BasicSity : GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
+		public BasicSity() {
+
+		}
+
 
 		//---------------------------------------------- Methods ----------------------------------------------
 
-		//---------------------------------------------- IO ----------------------------------------------
-		public override void DrawOnGameCell() {
-			throw new NotImplementedException();
-		}
 	}
 }
