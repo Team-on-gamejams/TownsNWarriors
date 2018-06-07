@@ -31,6 +31,7 @@ namespace TownsAndWarriors.game {
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public Game(GameWindow IOWindow) {
 			mainGrid = IOWindow.mainGameGrid;
+			isPlay = true;
 
 			int x = 5, y = 4;
 			for(int i = 0; i < x; ++i)
