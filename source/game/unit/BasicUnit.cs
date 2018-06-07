@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors {
+using TownsAndWarriors.game.IO;
+
+
+namespace TownsAndWarriors.game.unit {
 	public partial class BasicUnit : GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
 

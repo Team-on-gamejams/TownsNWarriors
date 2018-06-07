@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.sity {
 	public partial class BasicSity {
 		public override void InitializeShape() {
 			shape = new Rectangle();

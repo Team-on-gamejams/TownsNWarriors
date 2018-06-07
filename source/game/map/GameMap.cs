@@ -4,7 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors {
+using TownsAndWarriors.game;
+using TownsAndWarriors.game.settings;
+
+using TownsAndWarriors.game.sity;
+
+
+namespace TownsAndWarriors.game.map {
 	public partial class GameMap {
 		//---------------------------------------------- Fields ----------------------------------------------
 		int sizeX, sizeY;
@@ -24,7 +30,7 @@ namespace TownsAndWarriors {
 					map[i].Add(new GameCell());
 			}
 
-			sities = new List<BasicSity>(settings.locateMemorySizeForTowns);
+			sities = new List<BasicSity>(values.locateMemorySizeForTowns);
 		}
 
 

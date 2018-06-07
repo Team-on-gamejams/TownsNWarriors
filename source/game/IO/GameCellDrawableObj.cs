@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.IO {
 	public abstract class GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected System.Windows.Controls.Grid grid;

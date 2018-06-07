@@ -13,9 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.window;
+using TownsAndWarriors.game;
 
-namespace TownsAndWarriors {
+
+namespace TownsAndWarriors.window {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>

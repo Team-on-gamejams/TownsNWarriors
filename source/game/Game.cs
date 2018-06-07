@@ -13,9 +13,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using TownsAndWarriors.window;
 
-namespace TownsAndWarriors {
+using TownsAndWarriors.game.map;
+
+
+namespace TownsAndWarriors.game {
 	public class Game {
 		//---------------------------------------------- Fields ----------------------------------------------
 		GameMap gameMap;

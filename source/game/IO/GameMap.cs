@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.map {
 	public partial class GameMap {
 		public void DrawStatic(Grid grid) {
 			for (int i = 0; i < sizeY; ++i)

@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.unit {
 	public partial class BasicUnit {
 		public override void InitializeShape() {
 			throw new NotImplementedException();

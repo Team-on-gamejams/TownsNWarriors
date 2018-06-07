@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors {
+using TownsAndWarriors.game.IO;
+
+namespace TownsAndWarriors.game.sity {
 	public partial class BasicSity : GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
 
