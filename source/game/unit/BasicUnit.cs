@@ -8,7 +8,7 @@ using TownsAndWarriors.game.IO;
 
 
 namespace TownsAndWarriors.game.unit {
-	public partial class BasicUnit : GameCellDrawableObj {
+	public partial class BasicUnit : GameCellDrawableObj, tickable {
 		//---------------------------------------------- Fields ----------------------------------------------
 
 		//---------------------------------------------- Properties ----------------------------------------------
@@ -17,6 +17,10 @@ namespace TownsAndWarriors.game.unit {
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicUnit() {
 
+		}
+
+		public void TickReact() {
+			throw new NotImplementedException();
 		}
 
 

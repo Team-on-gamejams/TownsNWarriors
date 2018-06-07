@@ -24,13 +24,14 @@ namespace TownsAndWarriors.game.map {
 					if(map[i][j].Sity != null) {
 						map[i][j].Sity.SetGrid(grid);
 						map[i][j].Sity.DrawOnGameCell(j, i);
-
 					}
 				}
 		}
 
 		public void UpdateMap() {
-
+			foreach (var sity in sities) {
+				sity.UpdateValue();
+			}
 		}
 	}
 }

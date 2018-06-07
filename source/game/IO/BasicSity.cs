@@ -20,6 +20,8 @@ namespace TownsAndWarriors.game.sity {
 			shape = new Rectangle();
 			shape.Fill = Brushes.Green;
 		}
+		public override void UpdateValue() {
 
+		}
 	}
 }

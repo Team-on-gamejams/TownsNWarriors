@@ -15,7 +15,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using TownsAndWarriors.window;
-
 using TownsAndWarriors.game.map;
 
 
@@ -24,14 +23,15 @@ namespace TownsAndWarriors.game {
 		//---------------------------------------------- Fields ----------------------------------------------
 		GameMap gameMap;
 		Grid mainGrid;
+		bool isPlay;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public Game(GameWindow IOWindow) {
-			mainGrid = IOWindow.mainGameGrid;
 			isPlay = true;
+			mainGrid = IOWindow.mainGameGrid;
 
 			int x = 5, y = 4;
 			for(int i = 0; i < x; ++i)
@@ -46,7 +46,13 @@ namespace TownsAndWarriors.game {
 		//---------------------------------------------- Methods ----------------------------------------------
 		public void Play() {
 			Init();
-			Loop();
+
+			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+			timer.Interval = 100;
+			timer.Tick += (a, b) => {
+				if (isPlay) Loop();
+			};
+			timer.Start();
 		}
 
 		void Init() {
@@ -55,6 +61,8 @@ namespace TownsAndWarriors.game {
 
 		void Loop() {
 			gameMap.UpdateMap();
+			gameMap.Tick();
+			++game.globalGameInfo.tick;
 		}
 
 	}

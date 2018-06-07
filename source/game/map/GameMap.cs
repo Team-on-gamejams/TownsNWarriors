@@ -8,6 +8,7 @@ using TownsAndWarriors.game;
 using TownsAndWarriors.game.settings;
 
 using TownsAndWarriors.game.sity;
+using TownsAndWarriors.game.unit;
 
 
 namespace TownsAndWarriors.game.map {
@@ -16,6 +17,7 @@ namespace TownsAndWarriors.game.map {
 		int sizeX, sizeY;
 		List<List<GameCell>> map;
 		List<BasicSity> sities;
+		List<BasicUnit> units;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
@@ -30,11 +32,16 @@ namespace TownsAndWarriors.game.map {
 					map[i].Add(new GameCell());
 			}
 
-			sities = new List<BasicSity>(values.locateMemorySizeForTowns);
+			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
 		}
 
 
 		//---------------------------------------------- Methods ----------------------------------------------
+		public void Tick() {
+			foreach (var sity in sities)
+				sity.TickReact();
+		}
+
 		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY) {
 			GameMap m = new GameMap(SizeX, SizeY);
 			Random rnd = new Random(seed);
