@@ -48,7 +48,7 @@ namespace TownsAndWarriors.game {
 			Init();
 
 			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-			timer.Interval = 100;
+			timer.Interval = 10;
 			timer.Tick += (a, b) => {
 				if (isPlay) Loop();
 			};

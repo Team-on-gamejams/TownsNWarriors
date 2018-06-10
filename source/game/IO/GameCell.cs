@@ -17,16 +17,19 @@ using System.Windows.Shapes;
 namespace TownsAndWarriors.game.map {
 	partial class GameCell {
 		public override void InitializeShape() {
-			shape = new Rectangle();
+			shape = new Grid();
 
+
+			var rect = new Rectangle();
 			if (IsOpenLeft && IsOpenBottom)
-				shape.Fill = Brushes.Orange;
+				rect.Fill = Brushes.Orange;
 			else if(IsOpenLeft || IsOpenRight)
-				shape.Fill = Brushes.Red;
+				rect.Fill = Brushes.Red;
 			else if (IsOpenTop || IsOpenBottom)
-				shape.Fill = Brushes.Blue;
+				rect.Fill = Brushes.Blue;
 			else
-				shape.Fill = Brushes.Black;
+				rect.Fill = Brushes.Black;
+			shape.Children.Add(rect);
 		}
 	}
 }

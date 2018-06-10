@@ -18,7 +18,7 @@ namespace TownsAndWarriors.game.IO {
 	public abstract class GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected System.Windows.Controls.Grid grid;
-		protected System.Windows.Shapes.Shape shape;
+		protected System.Windows.Controls.Grid shape;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 

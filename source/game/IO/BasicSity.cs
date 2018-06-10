@@ -16,12 +16,17 @@ using System.Windows.Shapes;
 
 namespace TownsAndWarriors.game.sity {
 	public partial class BasicSity {
+		Label text = new Label();
+
 		public override void InitializeShape() {
-			shape = new Rectangle();
-			shape.Fill = Brushes.Green;
+			shape = new Grid();
+			shape.Children.Add(new Rectangle() {
+				Fill = Brushes.Green
+			});
+			shape.Children.Add(text);
 		}
 		public override void UpdateValue() {
-
+			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 	}
 }

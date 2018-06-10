@@ -22,13 +22,11 @@ namespace TownsAndWarriors.game.sity {
 			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
 		}
 
+		//---------------------------------------------- Methods ----------------------------------------------
 		public void TickReact() {
-			if (maxWarriors != currWarriors || game.globalGameInfo.tick % ticksPerIncome == 0)
+			if (maxWarriors != currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0)
 				++currWarriors;
 		}
-
-
-		//---------------------------------------------- Methods ----------------------------------------------
 
 	}
 }
