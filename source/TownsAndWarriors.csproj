@@ -84,6 +84,8 @@
     </Compile>
     <Compile Include="audio\Audio.cs" />
     <Compile Include="game\basicInterfaces\withPlayerId.cs" />
+    <Compile Include="game\bot\BasicBot.cs" />
+    <Compile Include="game\bot\SimpleBot.cs" />
     <Compile Include="game\globalGameInfo.cs" />
     <Compile Include="game\IO\BasicSity.cs" />
     <Compile Include="game\IO\BasicUnit.cs" />

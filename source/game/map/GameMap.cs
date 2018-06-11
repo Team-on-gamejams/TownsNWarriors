@@ -20,6 +20,8 @@ namespace TownsAndWarriors.game.map {
 		List<BasicSity> sities;
 		List<BasicUnit> units;
 
+		game.bot.BasicBot bot;
+
 		//---------------------------------------------- Properties ----------------------------------------------
 		public List<BasicUnit> Units => units;
 		public List<List<GameCell>> Map => map;
@@ -36,13 +38,12 @@ namespace TownsAndWarriors.game.map {
 
 			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
 			units = new List<BasicUnit>(values.locateMemory_SizeForUnits);
+			bot = new game.bot.SimpleBot(this, sities, units);
 		}
 
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public void Tick() {
-			BotTurn();
-
 			foreach (var sity in sities)
 				sity.TickReact();
 
@@ -51,27 +52,8 @@ namespace TownsAndWarriors.game.map {
 				if (unit.TickReact())
 					goto REPEAT_UNITS_TURN;
 			}
-		}
 
-		int botStreakCnt = 0;
-		bool botStreak = false;
-		void BotTurn() {
-			if (globalGameInfo.tick > 100) {
-				if ((globalGameInfo.tick - 1) % 200 == 0)
-					SendWarriors(sities[0], sities[2]);
-				if (sities[2].currWarriors >= 20) {
-					SendWarriors(sities[2], sities[1]);
-					botStreak = true;
-					botStreakCnt = 1;
-				}
-				if(botStreak && (globalGameInfo.tick + 2) % 50 == 0) {
-					++botStreakCnt;
-					SendWarriors(sities[2], sities[1]);
-
-					if (botStreakCnt == 3)
-						botStreak = false;
-				}
-			}
+			bot.TickReact();
 		}
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
