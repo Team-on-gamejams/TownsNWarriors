@@ -11,52 +11,57 @@ using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.unit;
 
 namespace TownsAndWarriors.game.map {
-	public partial class GameMap {
-		//---------------------------------------------- Fields ----------------------------------------------
-		int sizeX, sizeY;
-		int cellSizeX, cellSizeY;
+    public partial class GameMap {
+        //---------------------------------------------- Fields ----------------------------------------------
+        int sizeX, sizeY;
+        int cellSizeX, cellSizeY;
 
-		List<List<GameCell>> map;
-		List<BasicSity> sities;
-		List<BasicUnit> units;
+        List<List<GameCell>> map;
+        List<BasicSity> sities;
+        List<BasicUnit> units;
 
-		//---------------------------------------------- Properties ----------------------------------------------
-		public List<BasicUnit> Units => units;
-		public List<List<GameCell>> Map => map;
+        //---------------------------------------------- Properties ----------------------------------------------
+        public List<BasicUnit> Units => units;
+        public List<List<GameCell>> Map => map;
 
-		//---------------------------------------------- Ctor ----------------------------------------------
-		private GameMap(int SizeX, int SizeY) {
-			sizeX = SizeX; sizeY = SizeY;
-			map = new List<List<GameCell>>(sizeY);
-			for (int i = 0; i < sizeY; ++i) {
-				map.Add(new List<GameCell>(sizeX));
-				for (int j = 0; j < sizeX; ++j)
-					map[i].Add(new GameCell());
-			}
+        //---------------------------------------------- Ctor ----------------------------------------------
+        private GameMap(int SizeX, int SizeY) {
+            sizeX = SizeX; sizeY = SizeY;
+            map = new List<List<GameCell>>(sizeY);
+            for (int i = 0; i < sizeY; ++i) {
+                map.Add(new List<GameCell>(sizeX));
+                for (int j = 0; j < sizeX; ++j)
+                    map[i].Add(new GameCell());
+            }
 
-			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
-			units = new List<BasicUnit>(values.locateMemory_SizeForUnits);
-		}
+            sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
+            units = new List<BasicUnit>(values.locateMemory_SizeForUnits);
+        }
 
 
-		//---------------------------------------------- Methods ----------------------------------------------
-		public void Tick() {
-			foreach (var sity in sities)
-				sity.TickReact();
+        //---------------------------------------------- Methods ----------------------------------------------
+        public void Tick() {
+            foreach (var sity in sities)
+                sity.TickReact();
 
-			try {
-				foreach (var unit in units)
-					unit.TickReact();
-			}
-			catch (Exception ex) {
+            try {
+                foreach (var unit in units)
+                    unit.TickReact();
+            }
+            catch (Exception ex) {
 
-			}
+            }
 
-			if(globalGameInfo.tick % 200 == 0)
-			SendWarriors(sities[0], sities[2]);
-		}
+            if (globalGameInfo.tick % 200 == 0)
+                SendWarriors(sities[0], sities[2]);
+        }
 
-		public void SendWarriors(BasicSity from, BasicSity to) {
+        public void SendWarriors(List<BasicSity> from, BasicSity to) {
+            foreach (var i in from)
+                SendWarriors(i, to);
+        }
+
+        public void SendWarriors(BasicSity from, BasicSity to) {
 			var unit = from.SendUnit(to);
 
 			unit.SetCanvas(canvas);
