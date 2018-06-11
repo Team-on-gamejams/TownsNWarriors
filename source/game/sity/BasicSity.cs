@@ -35,6 +35,10 @@ namespace TownsAndWarriors.game.sity {
 				++currWarriors;
 				return true;
 			}
+			else if (settings.values.gameplay_RemoveOvercapedUnits && maxWarriors < currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0) {
+				--currWarriors;
+				return true;
+			}
 			return false;
 		}
 
