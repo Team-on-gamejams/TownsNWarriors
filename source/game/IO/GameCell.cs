@@ -21,8 +21,11 @@ namespace TownsAndWarriors.game.map {
 
 			var rect = new Rectangle();
 			if (IsOpenLeft && IsOpenBottom)
-				rect.Fill = Brushes.Orange;
-			else if(IsOpenLeft || IsOpenRight)
+            {
+                rect.Fill = Brushes.Aqua;
+
+            }
+            else if(IsOpenLeft || IsOpenRight)
 				rect.Fill = Brushes.Red;
 			else if (IsOpenTop || IsOpenBottom)
 				rect.Fill = Brushes.Blue;
