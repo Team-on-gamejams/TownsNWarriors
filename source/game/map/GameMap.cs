@@ -44,14 +44,12 @@ namespace TownsAndWarriors.game.map {
 			foreach (var sity in sities)
 				sity.TickReact();
 
-			try {
-				foreach (var unit in units)
-					unit.TickReact();
+			REPEAT_UNITS_TURN:
+			foreach (var unit in units) {
+				if (unit.TickReact())
+					goto REPEAT_UNITS_TURN;
 			}
-			catch (Exception ex) {
-
-			}
-
+		
 			if(globalGameInfo.tick % 200 == 0)
 			SendWarriors(sities[0], sities[2]);
 		}

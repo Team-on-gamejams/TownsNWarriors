@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.basicInterfaces {
 	interface tickable {
-		void TickReact();
+		bool TickReact();
 	}
 }

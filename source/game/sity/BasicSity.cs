@@ -28,9 +28,12 @@ namespace TownsAndWarriors.game.sity {
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public void TickReact() {
-			if (playerId != 0 && maxWarriors > currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0)
+		public bool TickReact() {
+			if (playerId != 0 && maxWarriors > currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0) {
 				++currWarriors;
+				return true;
+			}
+			return false;
 		}
 
 		public BasicUnit SendUnit(BasicSity to) {
