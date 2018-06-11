@@ -38,7 +38,7 @@ namespace TownsAndWarriors.game.map {
 
 			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
 			units = new List<BasicUnit>(values.locateMemory_SizeForUnits);
-			bot = new game.bot.SimpleBot(this, sities, units);
+			bot = new game.bot.SimpleBot(this, sities, units, 2);
 		}
 
 
