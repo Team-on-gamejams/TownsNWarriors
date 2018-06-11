@@ -84,11 +84,15 @@
     </Compile>
     <Compile Include="audio\Audio.cs" />
     <Compile Include="game\basicInterfaces\withPlayerId.cs" />
+    <Compile Include="game\bot\BasicBot.cs" />
+    <Compile Include="game\bot\SimpleBot.cs" />
     <Compile Include="game\globalGameInfo.cs" />
     <Compile Include="game\IO\BasicSity.cs" />
     <Compile Include="game\IO\BasicUnit.cs" />
     <Compile Include="game\IO\GameCell.cs" />
     <Compile Include="game\IO\GameMap.cs" />
+    <Compile Include="game\map\mapGenerators\BasicMapGenerator.cs" />
+    <Compile Include="game\map\mapGenerators\TunnelMapGenerator.cs" />
     <Compile Include="game\sity\BasicSity.cs" />
     <Compile Include="game\unit\BasicUnit.cs" />
     <Compile Include="game\Game.cs" />

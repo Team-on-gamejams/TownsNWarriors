@@ -12,6 +12,7 @@ namespace TownsAndWarriors.game.settings {
 
 		public static bool gameplay_SaveWarriorsOverCap = true;
 		public static bool gameplay_EqualsMeansCapture = false;
+		public static bool gameplay_RemoveOvercapedUnits = true;
 
 		public static ushort basicSity_MaxWarriors = 20;
 		public static ushort basicSity_StartWarriors = 10;

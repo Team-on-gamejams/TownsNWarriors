@@ -22,6 +22,13 @@ namespace TownsAndWarriors.game.sity {
 
         public override void InitializeShape() {
 			shape = new Grid();
+
+			shape.Children.Add(new Ellipse() {
+				Fill = Brushes.Orange,
+				Width = 30,
+				Height = 30
+			});
+
 			Rectangle newRec = new Rectangle();
 			newRec.Fill = Brushes.Green;
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
@@ -33,6 +40,7 @@ namespace TownsAndWarriors.game.sity {
 				newRec.Fill = Brushes.DarkGray;
 			};
 			shape.Children.Add(newRec);
+
 			shape.Children.Add(text);
             //тут створювати всі собитія з городом
 		}
