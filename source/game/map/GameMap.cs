@@ -23,11 +23,14 @@ namespace TownsAndWarriors.game.map {
 		game.bot.BasicBot bot;
 
 		//---------------------------------------------- Properties ----------------------------------------------
+		public List<BasicSity> Sities => sities;
 		public List<BasicUnit> Units => units;
 		public List<List<GameCell>> Map => map;
+		public int SizeX => sizeX;
+		public int SizeY => sizeY;
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		private GameMap(int SizeX, int SizeY) {
+		public GameMap(int SizeX, int SizeY) {
 			sizeX = SizeX; sizeY = SizeY;
 			map = new List<List<GameCell>>(sizeY);
 			for (int i = 0; i < sizeY; ++i) {
@@ -74,37 +77,8 @@ namespace TownsAndWarriors.game.map {
 			units.Add(unit);
 		}
 
-		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY) {
-			GameMap m = new GameMap(SizeX, SizeY);
-			Random rnd = new Random(seed);
-
-			for (int i = 0; i < m.sizeX; ++i)
-				m.map[0][i].IsOpenLeft = m.map[0][i].IsOpenRight = true;
-			for (int i = 0; i < m.sizeY; ++i)
-				m.map[i][m.sizeX - 1].IsOpenTop = m.map[i][m.sizeX - 1].IsOpenBottom = true;
-
-			for (int i = 0; i < m.sizeY; ++i)
-				m.map[i][0].IsOpenTop = m.map[i][0].IsOpenBottom = true;
-
-			m.map[0][0].IsOpenLeft = m.map[0][m.sizeX - 1].IsOpenRight = false;
-			m.map[0][m.sizeX - 1].IsOpenTop = m.map[m.sizeY - 1][m.sizeX - 1].IsOpenBottom = false;
-
-			m.map[0][0].IsOpenTop = m.map[m.sizeY - 1][0].IsOpenBottom = false;
-
-			BasicSity.gameMap = m;
-			m.sities.Add(new BasicSity());
-			m.sities.Add(new BasicSity());
-			m.sities.Add(new BasicSity());
-
-			m.sities[0].playerId = 1;
-			m.sities[1].playerId = 2;
-
-			m.map[0][0].Sity = m.sities[0];
-			m.map[m.sizeY - 1][m.sizeX - 1].Sity = m.sities[1];
-			m.map[m.sizeY - 1][0].Sity = m.sities[2];
-
-
-			return m;
+		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, game.map.mapGenerators.BasicMapGenerator mapGenerator) {
+			return mapGenerator.GenerateRandomMap(seed, SizeX, SizeY);
 		}
 	}
 }

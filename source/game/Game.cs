@@ -44,7 +44,7 @@ namespace TownsAndWarriors.game {
 			Grid.SetZIndex(mainCanvas, 2);
 			mainGrid.Children.Add(mainCanvas);
 
-			gameMap = GameMap.GenerateRandomMap(0, x, y);
+			gameMap = GameMap.GenerateRandomMap(0, x, y, new game.map.mapGenerators.TunnelMapGenerator());
 		}
 
 

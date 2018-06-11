@@ -91,6 +91,8 @@
     <Compile Include="game\IO\BasicUnit.cs" />
     <Compile Include="game\IO\GameCell.cs" />
     <Compile Include="game\IO\GameMap.cs" />
+    <Compile Include="game\map\mapGenerators\BasicMapGenerator.cs" />
+    <Compile Include="game\map\mapGenerators\TunnelMapGenerator.cs" />
     <Compile Include="game\sity\BasicSity.cs" />
     <Compile Include="game\unit\BasicUnit.cs" />
     <Compile Include="game\Game.cs" />
