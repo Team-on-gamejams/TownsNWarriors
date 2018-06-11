@@ -29,17 +29,17 @@ namespace TownsAndWarriors.game.sity {
 				Height = 30
 			});
 
-			Rectangle newRec = new Rectangle();
-			newRec.Fill = Brushes.Green;
+			//Rectangle newRec = new Rectangle();
+			//newRec.Fill = Brushes.Green;
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
 				selected.Add(this);
 			};
-			shape.MouseMove += delegate (object sender, MouseEventArgs e)
-			{
-				newRec.Fill = Brushes.DarkGray;
-			};
-			shape.Children.Add(newRec);
+			//shape.MouseMove += delegate (object sender, MouseEventArgs e)
+			//{
+			//	newRec.Fill = Brushes.DarkGray;
+			//};
+			//shape.Children.Add(newRec);
 
 			shape.Children.Add(text);
             //тут створювати всі собитія з городом
