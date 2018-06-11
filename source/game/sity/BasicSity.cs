@@ -13,7 +13,9 @@ namespace TownsAndWarriors.game.sity {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static TownsAndWarriors.game.map.GameMap gameMap;
 
-		protected ushort currWarriors, maxWarriors, ticksPerIncome;
+		public ushort currWarriors, maxWarriors;
+
+		ushort ticksPerIncome;
 		Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
 
 		//---------------------------------------------- Properties ----------------------------------------------

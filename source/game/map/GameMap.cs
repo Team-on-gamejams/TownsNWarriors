@@ -41,6 +41,8 @@ namespace TownsAndWarriors.game.map {
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public void Tick() {
+			BotTurn();
+
 			foreach (var sity in sities)
 				sity.TickReact();
 
@@ -49,9 +51,27 @@ namespace TownsAndWarriors.game.map {
 				if (unit.TickReact())
 					goto REPEAT_UNITS_TURN;
 			}
-		
-			if(globalGameInfo.tick % 200 == 0)
-			SendWarriors(sities[0], sities[2]);
+		}
+
+		int botStreakCnt = 0;
+		bool botStreak = false;
+		void BotTurn() {
+			if (globalGameInfo.tick > 100) {
+				if ((globalGameInfo.tick - 1) % 200 == 0)
+					SendWarriors(sities[0], sities[2]);
+				if (sities[2].currWarriors >= 20) {
+					SendWarriors(sities[2], sities[1]);
+					botStreak = true;
+					botStreakCnt = 1;
+				}
+				if(botStreak && (globalGameInfo.tick + 2) % 50 == 0) {
+					++botStreakCnt;
+					SendWarriors(sities[2], sities[1]);
+
+					if (botStreakCnt == 3)
+						botStreak = false;
+				}
+			}
 		}
 
 		public void SendWarriors(BasicSity from, BasicSity to) {

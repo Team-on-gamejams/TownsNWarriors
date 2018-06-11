@@ -11,7 +11,7 @@ namespace TownsAndWarriors.game.settings {
 		public static byte locateMemory_SizeForUnits = 12;
 
 		public static bool gameplay_SaveWarriorsOverCap = true;
-		public static bool gameplay_EqualsMeansCapture = true;
+		public static bool gameplay_EqualsMeansCapture = false;
 
 		public static ushort basicSity_MaxWarriors = 20;
 		public static ushort basicSity_StartWarriors = 10;
