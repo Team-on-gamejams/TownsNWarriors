@@ -48,12 +48,14 @@ namespace TownsAndWarriors.game.unit {
 				HorizontalAlignment = HorizontalAlignment.Center
 			});
 			shape.Children.Add(text);
-			canvas.Children.Add(shape);
 
 			pixelPerTurnX = cellSizeX / tickPerTurn;
 			pixelPerTurnY = cellSizeY / tickPerTurn;
 			shiftX = cellSizeX / 2 - shape.Width / 2;
 			shiftY = cellSizeY / 2 - shape.Height / 2;
+
+			UpdateValue();
+			canvas.Children.Add(shape);
 		}
 
 		public override void UpdateValue() {
