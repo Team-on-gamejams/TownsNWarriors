@@ -37,7 +37,7 @@ namespace TownsAndWarriors.game.unit {
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public void TickReact() {
+		public bool TickReact() {
 			++currTickOnCell;
 			if(currTickOnCell >= tickPerTurn) {
 				currTickOnCell = 1;
@@ -48,8 +48,10 @@ namespace TownsAndWarriors.game.unit {
 				if (currPathIndex == path.Count - 1) {
 					destination.GetUnits(this);
 					canvas.Children.Remove(shape);
+					return true;
 				}
 			}
+			return false;
 		}
 
 	}
