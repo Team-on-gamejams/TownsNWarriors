@@ -49,12 +49,78 @@ namespace TownsAndWarriors.game.sity {
 			return unit;
 
 			void BuildPath() {
-				pathToSities.Add(to, new List<KeyValuePair<int, int>>() {
-					new KeyValuePair<int, int>(0, 0),
-					new KeyValuePair<int, int>(0, 1),
-					new KeyValuePair<int, int>(0, 2),
-					new KeyValuePair<int, int>(0, 3)
-				});
+				PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
+				int fromX = 0, fromY = 0, toX = 0, toY = 0;
+
+				for (int i = 0; i < finder.GetLength(0); ++i) {
+					for (int j = 0; j < finder.GetLength(1); ++j) {
+						finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
+						if(gameMap.Map[i][j].Sity == this) {
+							fromX = j; fromY = i;
+						}
+						else if (gameMap.Map[i][j].Sity == to) {
+							toX = j; toY = i;
+						}
+					}
+				}
+
+				bool findSity = false;
+				Rec(fromX, fromY, 0);
+
+				List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
+				UnRec(toX, toY, finder[toY, toX].num);
+				reversedPath.Reverse();
+				pathToSities.Add(to, reversedPath);
+
+				//string str = "";
+				//for (int i = 0; i < finder.GetLength(0); ++i) {
+				//	for (int j = 0; j < finder.GetLength(1); ++j)
+				//		str += finder[i, j].num.ToString() + " ";
+				//	str += "\n";
+				//}
+				//System.Windows.MessageBox.Show(str);
+
+				//str = "";
+				//for (int i = 0; i < reversedPath.Count; ++i)
+				//	str += reversedPath[i].ToString() + "\n";
+				//System.Windows.MessageBox.Show(str);
+
+				void Rec(int x, int y, int value) {
+					if (findSity)
+						return;
+					if (x == toX && y == toY)
+						findSity = true;
+
+					if (finder[y, x].num != -1 && finder[y, x].num < value)
+						return;
+
+					finder[y, x].num = value++;
+					if (finder[y, x].IsOpenBottom)
+						Rec(x, y + 1, value);
+					if (finder[y, x].IsOpenRight)
+						Rec(x + 1, y, value);
+					if (finder[y, x].IsOpenTop)
+						Rec(x, y - 1, value);
+					if (finder[y, x].IsOpenLeft)
+						Rec(x - 1, y, value);
+				}
+
+				bool UnRec(int x, int y, int prevValue) {
+					if (prevValue == finder[y, x].num && finder[y, x].num != -1) {
+						bool prev = false;
+						reversedPath.Add(new KeyValuePair<int, int>(x, y));
+						if (finder[y, x].IsOpenBottom)
+							prev = UnRec(x, y + 1, prevValue - 1);
+						if (finder[y, x].IsOpenTop && !prev)
+							prev = UnRec(x, y - 1, prevValue - 1);
+						if (finder[y, x].IsOpenLeft && !prev)
+							prev = UnRec(x - 1, y, prevValue - 1);
+						if (finder[y, x].IsOpenRight && !prev)
+							prev = UnRec(x + 1, y, prevValue - 1);
+						return true;
+					}
+					return false;
+				}
 			}
 		}
 
@@ -80,5 +146,16 @@ namespace TownsAndWarriors.game.sity {
 			gameMap.Units.Remove(unit);
 		}
 
+		class PathFinderCell {
+			public bool IsOpenBottom = false, IsOpenLeft = false, IsOpenRight = false, IsOpenTop = false;
+			public int num = -1;
+
+			public PathFinderCell(game.map.GameCell cell) {
+				IsOpenBottom = cell.IsOpenBottom;
+				IsOpenLeft = cell.IsOpenLeft;
+				IsOpenRight = cell.IsOpenRight;
+				IsOpenTop = cell.IsOpenTop;
+			}
+		}
 	}
 }
