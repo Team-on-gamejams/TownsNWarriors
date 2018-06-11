@@ -82,6 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="audio\Audio.cs" />
     <Compile Include="game\basicInterfaces\withPlayerId.cs" />
     <Compile Include="game\globalGameInfo.cs" />
     <Compile Include="game\IO\BasicSity.cs" />
@@ -131,7 +132,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="audio\" />
     <Folder Include="img\" />
     <Folder Include="style\" />
   </ItemGroup>
@@ -149,6 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="codeTemplates\Class template.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="audio\sounds\gg.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

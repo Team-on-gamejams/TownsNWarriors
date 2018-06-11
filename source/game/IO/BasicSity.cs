@@ -24,6 +24,7 @@ namespace TownsAndWarriors.game.sity {
 				Fill = Brushes.Green
 			});
 			shape.Children.Add(text);
+            //тут створювати всі собитія з городом
 		}
 		public override void UpdateValue() {
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString() + '\n' + this.playerId.ToString();
