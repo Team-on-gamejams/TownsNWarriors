@@ -35,42 +35,27 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 				digPos.RemoveAt(0);
 			}
 
-			void Dig(int x, int y) {
-				map[y, x].isVisited = true;
-				List<KeyValuePair<int, int>> jumpPos = new List<KeyValuePair<int, int>>();
-				if (x != sizeX - 1 && !map[y, x + 1].isVisited) 
-					jumpPos.Add(new KeyValuePair<int, int>(x + 1, y));
-				if (x != 0 && !map[y, x - 1].isVisited)
-					jumpPos.Add(new KeyValuePair<int, int>(x - 1, y));
-				if (y != sizeY - 1 && !map[y + 1, x].isVisited)
-					jumpPos.Add(new KeyValuePair<int, int>(x, y + 1));
-				if (y != 0 && !map[y - 1, x].isVisited)
-					jumpPos.Add(new KeyValuePair<int, int>(x, y - 1));
-
-				byte jumpCnt = (byte)  (jumpPos.Count != 0 ? rnd.Next(1, jumpPos.Count) : 0);
-				while(jumpCnt-- != 0) {
-					var curr = jumpPos[rnd.Next(0, jumpPos.Count)];
-					jumpPos.Remove(curr);
-
-					if (curr.Key == x + 1)
-						map[y, x].IsOpenRight = map[y, x + 1].IsOpenLeft = true;
-					if (curr.Key == x - 1)
-						map[y, x].IsOpenLeft = map[y, x - 1].IsOpenRight = true;
-					if (curr.Value == y - 1)
-						map[y, x].IsOpenTop = map[y - 1, x].IsOpenBottom = true;
-					if (curr.Value == y + 1)
-						map[y, x].IsOpenBottom = map[y + 1, x].IsOpenTop = true;
-
-					digPos.Add(curr);
-				}
-			}
-
 			for (int i = 0; i < sizeY; ++i) { 
 				for (int j = 0; j < sizeX; ++j) {
 					m.Map[i][j].IsOpenLeft = map[i, j].IsOpenLeft;
 					m.Map[i][j].IsOpenRight = map[i, j].IsOpenRight;
 					m.Map[i][j].IsOpenTop = map[i, j].IsOpenTop;
 					m.Map[i][j].IsOpenBottom = map[i, j].IsOpenBottom;
+				}
+			}
+
+			int currSity = 0;
+			for (int i = 0; i < sizeY; ++i) {
+				for (int j = 0; j < sizeX; ++j) {
+					if (currSity == sities.Count)
+						break;
+
+					int s = (m.Map[i][j].IsOpenBottom ? 1 : 0) +
+					(m.Map[i][j].IsOpenTop ? 1 : 0) +
+					(m.Map[i][j].IsOpenLeft ? 1 : 0) +
+					(m.Map[i][j].IsOpenRight ? 1 : 0);
+					if (s == 1 || s == 4)
+						m.Map[i][j].Sity = sities[++currSity];
 				}
 			}
 
@@ -101,6 +86,37 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 					//m.Map[sizeY - 1][0].Sity = m.Sities[2];
 
 			return m;
+
+			void Dig(int x, int y) {
+				map[y, x].isVisited = true;
+				List<KeyValuePair<int, int>> jumpPos = new List<KeyValuePair<int, int>>();
+				if (x != sizeX - 1 && !map[y, x + 1].isVisited)
+					jumpPos.Add(new KeyValuePair<int, int>(x + 1, y));
+				if (x != 0 && !map[y, x - 1].isVisited)
+					jumpPos.Add(new KeyValuePair<int, int>(x - 1, y));
+				if (y != sizeY - 1 && !map[y + 1, x].isVisited)
+					jumpPos.Add(new KeyValuePair<int, int>(x, y + 1));
+				if (y != 0 && !map[y - 1, x].isVisited)
+					jumpPos.Add(new KeyValuePair<int, int>(x, y - 1));
+
+				byte jumpCnt = (byte)(jumpPos.Count != 0 ? rnd.Next(1, jumpPos.Count) : 0);
+				while (jumpCnt-- != 0) {
+					var curr = jumpPos[rnd.Next(0, jumpPos.Count)];
+					jumpPos.Remove(curr);
+
+					if (curr.Key == x + 1)
+						map[y, x].IsOpenRight = map[y, x + 1].IsOpenLeft = true;
+					if (curr.Key == x - 1)
+						map[y, x].IsOpenLeft = map[y, x - 1].IsOpenRight = true;
+					if (curr.Value == y - 1)
+						map[y, x].IsOpenTop = map[y - 1, x].IsOpenBottom = true;
+					if (curr.Value == y + 1)
+						map[y, x].IsOpenBottom = map[y + 1, x].IsOpenTop = true;
+
+					digPos.Add(curr);
+				}
+			}
+
 
 			bool CellsLeftUnvisited() {
 				for (int i = 0; i < sizeY; ++i)

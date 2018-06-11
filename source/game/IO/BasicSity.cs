@@ -20,8 +20,10 @@ namespace TownsAndWarriors.game.sity {
 
 		public override void InitializeShape() {
 			shape = new Grid();
-			shape.Children.Add(new Rectangle() {
-				Fill = Brushes.Green
+			shape.Children.Add(new Ellipse() {
+				Fill = Brushes.Orange,
+				Width = 30,
+				Height = 30
 			});
 			shape.Children.Add(text);
             //тут створювати всі собитія з городом
