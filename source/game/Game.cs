@@ -23,21 +23,26 @@ namespace TownsAndWarriors.game {
 		//---------------------------------------------- Fields ----------------------------------------------
 		GameMap gameMap;
 		Grid mainGrid;
+		Canvas mainCanvas;
+
 		bool isPlay;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow) {
+		public Game(GameWindow IOWindow, int x, int y) {
 			isPlay = true;
 			mainGrid = IOWindow.mainGameGrid;
 
-			int x = 5, y = 4;
 			for(int i = 0; i < x; ++i)
 				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
 			for (int i = 0; i < y; ++i)
 				mainGrid.RowDefinitions.Add(new RowDefinition());
+
+			mainCanvas = new Canvas();
+			Grid.SetZIndex(mainCanvas, 2);
+			mainGrid.Children.Add(mainCanvas);
 
 			gameMap = GameMap.GenerateRandomMap(0, x, y);
 		}
@@ -56,6 +61,7 @@ namespace TownsAndWarriors.game {
 		}
 
 		void Init() {
+			gameMap.SetCanvas(mainCanvas);
 			gameMap.DrawStatic(mainGrid);
 		}
 

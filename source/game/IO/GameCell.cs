@@ -19,7 +19,6 @@ namespace TownsAndWarriors.game.map {
 		public override void InitializeShape() {
 			shape = new Grid();
 
-
 			var rect = new Rectangle();
 			if (IsOpenLeft && IsOpenBottom)
 				rect.Fill = Brushes.Orange;

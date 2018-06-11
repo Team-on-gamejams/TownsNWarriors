@@ -26,7 +26,7 @@ namespace TownsAndWarriors.game.sity {
 			shape.Children.Add(text);
 		}
 		public override void UpdateValue() {
-			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
+			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString() + '\n' + this.playerId.ToString();
 		}
 	}
 }

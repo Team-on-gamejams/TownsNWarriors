@@ -10,17 +10,19 @@ using TownsAndWarriors.game.settings;
 using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.unit;
 
-
 namespace TownsAndWarriors.game.map {
 	public partial class GameMap {
 		//---------------------------------------------- Fields ----------------------------------------------
 		int sizeX, sizeY;
+		int cellSizeX, cellSizeY;
+
 		List<List<GameCell>> map;
 		List<BasicSity> sities;
 		List<BasicUnit> units;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-
+		public List<BasicUnit> Units => units;
+		public List<List<GameCell>> Map => map;
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		private GameMap(int SizeX, int SizeY) {
@@ -33,6 +35,7 @@ namespace TownsAndWarriors.game.map {
 			}
 
 			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
+			units = new List<BasicUnit>(values.locateMemory_SizeForUnits);
 		}
 
 
@@ -40,6 +43,30 @@ namespace TownsAndWarriors.game.map {
 		public void Tick() {
 			foreach (var sity in sities)
 				sity.TickReact();
+
+			try {
+				foreach (var unit in units)
+					unit.TickReact();
+			}
+			catch (Exception ex) {
+
+			}
+
+			if(globalGameInfo.tick % 200 == 0)
+			SendWarriors(sities[0], sities[2]);
+		}
+
+		public void SendWarriors(BasicSity from, BasicSity to) {
+			var unit = from.SendUnit(to);
+
+			unit.SetCanvas(canvas);
+
+			cellSizeX = (int)canvas.RenderSize.Width;
+			cellSizeY = (int)canvas.RenderSize.Height;
+			unit.SetOneCellSize(cellSizeX, cellSizeY);
+			unit.InitializeShape();
+
+			units.Add(unit);
 		}
 
 		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY) {
@@ -51,14 +78,25 @@ namespace TownsAndWarriors.game.map {
 			for (int i = 0; i < m.sizeY; ++i)
 				m.map[i][m.sizeX - 1].IsOpenTop = m.map[i][m.sizeX - 1].IsOpenBottom = true;
 
-			m.map[0][0].IsOpenLeft = m.map[0][m.sizeX - 1].IsOpenRight = false;
-			m.map[0][0].IsOpenTop = m.map[m.sizeY - 1][m.sizeX - 1].IsOpenBottom = false;
+			for (int i = 0; i < m.sizeY; ++i)
+				m.map[i][0].IsOpenTop = m.map[i][0].IsOpenBottom = true;
 
+			m.map[0][0].IsOpenLeft = m.map[0][m.sizeX - 1].IsOpenRight = false;
+			m.map[0][m.sizeX - 1].IsOpenTop = m.map[m.sizeY - 1][m.sizeX - 1].IsOpenBottom = false;
+
+			m.map[0][0].IsOpenTop = m.map[m.sizeY - 1][0].IsOpenBottom = false;
+
+			BasicSity.gameMap = m;
 			m.sities.Add(new BasicSity());
 			m.sities.Add(new BasicSity());
+			m.sities.Add(new BasicSity());
+
+			m.sities[0].playerId = 1;
+			m.sities[1].playerId = 2;
 
 			m.map[0][0].Sity = m.sities[0];
 			m.map[m.sizeY - 1][m.sizeX - 1].Sity = m.sities[1];
+			m.map[m.sizeY - 1][0].Sity = m.sities[2];
 
 
 			return m;

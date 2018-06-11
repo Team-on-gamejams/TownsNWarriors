@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.basicInterfaces {
 	interface tickable {
 		void TickReact();
 	}

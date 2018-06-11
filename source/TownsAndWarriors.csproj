@@ -82,6 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="game\basicInterfaces\withPlayerId.cs" />
     <Compile Include="game\globalGameInfo.cs" />
     <Compile Include="game\IO\BasicSity.cs" />
     <Compile Include="game\IO\BasicUnit.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="game\IO\GameCellDrawableObj.cs" />
     <Compile Include="game\map\GameMap.cs" />
     <Compile Include="game\settings\values.cs" />
-    <Compile Include="tickable.cs" />
+    <Compile Include="game\basicInterfaces\tickable.cs" />
     <Compile Include="window\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>

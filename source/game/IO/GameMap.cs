@@ -16,6 +16,10 @@ using System.Windows.Shapes;
 
 namespace TownsAndWarriors.game.map {
 	public partial class GameMap {
+		Canvas canvas;
+
+		public void SetCanvas(Canvas Canvas) => canvas = Canvas;
+
 		public void DrawStatic(Grid grid) {
 			for (int i = 0; i < sizeY; ++i)
 				for (int j = 0; j < sizeX; ++j) {
@@ -29,9 +33,10 @@ namespace TownsAndWarriors.game.map {
 		}
 
 		public void UpdateMap() {
-			foreach (var sity in sities) {
+			foreach (var sity in sities) 
 				sity.UpdateValue();
-			}
+			foreach (var unit in units)
+				unit.UpdateValue();
 		}
 	}
 }
