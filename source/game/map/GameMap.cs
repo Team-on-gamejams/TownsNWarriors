@@ -56,7 +56,7 @@ namespace TownsAndWarriors.game.map {
 					goto REPEAT_UNITS_TURN;
 			}
 
-			bot.TickReact();
+			//bot.TickReact();
 		}
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
