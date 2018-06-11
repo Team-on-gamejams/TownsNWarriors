@@ -51,6 +51,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -81,6 +82,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="game\basicInterfaces\withPlayerId.cs" />
+    <Compile Include="game\globalGameInfo.cs" />
     <Compile Include="game\IO\BasicSity.cs" />
     <Compile Include="game\IO\BasicUnit.cs" />
     <Compile Include="game\IO\GameCell.cs" />
@@ -91,7 +94,8 @@
     <Compile Include="game\map\GameCell.cs" />
     <Compile Include="game\IO\GameCellDrawableObj.cs" />
     <Compile Include="game\map\GameMap.cs" />
-    <Compile Include="game\settings\settings.cs" />
+    <Compile Include="game\settings\values.cs" />
+    <Compile Include="game\basicInterfaces\tickable.cs" />
     <Compile Include="window\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
@@ -127,6 +131,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="audio\" />
     <Folder Include="img\" />
     <Folder Include="style\" />
   </ItemGroup>

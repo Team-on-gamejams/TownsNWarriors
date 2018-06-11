@@ -14,8 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.map {
 	public partial class GameMap {
+		Canvas canvas;
+
+		public void SetCanvas(Canvas Canvas) => canvas = Canvas;
+
 		public void DrawStatic(Grid grid) {
 			for (int i = 0; i < sizeY; ++i)
 				for (int j = 0; j < sizeX; ++j) {
@@ -24,13 +28,15 @@ namespace TownsAndWarriors {
 					if(map[i][j].Sity != null) {
 						map[i][j].Sity.SetGrid(grid);
 						map[i][j].Sity.DrawOnGameCell(j, i);
-
 					}
 				}
 		}
 
 		public void UpdateMap() {
-
+			foreach (var sity in sities) 
+				sity.UpdateValue();
+			foreach (var unit in units)
+				unit.UpdateValue();
 		}
 	}
 }

@@ -1,4 +1,14 @@
-﻿	class CLASSNAME {
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using TownsAndWarriors.game;
+using TownsAndWarriors.game.settings;
+
+namespace TownsAndWarriors {
+	class CLASSNAME {
 		//---------------------------------------------- Fields ----------------------------------------------
 
 
@@ -11,3 +21,4 @@
 		//---------------------------------------------- Methods ----------------------------------------------
 
 	}
+}

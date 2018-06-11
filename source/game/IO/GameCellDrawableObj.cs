@@ -14,12 +14,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.IO {
 	public abstract class GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected System.Windows.Controls.Grid grid;
-		protected System.Windows.Shapes.Shape shape;
-		//protected int x, y;
+		protected System.Windows.Controls.Grid shape;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
@@ -32,7 +31,6 @@ namespace TownsAndWarriors {
 		public abstract void InitializeShape();
 
 		public virtual void SetGrid(System.Windows.Controls.Grid a) => grid = a;
-		//public void SetPoint(int X, int Y){x = X; y = Y; }
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public virtual void DrawOnGameCell(int x, int y) {
@@ -43,7 +41,9 @@ namespace TownsAndWarriors {
 			grid.Children.Remove(shape);
 			grid.Children.Add(shape);
 		}
-		//public void DrawOnGameCell() {
-		//}
+
+		public virtual void UpdateValue() {
+			throw new NotImplementedException();
+		}
 	}
 }

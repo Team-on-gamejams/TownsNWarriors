@@ -14,12 +14,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors {
+namespace TownsAndWarriors.game.sity {
 	public partial class BasicSity {
-		public override void InitializeShape() {
-			shape = new Rectangle();
-			shape.Fill = Brushes.Green;
-		}
+		Label text = new Label();
 
+		public override void InitializeShape() {
+			shape = new Grid();
+			shape.Children.Add(new Rectangle() {
+				Fill = Brushes.Green
+			});
+			shape.Children.Add(text);
+		}
+		public override void UpdateValue() {
+			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString() + '\n' + this.playerId.ToString();
+		}
 	}
 }
