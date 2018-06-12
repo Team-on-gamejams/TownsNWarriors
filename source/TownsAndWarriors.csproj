@@ -97,6 +97,7 @@
     <Compile Include="game\map\mapGenerators\road\BasicMapGenerator.cs" />
     <Compile Include="game\map\mapGenerators\city\SityPlacer14.cs" />
     <Compile Include="game\map\mapGenerators\road\TunnelMapGenerator.cs" />
+    <Compile Include="game\settings\colors.cs" />
     <Compile Include="game\sity\BasicSity.cs" />
     <Compile Include="game\unit\BasicUnit.cs" />
     <Compile Include="game\Game.cs" />
