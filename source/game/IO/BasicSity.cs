@@ -23,12 +23,37 @@ namespace TownsAndWarriors.game.sity {
         public override void InitializeShape() {
 			shape = new Grid();
 
-			shape.Children.Add(new Ellipse() {
-				Fill = Brushes.Orange,
-				Stroke = Brushes.Black,
+			//Label
+			shape.Children.Add(text);
+
+			//Elipse
+			var elipse = new Ellipse() {
+				Fill = settings.colors.neutralTownFill,
+				Stroke = settings.colors.neutralTownStroke,
 				Width = 30,
 				Height = 30
-			});
+			};
+
+			if(playerId == 1) {
+				elipse.Fill = settings.colors.playerTownFill;
+				elipse.Stroke = settings.colors.playerTownStroke;
+			}
+			else if (playerId != 0) {
+				if (settings.colors.TownFills.Count <= playerId - 2)
+					elipse.Fill = settings.colors.TownFills[settings.colors.TownFills.Count - 1];
+				else
+					elipse.Fill = settings.colors.TownFills[playerId - 2];
+
+				if (settings.colors.TownStrokes.Count <= playerId - 2)
+					elipse.Stroke = settings.colors.TownStrokes[settings.colors.TownStrokes.Count - 1];
+				else
+					elipse.Stroke = settings.colors.TownStrokes[playerId - 2];
+
+			}
+
+			shape.Children.Add(elipse);
+
+			//Delegates
 
 			//Rectangle newRec = new Rectangle();
 			//newRec.Fill = Brushes.Green;
@@ -42,7 +67,6 @@ namespace TownsAndWarriors.game.sity {
 			//};
 			//shape.Children.Add(newRec);
 
-			shape.Children.Add(text);
             //тут створювати всі собитія з городом
 		}
 		public override void UpdateValue() {
