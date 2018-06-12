@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace TownsAndWarriors.window {
 	/// <summary>
 	/// Interaction logic for GameWindow.xaml
@@ -19,6 +20,14 @@ namespace TownsAndWarriors.window {
 	public partial class GameWindow : Window {
 		public GameWindow() {
 			InitializeComponent();
+		}
+
+		public void ForceResize() {
+			//this.OnRenderSizeChanged(new SizeChangedInfo(this, this.RenderSize, false, false));
+			if(this.Width % 2 == 0)
+				this.Width--;
+			else
+				this.Width++;
 		}
 	}
 }

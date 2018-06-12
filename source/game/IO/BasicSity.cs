@@ -25,24 +25,67 @@ namespace TownsAndWarriors.game.sity
 		public override void InitializeShape()
 		{
 			shape = new Grid();
-			//shape.Style = (Style)shape.FindResource("BasicCityMouseMove");
+			FillShape();
 
-			Label newLabel = new Label();
-			newLabel.Style = (Style)newLabel.FindResource("BasicCityStyle");
+			//Delegates
+			shape.SizeChanged += (a, b) => {
+					shape.Children.Clear();
+					FillShape();
+			};
 
-			shape.Children.Add(newLabel);
+			//Rectangle newRec = new Rectangle();
+			//newRec.Fill = Brushes.Green;
 
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
 				selected.Add(this);
 			};
 
-			shape.Children.Add(text);
-			//тут створювати всі собитія з городом
+			//shape.MouseMove += delegate (object sender, MouseEventArgs e)
+			//{
+			//	newRec.Fill = Brushes.DarkGray;
+			//};
+			//shape.Children.Add(newRec);
+
+            //тут створювати всі собитія з городом
+
 		}
 		public override void UpdateValue()
 		{
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString() + '\n' + this.playerId.ToString();
+		}
+
+		void FillShape() {
+			//Label
+			shape.Children.Add(text);
+
+			//Elipse
+			double min = settings.size.oneCellSizeX < settings.size.oneCellSizeY ? settings.size.oneCellSizeX : settings.size.oneCellSizeY;
+			var elipse = new Ellipse() {
+				Fill = settings.colors.neutralTownFill,
+				Stroke = settings.colors.neutralTownStroke,
+				Width = min * settings.size.sitySizeMult,
+				Height = min * settings.size.sitySizeMult,
+			};
+
+			if (playerId == 1) {
+				elipse.Fill = settings.colors.playerTownFill;
+				elipse.Stroke = settings.colors.playerTownStroke;
+			}
+			else if (playerId != 0) {
+				if (settings.colors.TownFills.Count <= playerId - 2)
+					elipse.Fill = settings.colors.TownFills[settings.colors.TownFills.Count - 1];
+				else
+					elipse.Fill = settings.colors.TownFills[playerId - 2];
+
+				if (settings.colors.TownStrokes.Count <= playerId - 2)
+					elipse.Stroke = settings.colors.TownStrokes[settings.colors.TownStrokes.Count - 1];
+				else
+					elipse.Stroke = settings.colors.TownStrokes[playerId - 2];
+
+			}
+
+			shape.Children.Add(elipse);
 		}
 	}
 }
