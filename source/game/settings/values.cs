@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.settings {
 	public static class values {
-		//---------------------------------------------- Memory ----------------------------------------------
 		public static byte locateMemory_SizeForTowns = 12;
 		public static byte locateMemory_SizeForUnits = 12;
 
@@ -24,7 +23,7 @@ namespace TownsAndWarriors.game.settings {
 		public static bool generator_SityPlacer14_QuadIsRoad = false;
 		public static byte generator_SityPlacer14_Quad_Size = 25;
 		public static byte generator_SityPlacer14_Quad_MinimimCnt = 2;
-		public static byte generator_SityPlacer14_Quad_Sities_Min = 2;
+		public static byte generator_SityPlacer14_Quad_Sities_Min = 4;
 		public static byte generator_SityPlacer14_Quad_Sities_Max = 4;
 		public static bool generator_SityPlacer14_FillAllWith1Road = true;
 		public static byte generator_SityPlacer14_Chance_PosWith1Road = 100;
