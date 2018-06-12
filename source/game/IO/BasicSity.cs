@@ -25,6 +25,7 @@ namespace TownsAndWarriors.game.sity {
 
 			shape.Children.Add(new Ellipse() {
 				Fill = Brushes.Orange,
+				Stroke = Brushes.Black,
 				Width = 30,
 				Height = 30
 			});
