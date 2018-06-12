@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.map.mapGenerators {
-	public interface BasicMapGenerator {
-		GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, BasicSityPlacer sityPlacer);
+	public interface BasicSityPlacer {
+		void PlaceSities(GameMap m, Random rnd);
 	}
 }
