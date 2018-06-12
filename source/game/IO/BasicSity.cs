@@ -14,29 +14,34 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors.game.sity {
-	public partial class BasicSity {
+namespace TownsAndWarriors.game.sity
+{
+	public partial class BasicSity
+	{
 		Label text = new Label();
 
-        public static List<BasicSity> selected = new List<BasicSity>();
+		public static List<BasicSity> selected = new List<BasicSity>();
 
-        public override void InitializeShape() {
+		public override void InitializeShape()
+		{
 			shape = new Grid();
-			Rectangle newRec = new Rectangle();
-			newRec.Fill = Brushes.Green;
+			//shape.Style = (Style)shape.FindResource("BasicCityMouseMove");
+
+			Label newLabel = new Label();
+			newLabel.Style = (Style)newLabel.FindResource("BasicCityStyle");
+
+			shape.Children.Add(newLabel);
+
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
 				selected.Add(this);
 			};
-			shape.MouseMove += delegate (object sender, MouseEventArgs e)
-			{
-				newRec.Fill = Brushes.DarkGray;
-			};
-			shape.Children.Add(newRec);
+
 			shape.Children.Add(text);
-            //тут створювати всі собитія з городом
+			//тут створювати всі собитія з городом
 		}
-		public override void UpdateValue() {
+		public override void UpdateValue()
+		{
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString() + '\n' + this.playerId.ToString();
 		}
 	}
