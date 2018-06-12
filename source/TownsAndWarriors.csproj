@@ -91,10 +91,10 @@
     <Compile Include="game\IO\BasicUnit.cs" />
     <Compile Include="game\IO\GameCell.cs" />
     <Compile Include="game\IO\GameMap.cs" />
-    <Compile Include="game\map\mapGenerators\BasicSityPlacer.cs" />
-    <Compile Include="game\map\mapGenerators\BasicMapGenerator.cs" />
-    <Compile Include="game\map\mapGenerators\SityPlacer14.cs" />
-    <Compile Include="game\map\mapGenerators\TunnelMapGenerator.cs" />
+    <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
+    <Compile Include="game\map\mapGenerators\road\BasicMapGenerator.cs" />
+    <Compile Include="game\map\mapGenerators\city\SityPlacer14.cs" />
+    <Compile Include="game\map\mapGenerators\road\TunnelMapGenerator.cs" />
     <Compile Include="game\sity\BasicSity.cs" />
     <Compile Include="game\unit\BasicUnit.cs" />
     <Compile Include="game\Game.cs" />

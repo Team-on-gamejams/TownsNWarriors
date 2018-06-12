@@ -24,16 +24,15 @@ namespace TownsAndWarriors.window {
 		public MainWindow() {
 			InitializeComponent();
 			this.KeyDown += (a, b) => {
-				//Random rnd = new Random();
-				//while (!(5>>(4>>(2>>1)) == 2)) {
-				//	MessageBox.Show(rnd.Next(0, 2).ToString());
-				//}
-
 				GameWindow gameWindow = new GameWindow();
 				gameWindow.Show();
 				this.Close();
+				//gameWindow.Top = this.Top;
+				//gameWindow.Left = this.Left;
+				//gameWindow.Height = this.Height;
+				//gameWindow.Width = this.Width;
 
-				Game game = new Game(gameWindow, 10, 10);
+				Game game = new Game(gameWindow, TownsAndWarriors.game.settings.values.fieldSizeX, TownsAndWarriors.game.settings.values.fieldSizeY);
 				game.Play();
 			};
 

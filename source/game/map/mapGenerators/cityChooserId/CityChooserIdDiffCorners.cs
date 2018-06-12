@@ -5,7 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.map.mapGenerators {
-	public interface BasicSityPlacer {
-		void PlaceSities(GameMap m, Random rnd);
+	public class CityChooserIdDiffCorners : BasicCityChooserId {
+
+		public void PlaceId(GameMap m, Random rnd) {
+			throw new NotImplementedException();
+		}
+
 	}
 }

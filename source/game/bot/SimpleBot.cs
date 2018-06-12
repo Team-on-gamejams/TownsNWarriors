@@ -15,10 +15,10 @@ namespace TownsAndWarriors.game.bot {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public SimpleBot(game.map.GameMap Map,
-		List<game.sity.BasicSity> Sities,
-		List<game.unit.BasicUnit> Units,
-		byte botId	
-			) {
+			List<game.sity.BasicSity> Sities,
+			List<game.unit.BasicUnit> Units,
+			byte botId	
+		) {
 			map = Map;
 			sities = Sities;
 			units = Units;
