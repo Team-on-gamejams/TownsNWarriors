@@ -14,13 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors.game.sity {
-	public partial class BasicSity {
+namespace TownsAndWarriors.game.sity
+{
+	public partial class BasicSity
+	{
 		Label text = new Label();
 
-        public static List<BasicSity> selected = new List<BasicSity>();
+		public static List<BasicSity> selected = new List<BasicSity>();
 
-        public override void InitializeShape() {
+		public override void InitializeShape()
+		{
 			shape = new Grid();
 			FillShape();
 
@@ -32,10 +35,12 @@ namespace TownsAndWarriors.game.sity {
 
 			//Rectangle newRec = new Rectangle();
 			//newRec.Fill = Brushes.Green;
+
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
 				selected.Add(this);
 			};
+
 			//shape.MouseMove += delegate (object sender, MouseEventArgs e)
 			//{
 			//	newRec.Fill = Brushes.DarkGray;
@@ -43,8 +48,10 @@ namespace TownsAndWarriors.game.sity {
 			//shape.Children.Add(newRec);
 
             //тут створювати всі собитія з городом
+
 		}
-		public override void UpdateValue() {
+		public override void UpdateValue()
+		{
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString() + '\n' + this.playerId.ToString();
 		}
 
