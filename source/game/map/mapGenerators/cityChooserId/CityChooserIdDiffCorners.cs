@@ -6,10 +6,28 @@ using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.map.mapGenerators {
 	public class CityChooserIdDiffCorners : BasicCityChooserId {
+		//---------------------------------------------- Fields ----------------------------------------------
 
+		//---------------------------------------------- Methods - main ----------------------------------------------
 		public void PlaceId(GameMap m, Random rnd) {
-			throw new NotImplementedException();
-		}
+			//settings.values.generator_CityChooserIdDiffCorners_Players;
+			//settings.values.generator_CityChooserIdDiffCorners_TownsPerPlayer;
+			//settings.values.generator_CityChooserIdDiffCorners_TownsPerBot;
+			int playerTowns = settings.values.generator_CityChooserIdDiffCorners_TownsPerPlayer;
 
+			while (playerTowns-- != 0) {
+				int minLen = 0;
+				for (int i = 0; i < m.SizeY; ++i) {
+					for (int j = 0; j < m.SizeX; ++j) {
+						if(m.Map[i][j].Sity != null && )
+					}
+				}
+			}
+
+		//-------------------------------------------- Methods - parts --------------------------------------------
+
+
+
+		//-------------------------------------- Methods - Support --------------------------------------------
 	}
 }

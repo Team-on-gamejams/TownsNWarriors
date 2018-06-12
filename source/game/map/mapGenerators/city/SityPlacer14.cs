@@ -117,7 +117,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 					m.Map[bestSitiesPos[i].Key][bestSitiesPos[i].Value].Sity = sities[i];
 		}
 
-		//-------------------------------------- Methods - Ultaity --------------------------------------------
+		//-------------------------------------- Methods - Support --------------------------------------------
 
 		bool IsFreeAround(int k, GameMap m) {
 			return (bestSitiesPos[k].Key == 0 || !m.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenTop ||
