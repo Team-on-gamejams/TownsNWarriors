@@ -152,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="audio\sounds\gg.mp3" />
+    <Resource Include="game\unit\unit sprite\black warrior.jpg" />
+    <Resource Include="game\unit\unit sprite\warrior.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
