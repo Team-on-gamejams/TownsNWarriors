@@ -94,7 +94,6 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 
 				if (values.generator_TunenelMapGenerator_CrossOnStart && digNum == 1) 
 					jumpCnt = 4;
-				
 
 				while (jumpCnt-- != 0) {
 					var curr = jumpPos[rnd.Next(0, jumpPos.Count)];
