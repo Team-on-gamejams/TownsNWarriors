@@ -91,6 +91,8 @@
     <Compile Include="game\IO\BasicUnit.cs" />
     <Compile Include="game\IO\GameCell.cs" />
     <Compile Include="game\IO\GameMap.cs" />
+    <Compile Include="game\map\mapGenerators\cityId\BasicCityId.cs" />
+    <Compile Include="game\map\mapGenerators\cityId\CityIdDiffCorners.cs" />
     <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
     <Compile Include="game\map\mapGenerators\road\BasicMapGenerator.cs" />
     <Compile Include="game\map\mapGenerators\city\SityPlacer14.cs" />

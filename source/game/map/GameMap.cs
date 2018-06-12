@@ -77,8 +77,11 @@ namespace TownsAndWarriors.game.map {
 			units.Add(unit);
 		}
 
-		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, game.map.mapGenerators.BasicMapGenerator mapGenerator, game.map.mapGenerators.BasicSityPlacer sityPlacer) {
-			return mapGenerator.GenerateRandomMap(seed, SizeX, SizeY, sityPlacer);
+		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, 
+			game.map.mapGenerators.BasicMapGenerator mapGenerator, game.map.mapGenerators.BasicSityPlacer sityPlacer,
+			game.map.mapGenerators.BasicCityId basicCityId
+			) {
+			return mapGenerator.GenerateRandomMap(seed, SizeX, SizeY, sityPlacer, basicCityId);
 		}
 	}
 }

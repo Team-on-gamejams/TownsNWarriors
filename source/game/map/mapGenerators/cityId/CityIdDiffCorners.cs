@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.map.mapGenerators {
-	public class CityChooserIdDiffCorners : BasicCityChooserId {
+	public class CityIdDiffCorners : BasicCityId {
 		//---------------------------------------------- Fields ----------------------------------------------
 
 		//---------------------------------------------- Methods - main ----------------------------------------------
@@ -19,11 +19,13 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 				int minLen = 0;
 				for (int i = 0; i < m.SizeY; ++i) {
 					for (int j = 0; j < m.SizeX; ++j) {
-						if(m.Map[i][j].Sity != null && )
+						if (m.Map[i][j].Sity != null && m.Map[i][j].Sity.playerId == 0) {
+
+						}
 					}
 				}
 			}
-
+		}
 		//-------------------------------------------- Methods - parts --------------------------------------------
 
 

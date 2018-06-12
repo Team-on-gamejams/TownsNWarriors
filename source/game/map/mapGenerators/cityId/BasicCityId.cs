@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.map.mapGenerators {
-	public interface BasicCityChooserId {
+	public interface BasicCityId {
 		void PlaceId(GameMap m, Random rnd);
 	}
 }

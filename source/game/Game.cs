@@ -49,7 +49,8 @@ namespace TownsAndWarriors.game {
 				//1340092764,
 				x, y, 
 				new game.map.mapGenerators.TunnelMapGenerator(),
-				new game.map.mapGenerators.SityPlacer14()
+				new game.map.mapGenerators.SityPlacer14(),
+				new game.map.mapGenerators.CityIdDiffCorners()
 				);
 		}
 

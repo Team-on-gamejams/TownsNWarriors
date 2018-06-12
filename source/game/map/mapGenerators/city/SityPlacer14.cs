@@ -14,7 +14,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 		List<KeyValuePair<int, int>> bestSitiesPos = new List<KeyValuePair<int, int>>();
 
 		//---------------------------------------------- Methods - main ----------------------------------------------
-		public void PlaceSities(GameMap m, BasicCityChooserId chooserId, Random rnd) {
+		public void PlaceSities(GameMap m, BasicCityId chooserId, Random rnd) {
 			FormSitiesList(m, rnd);
 			FormBestPosition(m, rnd);
 
