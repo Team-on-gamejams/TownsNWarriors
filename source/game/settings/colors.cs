@@ -16,6 +16,10 @@ using System.Windows.Shapes;
 
 namespace TownsAndWarriors.game.settings {
 	static class colors {
+		public static Brush roadBackground = Brushes.Black;
+		public static Brush roadStroke = Brushes.White;
+		public static double roadStrokeThickness = 0.3;
+
 		public static Brush neutralTownFill = Brushes.Wheat;
 		public static Brush neutralTownStroke = Brushes.Black;
 

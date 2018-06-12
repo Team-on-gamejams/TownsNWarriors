@@ -44,6 +44,14 @@ namespace TownsAndWarriors.game {
 			Grid.SetZIndex(mainCanvas, 2);
 			mainGrid.Children.Add(mainCanvas);
 
+			globalGameInfo.oneCellSizeX = mainGrid.RenderSize.Width / x;
+			globalGameInfo.oneCellSizeY = mainGrid.RenderSize.Height / y;
+			mainGrid.SizeChanged += (a, b) => {
+				globalGameInfo.oneCellSizeX = b.NewSize.Width / x;
+				globalGameInfo.oneCellSizeY = b.NewSize.Height / y;
+			};
+
+
 			gameMap = GameMap.GenerateRandomMap(
 				(int)DateTime.Now.Ticks, 
 				//1340092764,
@@ -53,7 +61,6 @@ namespace TownsAndWarriors.game {
 				new game.map.mapGenerators.CityIdDiffCorners()
 				);
 		}
-
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public void Play() {

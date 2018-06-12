@@ -32,7 +32,6 @@ namespace TownsAndWarriors.game.settings {
 		public static byte generator_SityPlacer14_Chance_PosWith4Road = 100;
 		public static byte generator_SityPlacer14_Code_MaxSityPlaceRepeats = 3;
 
-
 		public static byte generator_CityChooserIdDiffCorners_Bots = 1;
 		public static byte generator_CityChooserIdDiffCorners_TownsPerPlayer = 1;
 		public static byte generator_CityChooserIdDiffCorners_TownsPerBot = 1;

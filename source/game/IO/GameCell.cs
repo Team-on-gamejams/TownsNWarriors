@@ -18,7 +18,12 @@ namespace TownsAndWarriors.game.map {
 	partial class GameCell {
 		public override void InitializeShape() {
 			shape = new Grid();
-			shape.Background = Brushes.Black;
+			shape.Background = settings.colors.roadBackground;
+			shape.Children.Add(new Rectangle() {
+				Fill = settings.colors.roadBackground,
+				Stroke = settings.colors.roadStroke,
+				StrokeThickness = settings.colors.roadStrokeThickness
+			});
 
 			Rectangle rect;
 			if (IsOpenTop) {

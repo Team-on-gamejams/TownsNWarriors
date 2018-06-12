@@ -35,8 +35,9 @@ namespace TownsAndWarriors.game.map {
 			map = new List<List<GameCell>>(sizeY);
 			for (int i = 0; i < sizeY; ++i) {
 				map.Add(new List<GameCell>(sizeX));
-				for (int j = 0; j < sizeX; ++j)
+				for (int j = 0; j < sizeX; ++j) {
 					map[i].Add(new GameCell());
+				}
 			}
 
 			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
