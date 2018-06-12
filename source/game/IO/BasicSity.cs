@@ -53,7 +53,7 @@ namespace TownsAndWarriors.game.sity {
 			shape.Children.Add(text);
 
 			//Elipse
-			double min = globalGameInfo.oneCellSizeX < globalGameInfo.oneCellSizeY ? globalGameInfo.oneCellSizeX : globalGameInfo.oneCellSizeY;
+			double min = settings.size.oneCellSizeX < settings.size.oneCellSizeY ? settings.size.oneCellSizeX : settings.size.oneCellSizeY;
 			var elipse = new Ellipse() {
 				Fill = settings.colors.neutralTownFill,
 				Stroke = settings.colors.neutralTownStroke,

@@ -21,5 +21,13 @@ namespace TownsAndWarriors.window {
 		public GameWindow() {
 			InitializeComponent();
 		}
+
+		public void ForceResize() {
+			//this.OnRenderSizeChanged(new SizeChangedInfo(this, this.RenderSize, false, false));
+			if(this.Width % 2 == 0)
+				this.Width--;
+			else
+				this.Width++;
+		}
 	}
 }
