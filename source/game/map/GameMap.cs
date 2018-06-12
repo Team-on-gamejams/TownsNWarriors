@@ -35,8 +35,9 @@ namespace TownsAndWarriors.game.map {
 			map = new List<List<GameCell>>(sizeY);
 			for (int i = 0; i < sizeY; ++i) {
 				map.Add(new List<GameCell>(sizeX));
-				for (int j = 0; j < sizeX; ++j)
+				for (int j = 0; j < sizeX; ++j) {
 					map[i].Add(new GameCell());
+				}
 			}
 
 			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
@@ -77,8 +78,11 @@ namespace TownsAndWarriors.game.map {
 			units.Add(unit);
 		}
 
-		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, game.map.mapGenerators.BasicMapGenerator mapGenerator, game.map.mapGenerators.BasicSityPlacer sityPlacer) {
-			return mapGenerator.GenerateRandomMap(seed, SizeX, SizeY, sityPlacer);
+		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, 
+			game.map.mapGenerators.BasicMapGenerator mapGenerator, game.map.mapGenerators.BasicSityPlacer sityPlacer,
+			game.map.mapGenerators.BasicCityId basicCityId
+			) {
+			return mapGenerator.GenerateRandomMap(seed, SizeX, SizeY, sityPlacer, basicCityId);
 		}
 	}
 }

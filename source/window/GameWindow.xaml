@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TownsAndWarriors.window"
         mc:Ignorable="d"
         Title="GameWindow" Height="454.054" Width="609.73">
-	<Grid x:Name="mainGameGrid" ShowGridLines="True">
+	<Grid x:Name="mainGameGrid" ShowGridLines="False">
 
 	</Grid>
 </Window>

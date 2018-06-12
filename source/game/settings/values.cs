@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.settings {
 	public static class values {
-		//---------------------------------------------- Memory ----------------------------------------------
 		public static byte locateMemory_SizeForTowns = 12;
 		public static byte locateMemory_SizeForUnits = 12;
+
+		public static ushort fieldSizeX = 10;
+		public static ushort fieldSizeY = 10;
 
 		public static bool gameplay_SaveWarriorsOverCap = true;
 		public static bool gameplay_EqualsMeansCapture = false;
@@ -28,7 +30,11 @@ namespace TownsAndWarriors.game.settings {
 		public static byte generator_SityPlacer14_Chance_PosWith2Road = 10;
 		public static byte generator_SityPlacer14_Chance_PosWith3Road = 25;
 		public static byte generator_SityPlacer14_Chance_PosWith4Road = 100;
+		public static byte generator_SityPlacer14_Code_MaxSityPlaceRepeats = 3;
 
+		public static byte generator_CityChooserIdDiffCorners_Bots = 1;
+		public static byte generator_CityChooserIdDiffCorners_TownsPerPlayer = 1;
+		public static byte generator_CityChooserIdDiffCorners_TownsPerBot = 1;
 
 		public static ushort basicSity_MaxWarriors = 20;
 		public static ushort basicSity_StartWarriors = 10;

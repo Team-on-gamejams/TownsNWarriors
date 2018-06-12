@@ -22,7 +22,6 @@ namespace TownsAndWarriors.game.map {
 		public BasicSity Sity { get; set; }
 		public List<BasicUnit> Units => units.Value;
 
-
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public GameCell() {
 			IsOpenBottom = IsOpenLeft = IsOpenRight = IsOpenTop = false;

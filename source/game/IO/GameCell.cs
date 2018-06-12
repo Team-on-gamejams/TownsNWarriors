@@ -18,7 +18,19 @@ namespace TownsAndWarriors.game.map {
 	partial class GameCell {
 		public override void InitializeShape() {
 			shape = new Grid();
-			shape.Background = Brushes.Black;
+			FillShape();
+
+
+
+		}
+
+		void FillShape() {
+			shape.Background = settings.colors.roadBackground;
+			shape.Children.Add(new Rectangle() {
+				Fill = settings.colors.roadBackground,
+				Stroke = settings.colors.roadStroke,
+				StrokeThickness = settings.colors.roadStrokeThickness
+			});
 
 			Rectangle rect;
 			if (IsOpenTop) {
@@ -45,14 +57,14 @@ namespace TownsAndWarriors.game.map {
 				rect.HorizontalAlignment = HorizontalAlignment.Right;
 				shape.Children.Add(rect);
 			}
+		}
 
-			Rectangle FormRect() {
-				return new Rectangle() {
-					Fill = Brushes.LightGray,
-					Width = 15,
-					Height = 15
+		Rectangle FormRect() {
+			return new Rectangle() {
+				Fill = Brushes.LightGray,
+				Width = 15,
+				Height = 15
 			};
-			}
 		}
 	}
 }
