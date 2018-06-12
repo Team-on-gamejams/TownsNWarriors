@@ -25,6 +25,7 @@ namespace TownsAndWarriors.game.sity
 		public override void InitializeShape()
 		{
 			shape = new Grid();
+			shape.Style = (Style)shape.FindResource("BasicCityStyle"); 
 			FillShape();
 
 			//Delegates
@@ -82,7 +83,6 @@ namespace TownsAndWarriors.game.sity
 					elipse.Stroke = settings.colors.TownStrokes[settings.colors.TownStrokes.Count - 1];
 				else
 					elipse.Stroke = settings.colors.TownStrokes[playerId - 2];
-
 			}
 
 			shape.Children.Add(elipse);
