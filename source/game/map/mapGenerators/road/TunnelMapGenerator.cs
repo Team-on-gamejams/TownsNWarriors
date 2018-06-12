@@ -17,6 +17,8 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 			Random rnd = new Random(seed);
 			GameMap m = new GameMap(sizeX, sizeY);
 
+			//System.Windows.MessageBox.Show(seed.ToString());
+
 			LaburintCell[,] map = new LaburintCell[sizeY, sizeX];
 			for (int i = 0; i < sizeY; ++i)
 				for (int j = 0; j < sizeX; ++j)

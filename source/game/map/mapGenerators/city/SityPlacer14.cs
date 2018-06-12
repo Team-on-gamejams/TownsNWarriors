@@ -16,12 +16,19 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 		//---------------------------------------------- Methods - main ----------------------------------------------
 		public void PlaceSities(GameMap m, BasicCityId chooserId, Random rnd) {
 			FormSitiesList(m, rnd);
-			FormBestPosition(m, rnd);
+			
+			int cnt = values.generator_SityPlacer14_Code_MaxSityPlaceRepeats;
+			do {
+				if (cnt-- == 0)
+					break;
 
-			MixSitiesAndPos(m, rnd);
+				FormBestPosition(m, rnd);
 
-			SpecialInsertWith1Road(m, rnd);
-			InsertIntoMap(m);
+				MixSitiesAndPos(m, rnd);
+
+				SpecialInsertWith1Road(m, rnd);
+				InsertIntoMap(m);
+			} while (sities.Count != 0);
 
 			chooserId.PlaceId(m, rnd);
 		}
@@ -40,8 +47,8 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 			}
 			else
 				gameQuads = m.SizeX * m.SizeY / values.generator_SityPlacer14_Quad_Size;
-
 			if (gameQuads < values.generator_SityPlacer14_Quad_MinimimCnt) gameQuads = values.generator_SityPlacer14_Quad_MinimimCnt;
+
 			sitiesCnt = rnd.Next(values.generator_SityPlacer14_Quad_Sities_Min * gameQuads,
 				values.generator_SityPlacer14_Quad_Sities_Max * gameQuads);
 
@@ -71,23 +78,29 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 
 		void MixSitiesAndPos(GameMap m, Random rnd) {
 			for (int i = 0; i < bestSitiesPos.Count * (rnd.NextDouble() + 1); ++i) {
-				int pos1 = rnd.Next(0, bestSitiesPos.Count), pos2;
-				do
-					pos2 = rnd.Next(0, bestSitiesPos.Count);
-				while (pos2 == pos1);
+				int pos1, pos2;
+				object tmp;
 
-				object tmp = bestSitiesPos[pos1];
-				bestSitiesPos[pos1] = bestSitiesPos[pos2];
-				bestSitiesPos[pos2] = (KeyValuePair<int, int>)tmp;
+				if (bestSitiesPos.Count != 1 && bestSitiesPos.Count != 2) {
+					pos1 = rnd.Next(0, bestSitiesPos.Count);
+					do
+						pos2 = rnd.Next(0, bestSitiesPos.Count);
+					while (pos2 == pos1);
 
+					tmp = bestSitiesPos[pos1];
+					bestSitiesPos[pos1] = bestSitiesPos[pos2];
+					bestSitiesPos[pos2] = (KeyValuePair<int, int>)tmp;
+				}
 
-				pos1 = rnd.Next(0, sities.Count);
-				do
-					pos2 = rnd.Next(0, sities.Count);
-				while (pos2 == pos1);
-				tmp = sities[pos1];
-				sities[pos1] = sities[pos2];
-				sities[pos2] = (BasicSity)tmp;
+				if (sities.Count != 1 && sities.Count != 2) {
+					pos1 = rnd.Next(0, sities.Count);
+					do
+						pos2 = rnd.Next(0, sities.Count);
+					while (pos2 == pos1);
+					tmp = sities[pos1];
+					sities[pos1] = sities[pos2];
+					sities[pos2] = (BasicSity)tmp;
+				}
 			}
 
 		}
@@ -112,9 +125,15 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 		}
 
 		void InsertIntoMap(GameMap m) {
-			for (int i = 0; i < bestSitiesPos.Count && i < sities.Count; ++i)
-				if (IsFreeAround(i, m))
-					m.Map[bestSitiesPos[i].Key][bestSitiesPos[i].Value].Sity = sities[i];
+			while (sities.Count != 0 && bestSitiesPos.Count != 0) {
+				if (IsFreeAround(0, m)) {
+					m.Map[bestSitiesPos[0].Key][bestSitiesPos[0].Value].Sity = sities[0];
+					bestSitiesPos.RemoveAt(0);
+					sities.RemoveAt(0);
+				}
+				else
+					bestSitiesPos.RemoveAt(0);
+			}
 		}
 
 		//-------------------------------------- Methods - Support --------------------------------------------
@@ -129,7 +148,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 												 m.Map[bestSitiesPos[k].Key + 1][bestSitiesPos[k].Value].Sity == null)) &&
 
 					(bestSitiesPos[k].Value == 0 || !m.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenLeft ||
-					(bestSitiesPos[k].Value > 0 && m.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value - 1].IsOpenLeft &&
+					(bestSitiesPos[k].Value > 0 && m.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenLeft &&
 												 m.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value - 1].Sity == null)) &&
 
 					(bestSitiesPos[k].Value == m.Map[0].Count - 1 || !m.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenRight ||
@@ -137,5 +156,13 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 												 m.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value + 1].Sity == null));
 		}
 
+		int CntSities(GameMap m) {
+			int rez = 0;
+			for (int i = 0; i < m.SizeY; ++i)
+				for (int j = 0; j < m.SizeX; ++j)
+					if (m.Map[i][j].Sity != null)
+						++rez;
+			return rez;
+		}
 	}
 }
