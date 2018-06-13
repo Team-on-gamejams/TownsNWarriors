@@ -53,7 +53,7 @@ namespace TownsAndWarriors.game.sity
 		}
 		public override void UpdateValue()
 		{
-			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
+				text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
 		void FillShape() {
@@ -86,7 +86,6 @@ namespace TownsAndWarriors.game.sity
 
 			shape.Children.Add(elipse);
 
-			Label
 			text = new Label()
 			{
 				Foreground = Brushes.Black,
