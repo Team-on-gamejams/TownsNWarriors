@@ -70,8 +70,11 @@ namespace TownsAndWarriors.game.map {
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
             foreach (var i in from)
-                SendWarriors(i, to);
-        }
+			{
+				if (i.currWarriors > 1)
+				SendWarriors(i, to);
+			}
+		}
 
     	public void SendWarriors(BasicSity from, BasicSity to) {
 			var unit = from.SendUnit(to);
