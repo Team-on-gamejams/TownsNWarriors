@@ -18,7 +18,7 @@ namespace TownsAndWarriors.game.unit {
 		protected int currPathIndex;
 		protected ushort currTickOnCell, tickPerTurn;
 
-		BasicSity destination;
+		public BasicSity destination;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }

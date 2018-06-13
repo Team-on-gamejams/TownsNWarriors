@@ -41,6 +41,7 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort basicSity_StartWarriors = 10;
 		public static ushort basicSity_ticks_NewWarrior = 50;
 		public static float basicSity_sendWarriorsPersent = 0.50f;
+		public static float basicSity_defendWarriorsPersent = 1.0f;
 
 		public static ushort basicUnit_ticks_MoveWarrior = 7;
 

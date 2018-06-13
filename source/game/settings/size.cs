@@ -34,6 +34,7 @@ namespace TownsAndWarriors.game.settings {
 		}
 
 		public static double sitySizeMult = 0.67;
+		public static double unitSizeMult = 0.40;
 
 		public static double roadWidth = 0.2;
 		public static double roadHeight = 0.2;
