@@ -86,8 +86,9 @@ namespace TownsAndWarriors.game.sity
 
 			shape.Children.Add(elipse);
 
-			//Label
-			text = new Label() {
+			Label
+			text = new Label()
+			{
 				Foreground = Brushes.Black,
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
