@@ -14,6 +14,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Windows.Media.Animation;
+
+using System.Reflection;
+
 namespace TownsAndWarriors.game.sity
 {
 	public partial class BasicSity
@@ -89,15 +93,59 @@ namespace TownsAndWarriors.game.sity
 
 			shape.Children.Add(elipse);
 
-			text = new Label()
-			{
+			text = new Label() {
 				Foreground = Brushes.Black,
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
 			};
-			shape.Children.Add(text);
+			text.MouseMove += (a, b) => {
+				//var dynMethod = elipse.GetType().GetEvent("MouseMove", BindingFlags.NonPublic | BindingFlags.Instance);
+				////MessageBox.Show((dynMethod == null).ToString());
+				//if (dynMethod != null) {
+				//dynMethod.Invoke(this, new object[] { a, b });
+				//}
+
+				//var eventArgs = b; //replace with real args
+
+				//var eventInfo = elipse.GetType().GetEvent("MouseMove", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+				//MessageBox.Show((eventInfo != null).ToString());
+
+				//var method = eventInfo.GetRaiseMethod(true);
+				//eventInfo.AddEventHandler(elipse, null);
+
+				//method.Invoke(elipse, new object[] { b });
+
+				//var eventDelegate = (MulticastDelegate)elipse.GetType().GetField("MouseMove", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(elipse);
+				//if (eventDelegate != null) {
+				//	foreach (var handler in eventDelegate.GetInvocationList()) {
+				//		handler.Method.Invoke(handler.Target, new object[] { elipse, eventArgs });
+				//	}
+				//}
+
+
+			};
+
+			shape.MouseEnter += (a, b)=>{
+				var anim = new System.Windows.Media.Animation.DoubleAnimation {
+					From = min * settings.size.sitySizeMult,
+					To = min,
+					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
+				};
+				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
+				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
+			};
+			shape.MouseLeave += (a, b) => {
+				var anim = new System.Windows.Media.Animation.DoubleAnimation {
+					To = min * settings.size.sitySizeMult,
+					From  = min,
+					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
+				};
+				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
+				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
+			};
 		}
 	}
 }
