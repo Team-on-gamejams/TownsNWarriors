@@ -38,15 +38,16 @@ namespace TownsAndWarriors.game.sity
 				FillShape();
 			};
 
-
-			//shape.IsMouseDirectlyOverChanged
-
-			//Rectangle newRec = new Rectangle();
-			//newRec.Fill = Brushes.Green;
-
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
-				selected.Add(this);
+				if (playerId == 1)
+					selected.Add(this);
+				if (playerId != 1)
+				{
+					//MessageBox.Show(gameMap.ToString());
+					gameMap.SendWarriors(selected, this);
+					selected.Clear();
+				}
 			};
 			//shape.Children.Add(newRec);
 
@@ -68,25 +69,6 @@ namespace TownsAndWarriors.game.sity
 				Stroke = settings.colors.neutralTownStroke,
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
-			};
-
-			shape.MouseMove += delegate (object sender, MouseEventArgs e)
-			{
-				//shape.Background = Brushes.DarkGray;
-				// анимация для ширины
-				//DoubleAnimation widthAnimation = new DoubleAnimation();
-				//widthAnimation.From = elipse.ActualWidth;
-				//widthAnimation.To = 60;
-				//widthAnimation.Duration = TimeSpan.FromSeconds(5);
-
-				//// анимация для высоты
-				//DoubleAnimation heightAnimation = new DoubleAnimation();
-				//heightAnimation.From = elipse.ActualHeight;
-				//heightAnimation.To = 60;
-				//heightAnimation.Duration = TimeSpan.FromSeconds(5);
-
-				//helloButton.BeginAnimation(Button.WidthProperty, widthAnimation);
-				//helloButton.BeginAnimation(Button.HeightProperty, heightAnimation);
 			};
 
 			if (playerId == 1) {
