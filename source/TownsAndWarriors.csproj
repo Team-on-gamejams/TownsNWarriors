@@ -70,11 +70,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="style\DictionaryStyle.xaml">
+    <Page Include="style\CityStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="style\WindowStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\GameLobbyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="window\GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\HightScores.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\InGameMenuEsc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,8 +130,17 @@
     <Compile Include="game\map\GameMap.cs" />
     <Compile Include="game\settings\values.cs" />
     <Compile Include="game\basicInterfaces\tickable.cs" />
+    <Compile Include="window\GameLobbyWindow.xaml.cs">
+      <DependentUpon>GameLobbyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="window\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\HightScores.xaml.cs">
+      <DependentUpon>HightScores.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\InGameMenuEsc.xaml.cs">
+      <DependentUpon>InGameMenuEsc.xaml</DependentUpon>
     </Compile>
     <Compile Include="window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -166,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="audio\sounds\gg.mp3" />
+    <Resource Include="img\window\lobby\background.jpg" />
     <Resource Include="img\unit sprite\black warrior.jpg" />
     <Resource Include="img\unit sprite\warrior.jpg" />
   </ItemGroup>

@@ -35,27 +35,6 @@ namespace TownsAndWarriors.window {
 				Game game = new Game(gameWindow, TownsAndWarriors.game.settings.values.fieldSizeX, TownsAndWarriors.game.settings.values.fieldSizeY);
 				game.Play();
 			};
-
-			var g = new Grid();
-			this.Content = g;
-			g.RowDefinitions.Add(new RowDefinition());
-			g.RowDefinitions.Add(new RowDefinition());
-			g.RowDefinitions.Add(new RowDefinition());
-
-			g.ColumnDefinitions.Add(new ColumnDefinition());
-			g.ColumnDefinitions.Add(new ColumnDefinition());
-			g.ColumnDefinitions.Add(new ColumnDefinition());
-
-			var c = new Canvas();
-			g.Children.Add(c);
-
-			var r = new Grid() { Height = 100, Width = 150};
-			r.Children.Add(new Ellipse() { Fill = Brushes.Aqua, Stroke = Brushes.Red });
-			r.Children.Add(new Label() { Content="142" });
-			Canvas.SetZIndex(r, 3);
-			Canvas.SetTop(r, 100);
-			Canvas.SetLeft(r, 100);
-			c.Children.Add(r);
 		}
 	}
 }
