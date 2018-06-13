@@ -6,39 +6,36 @@
 		<Style.Resources>
 			<Style TargetType="Label">
 				<!--<Style.Setters>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Label">
-						<Ellipse>
-							<Ellipse.Fill>Orange</Ellipse.Fill>
-							<Ellipse.Width>30</Ellipse.Width>
-							<Ellipse.Height>30</Ellipse.Height>
-						</Ellipse>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style.Setters>-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Label">
+                        <Ellipse>
+                            <Ellipse.Fill>Orange</Ellipse.Fill>
+                            <Ellipse.Width>30</Ellipse.Width>
+                            <Ellipse.Height>30</Ellipse.Height>
+                        </Ellipse>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>-->
 				<Style.Triggers>
 					<EventTrigger RoutedEvent="MouseMove">
 						<EventTrigger.Actions>
 							<!--<BeginStoryboard>
-								<Storyboard>
-									<DoubleAnimation Storyboard.TargetProperty="Width" Duration="0:0:1" To="100" AutoReverse="True" />
-									<DoubleAnimation Storyboard.TargetProperty="Height" Duration="0:0:1" To="100" AutoReverse="True" />
-								</Storyboard>
-							</BeginStoryboard>-->
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Width" Duration="0:0:1" To="100" AutoReverse="True" />
+                                    <DoubleAnimation Storyboard.TargetProperty="Height" Duration="0:0:1" To="100" AutoReverse="True" />
+                                </Storyboard>
+                            </BeginStoryboard>-->
 						</EventTrigger.Actions>
 					</EventTrigger>
 				</Style.Triggers>
 			</Style>
 		</Style.Resources>
 	</Style>
-	
 
-	
-	
 	<Style TargetType="Grid" x:Key="BasicCityMouseMove">
 
 	</Style>
-	
+
 </ResourceDictionary>

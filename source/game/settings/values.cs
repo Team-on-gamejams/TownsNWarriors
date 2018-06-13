@@ -11,6 +11,7 @@ namespace TownsAndWarriors.game.settings {
 
 		public static ushort fieldSizeX = 10;
 		public static ushort fieldSizeY = 10;
+		public static ushort milisecondsPerTick = 500;
 
 		public static bool gameplay_SaveWarriorsOverCap = true;
 		public static bool gameplay_EqualsMeansCapture = false;

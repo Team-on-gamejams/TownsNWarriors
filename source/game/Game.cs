@@ -46,10 +46,8 @@ namespace TownsAndWarriors.game {
 			Grid.SetZIndex(mainCanvas, 2);
 			mainGrid.Children.Add(mainCanvas);
 
-			//settings.size.oneCellSizeX = mainGrid.RenderSize.Width / x;
-			//settings.size.oneCellSizeY = mainGrid.RenderSize.Height / y;
-			settings.size.oneCellSizeX = 0;
-			settings.size.oneCellSizeY = 0;
+			settings.size.OneCellSizeX = 0;
+			settings.size.OneCellSizeY = 0;
 
 			gameMap = GameMap.GenerateRandomMap(
 				(int)DateTime.Now.Ticks, 
@@ -66,7 +64,7 @@ namespace TownsAndWarriors.game {
 			Init();
 
 			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-			timer.Interval = 500;
+			timer.Interval = settings.values.milisecondsPerTick;
 			timer.Tick += (a, b) => {
 				if (isPlay) Loop();
 			};
@@ -76,27 +74,7 @@ namespace TownsAndWarriors.game {
 		void Init() {
 			gameMap.SetCanvas(mainCanvas);
 			gameMap.DrawStatic(mainGrid);
-
-			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-			timer.Interval = 10;
-			timer.Tick += (a, b) => {
-				if (settings.size.oneCellSizeX != mainGrid.RenderSize.Width / gameMap.SizeX)
-					++settings.size.oneCellSizeX;
-				if (settings.size.oneCellSizeY != mainGrid.RenderSize.Height / gameMap.SizeY)
-					++settings.size.oneCellSizeY;
-
-				if ((int)settings.size.oneCellSizeX == (int)(mainGrid.RenderSize.Width / gameMap.SizeX) ||
-					(int)settings.size.oneCellSizeY == (int)(mainGrid.RenderSize.Height / gameMap.SizeY)) {
-					timer.Stop();
-					mainGrid.SizeChanged += (c, d) => {
-						settings.size.oneCellSizeX = d.NewSize.Width / gameMap.SizeX;
-						settings.size.oneCellSizeY = d.NewSize.Height / gameMap.SizeY;
-					};
-				}
-
-				IOWindow.ForceResize();
-			};
-			timer.Start();
+			SetGrowTimer();
 		}
 
 		void Loop() {
@@ -105,5 +83,28 @@ namespace TownsAndWarriors.game {
 			++game.globalGameInfo.tick;
 		}
 
+		void SetGrowTimer() {
+			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+			timer.Interval = 10;
+
+			timer.Tick += (a, b) => {
+				if ((int)settings.size.OneCellSizeX < (int)(mainGrid.RenderSize.Width / gameMap.SizeX))
+					settings.size.OneCellSizeX += settings.size.growIncr;
+				if ((int)settings.size.OneCellSizeY < (int)(mainGrid.RenderSize.Height / gameMap.SizeY))
+					settings.size.OneCellSizeY += settings.size.growIncr;
+
+				if ((int)settings.size.OneCellSizeX >= (int)(mainGrid.RenderSize.Width / gameMap.SizeX) &&
+					(int)settings.size.OneCellSizeY >= (int)(mainGrid.RenderSize.Height / gameMap.SizeY)) {
+					timer.Stop();
+
+					mainGrid.SizeChanged += (c, d) => {
+						settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
+						settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
+					};
+				}
+			};
+
+			timer.Start();
+		}
 	}
 }
