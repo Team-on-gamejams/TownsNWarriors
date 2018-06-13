@@ -23,7 +23,7 @@ namespace TownsAndWarriors.game.map {
 		game.bot.BasicBot bot;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public List<BasicSity> Sities => sities;
+		public List<BasicSity> Sities { get => sities; set => sities = value; }
 		public List<BasicUnit> Units => units;
 		public List<List<GameCell>> Map => map;
 		public int SizeX => sizeX;

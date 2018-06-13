@@ -20,8 +20,11 @@ namespace TownsAndWarriors.game.map {
 			shape = new Grid();
 			FillShape();
 
-
-
+			//Delegates
+			shape.SizeChanged += (a, b) => {
+				shape.Children.Clear();
+				FillShape();
+			};
 		}
 
 		void FillShape() {
@@ -35,26 +38,34 @@ namespace TownsAndWarriors.game.map {
 			Rectangle rect;
 			if (IsOpenTop) {
 				rect = FormRect();
-				rect.Height = 30;
+				rect.Width = settings.size.roadWidth * settings.size.oneCellSizeX;
 				rect.VerticalAlignment = VerticalAlignment.Top;
 				shape.Children.Add(rect);
 			}
 			if (IsOpenBottom) {
 				rect = FormRect();
-				rect.Height = 30;
+				rect.Width = settings.size.roadWidth * settings.size.oneCellSizeX;
 				rect.VerticalAlignment = VerticalAlignment.Bottom;
 				shape.Children.Add(rect);
 			}
 			if (IsOpenLeft) {
 				rect = FormRect();
-				rect.Width = 30;
+				rect.Height = settings.size.roadHeight * settings.size.oneCellSizeY;
 				rect.HorizontalAlignment = HorizontalAlignment.Left;
 				shape.Children.Add(rect);
 			}
 			if (IsOpenRight) {
 				rect = FormRect();
-				rect.Width = 30;
+				rect.Height = settings.size.roadHeight * settings.size.oneCellSizeY;
 				rect.HorizontalAlignment = HorizontalAlignment.Right;
+				shape.Children.Add(rect);
+			}
+			if(IsOpenTop || IsOpenBottom || IsOpenLeft || IsOpenRight) {
+				rect = FormRect();
+				rect.HorizontalAlignment = HorizontalAlignment.Center;
+				rect.VerticalAlignment = VerticalAlignment.Center;
+				rect.Height = settings.size.roadHeight * settings.size.oneCellSizeY;
+				rect.Width = settings.size.roadWidth * settings.size.oneCellSizeX;
 				shape.Children.Add(rect);
 			}
 		}
@@ -62,8 +73,8 @@ namespace TownsAndWarriors.game.map {
 		Rectangle FormRect() {
 			return new Rectangle() {
 				Fill = Brushes.LightGray,
-				Width = 15,
-				Height = 15
+				Height = settings.size.oneCellSizeY / 2,
+				Width = settings.size.oneCellSizeX / 2
 			};
 		}
 	}
