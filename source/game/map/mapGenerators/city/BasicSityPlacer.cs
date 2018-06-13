@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.map.mapGenerators {
 	public interface BasicSityPlacer {
-		void PlaceSities(GameMap m, BasicCityId chooserId, Random rnd);
+		void PlaceSities(GameMap m, BasicCityId chooserId);
 	}
 }

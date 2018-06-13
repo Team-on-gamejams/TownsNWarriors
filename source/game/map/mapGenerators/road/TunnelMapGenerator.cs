@@ -11,10 +11,11 @@ using TownsAndWarriors.game.settings;
 using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.unit;
 
+using static TownsAndWarriors.game.settings.values;
+
 namespace TownsAndWarriors.game.map.mapGenerators {
 	public class TunnelMapGenerator : BasicMapGenerator {
-		public GameMap GenerateRandomMap(int seed, int sizeX, int sizeY, BasicSityPlacer sityPlacer, BasicCityId basicCityId) {
-			Random rnd = new Random(seed);
+		public GameMap GenerateRandomMap(int sizeX, int sizeY, BasicSityPlacer sityPlacer, BasicCityId basicCityId) {
 			GameMap m = new GameMap(sizeX, sizeY);
 
 			//System.Windows.MessageBox.Show(seed.ToString());
@@ -46,7 +47,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 				}
 			}
 
-			sityPlacer.PlaceSities(m, basicCityId, rnd);
+			sityPlacer.PlaceSities(m, basicCityId);
 
 			return m;
 

@@ -16,6 +16,7 @@ namespace TownsAndWarriors.game.map {
 		//---------------------------------------------- Fields ----------------------------------------------
 		int sizeX, sizeY;
 		int cellSizeX, cellSizeY;
+		Random rnd;
 
 		List<List<GameCell>> map;
 		List<BasicSity> sities;
@@ -29,6 +30,7 @@ namespace TownsAndWarriors.game.map {
 		public List<List<GameCell>> Map => map;
 		public int SizeX => sizeX;
 		public int SizeY => sizeY;
+		public Random Rnd => rnd;
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public GameMap(int SizeX, int SizeY) {
@@ -95,11 +97,11 @@ namespace TownsAndWarriors.game.map {
 			bots[id] = type;
 		}
 
-		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, 
+		static public GameMap GenerateRandomMap(int SizeX, int SizeY, 
 			game.map.mapGenerators.BasicMapGenerator mapGenerator, game.map.mapGenerators.BasicSityPlacer sityPlacer,
 			game.map.mapGenerators.BasicCityId basicCityId
 			) {
-			return mapGenerator.GenerateRandomMap(seed, SizeX, SizeY, sityPlacer, basicCityId);
+			return mapGenerator.GenerateRandomMap(SizeX, SizeY, sityPlacer, basicCityId);
 		}
 	}
 }

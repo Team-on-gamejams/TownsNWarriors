@@ -29,6 +29,7 @@ namespace TownsAndWarriors.game.sity {
 			currWarriors = settings.values.basicSity_StartWarriors;
 			sendPersent = settings.values.basicSity_sendWarriorsPersent;
 			defPersent = settings.values.basicSity_defendWarriorsPersent;
+			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
 			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
         }
 
@@ -153,7 +154,9 @@ namespace TownsAndWarriors.game.sity {
 					currWarriors = maxWarriors;
 			}
 			else {
-				ushort defWarriors = GetDefWarriors();
+				ushort defWarriors = currWarriors;
+				unit.warriorsCnt = (ushort)((2 - this.defPersent) * unit.warriorsCnt);
+
 				if (defWarriors > unit.warriorsCnt) {
 					defWarriors -= unit.warriorsCnt;
 					if(currWarriors > defWarriors)

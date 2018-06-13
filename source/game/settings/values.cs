@@ -9,6 +9,16 @@ namespace TownsAndWarriors.game.settings {
 		public static byte locateMemory_SizeForTowns = 12;
 		public static byte locateMemory_SizeForUnits = 12;
 
+		public static Random rnd { get; private set; }
+		public static int seedField;
+		public static int seed {
+			get => seedField;
+			set {
+				seedField = value;
+				rnd = new Random(seed);
+			}
+		}
+
 		public static ushort fieldSizeX = 10;
 		public static ushort fieldSizeY = 10;
 		public static ushort milisecondsPerTick = 20;
