@@ -14,7 +14,7 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort milisecondsPerTick = 20;
 
 		public static bool gameplay_SaveWarriorsOverCap = true;
-		public static bool gameplay_EqualsMeansCapture = false;
+		public static bool gameplay_EqualsMeansCapture = true;
 		public static bool gameplay_RemoveOvercapedUnits = true;
 
 		public static byte generator_TunenelMapGenerator_SkipChance = 10;
@@ -44,7 +44,9 @@ namespace TownsAndWarriors.game.settings {
 
 		public static ushort basicUnit_ticks_MoveWarrior = 7;
 
-		public static byte bot_rushBot_Tick_IgnoreFirstN = 0;
+		public static byte bot_rushBot_Tick_IgnoreFirstN = 200;
 		public static byte bot_rushBot_Tick_React = 50;
+		public static byte bot_rushBot_RushCnt = 2;
+		public static double bot_rushBot_MinimumMlt = 1.05;
 	}
 }
