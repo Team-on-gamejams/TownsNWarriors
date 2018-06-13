@@ -145,6 +145,8 @@ namespace TownsAndWarriors.game.sity {
 				else {
 					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
 					playerId = unit.playerId;
+					this.shape.Children.Clear();
+					this.FillShape();
 				}
 
 			}
