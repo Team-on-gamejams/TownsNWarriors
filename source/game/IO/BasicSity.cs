@@ -34,6 +34,9 @@ namespace TownsAndWarriors.game.sity
 				FillShape();
 			};
 
+
+			//shape.IsMouseDirectlyOverChanged
+
 			//Rectangle newRec = new Rectangle();
 			//newRec.Fill = Brushes.Green;
 
@@ -53,7 +56,8 @@ namespace TownsAndWarriors.game.sity
 		}
 		public override void UpdateValue()
 		{
-			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
+			if (text != null)
+				text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
 		void FillShape() {
