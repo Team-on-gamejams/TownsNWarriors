@@ -26,9 +26,6 @@ namespace TownsAndWarriors.game.sity
 		{
 			shape = new Grid();
 			shape.Style = (Style)shape.FindResource("BasicCityStyle");
-			text = new Label() { Foreground = Brushes.Black,
-				VerticalAlignment = VerticalAlignment.Center,
-				HorizontalAlignment = HorizontalAlignment.Center };
 			FillShape();
 
 			//Delegates
@@ -56,13 +53,15 @@ namespace TownsAndWarriors.game.sity
 		}
 		public override void UpdateValue()
 		{
-			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString() + '\n' + this.playerId.ToString();
+			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
 		void FillShape() {
 			//Elipse
 			double min = settings.size.oneCellSizeX < settings.size.oneCellSizeY ? settings.size.oneCellSizeX : settings.size.oneCellSizeY;
 			var elipse = new Ellipse() {
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
 				Fill = settings.colors.neutralTownFill,
 				Stroke = settings.colors.neutralTownStroke,
 				Width = min * settings.size.sitySizeMult,
@@ -88,6 +87,13 @@ namespace TownsAndWarriors.game.sity
 			shape.Children.Add(elipse);
 
 			//Label
+			text = new Label() {
+				Foreground = Brushes.Black,
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Width = min * settings.size.sitySizeMult,
+				Height = min * settings.size.sitySizeMult,
+			};
 			shape.Children.Add(text);
 		}
 	}
