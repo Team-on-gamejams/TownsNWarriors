@@ -31,21 +31,8 @@ namespace TownsAndWarriors.game.bot {
 		public override bool TickReact() {
 			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN && 
 				globalGameInfo.tick % values.bot_rushBot_Tick_React == 0) {
-				if (globalGameInfo.tick % 200 == 0)
-					map.SendWarriors(sities[0], sities[2]);
 
-				if (sities[2].currWarriors >= 20) {
-					botStreak = true;
-					botStreakCnt = 0;
-				}
-
-				if (botStreak) {
-					++botStreakCnt;
-					map.SendWarriors(sities[2], sities[1]);
-
-					if (botStreakCnt == 3)
-						botStreak = false;
-				}
+				System.Windows.MessageBox.Show("BOT TURN");
 
 				return true;
 			}

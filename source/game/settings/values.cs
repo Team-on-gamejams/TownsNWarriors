@@ -11,7 +11,7 @@ namespace TownsAndWarriors.game.settings {
 
 		public static ushort fieldSizeX = 10;
 		public static ushort fieldSizeY = 10;
-		public static ushort milisecondsPerTick = 500;
+		public static ushort milisecondsPerTick = 20;
 
 		public static bool gameplay_SaveWarriorsOverCap = true;
 		public static bool gameplay_EqualsMeansCapture = false;
@@ -44,7 +44,7 @@ namespace TownsAndWarriors.game.settings {
 
 		public static ushort basicUnit_ticks_MoveWarrior = 3;
 
-		public static byte bot_rushBot_Tick_IgnoreFirstN = 100;
+		public static byte bot_rushBot_Tick_IgnoreFirstN = 0;
 		public static byte bot_rushBot_Tick_React = 50;
 	}
 }
