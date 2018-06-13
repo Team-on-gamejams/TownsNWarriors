@@ -77,6 +77,9 @@ namespace TownsAndWarriors.game.map {
 		}
 
     	public void SendWarriors(BasicSity from, BasicSity to) {
+			if (from == to)
+				return;
+
 			var unit = from.SendUnit(to);
 
 			unit.SetCanvas(canvas);

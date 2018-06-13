@@ -14,7 +14,7 @@ namespace TownsAndWarriors.game.sity {
 		public static TownsAndWarriors.game.map.GameMap gameMap;
 
 		public ushort currWarriors, maxWarriors;
-		public double sendPersent;
+		public double sendPersent, defPersent;
 
 		ushort ticksPerIncome;
 		Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
@@ -29,6 +29,7 @@ namespace TownsAndWarriors.game.sity {
 			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
 			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
 			sendPersent = settings.values.basicSity_sendWarriorsPersent;
+			defPersent = settings.values.basicSity_defendWarriorsPersent;
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -49,7 +50,7 @@ namespace TownsAndWarriors.game.sity {
 		}
 
 		public ushort GetDefWarriors() {
-			return currWarriors;
+			return (ushort)(currWarriors * defPersent);
 		}
 
 		public BasicUnit SendUnit(BasicSity to) {
