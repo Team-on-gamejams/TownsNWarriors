@@ -64,5 +64,9 @@ namespace TownsAndWarriors.game.settings {
 		public static byte bot_rushBot_Tick_React = 50;
 		public static byte bot_rushBot_RushCnt = 3;
 		public static byte bot_rushBot_MinimumMore = 1;
+		public static bool bot_rushBot_IsDropOvercapacityUnits = true;
+		public static bool bot_rushBot_NearMaxMeansOvercapacityToo = true;
+		public static bool bot_rushBot_IsProtectSities = true;
+		public static bool bot_rushBot_IsMoveUnitsToWeakSities = true;
 	}
 }

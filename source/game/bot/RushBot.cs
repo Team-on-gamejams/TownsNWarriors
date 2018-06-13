@@ -34,7 +34,7 @@ namespace TownsAndWarriors.game.bot {
 			playerId = botId;
 		}
 
-		//---------------------------------------------- Methods ----------------------------------------------
+		//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
 			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN && 
 				globalGameInfo.tick % values.bot_rushBot_Tick_React == 0) {
@@ -47,11 +47,22 @@ namespace TownsAndWarriors.game.bot {
 				if(isRushing)
 					RushFromAllSities();
 
+				if (values.bot_rushBot_IsDropOvercapacityUnits)
+					DropOvercapacityUnits();
+
+				if (values.bot_rushBot_IsProtectSities)
+					ProtectSities();
+
+				if (values.bot_rushBot_IsMoveUnitsToWeakSities)
+					MoveUnitsToWeakSity();
+
 				return true;
 			}
 
 			return false;
 		}
+
+		//---------------------------------------------- Methods - fillData ----------------------------------------------
 
 		void RecalcBotSities() {
 			REPEAT_FILL_CITY:
@@ -76,6 +87,8 @@ namespace TownsAndWarriors.game.bot {
 					rushingSities.Add(unit.destination);
 			}
 		}
+
+		//---------------------------------------------- Methods - behavior ----------------------------------------------
 
 		void CalculateWhoNeedToBeRushed() {
 			List<List<BasicSity>> potentialRushes = new List<List<BasicSity>>();
@@ -111,6 +124,31 @@ namespace TownsAndWarriors.game.bot {
 			}
 		}
 
+		void RushFromAllSities() {
+			if (rushSity.playerId == this.playerId)
+				isRushing = false;
+
+			if (rushWaveRemains-- == 0)
+				isRushing = false;
+			else
+				foreach (var sity in botSities)
+					map.SendWarriors(sity, rushSity);
+		}
+
+		void DropOvercapacityUnits() {
+
+		}
+
+		void ProtectSities() {
+
+		}
+
+		void MoveUnitsToWeakSity() {
+
+		}
+
+		//---------------------------------------------- Methods - Support  ----------------------------------------------
+
 		uint CalcPotentialArmy(byte rushesCntBase) {
 			uint potentialArmy = 0;
 			foreach (var sity in botSities) {
@@ -121,17 +159,6 @@ namespace TownsAndWarriors.game.bot {
 			}
 			//System.Windows.MessageBox.Show(botSities[0].playerId.ToString() + "  " + potentialArmy.ToString());
 			return potentialArmy;
-		}
-
-		void RushFromAllSities() {
-			if (rushSity.playerId == this.playerId)
-				isRushing = false;
-
-			if (rushWaveRemains-- == 0) 
-				isRushing = false;
-			else 
-				foreach (var sity in botSities) 
-					map.SendWarriors(sity, rushSity);
 		}
 
 		int GetAvgDistance(BasicSity sity) {
@@ -155,6 +182,6 @@ namespace TownsAndWarriors.game.bot {
 					((values.basicUnit_ticks_MoveWarrior * GetAvgDistance(sityTo)) / sityTo.ticksPerIncome);
 		}
 
-		//	void DropOverca
+		
 	}
 }
