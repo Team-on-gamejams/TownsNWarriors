@@ -32,7 +32,7 @@ namespace TownsAndWarriors.game.bot {
 			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN && 
 				globalGameInfo.tick % values.bot_rushBot_Tick_React == 0) {
 
-				System.Windows.MessageBox.Show("BOT TURN");
+				//System.Windows.MessageBox.Show("BOT TURN");
 
 				return true;
 			}
