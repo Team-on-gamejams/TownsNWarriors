@@ -29,6 +29,7 @@ namespace TownsAndWarriors.game.sity {
 			currWarriors = settings.values.basicSity_StartWarriors;
 			sendPersent = settings.values.basicSity_sendWarriorsPersent;
 			defPersent = settings.values.basicSity_defendWarriorsPersent;
+			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
 			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
         }
 
