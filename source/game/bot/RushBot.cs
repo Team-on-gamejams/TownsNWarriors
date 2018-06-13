@@ -10,8 +10,7 @@ using TownsAndWarriors.game.settings;
 namespace TownsAndWarriors.game.bot {
 	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
-		int botStreakCnt = 0;
-		bool botStreak = false;
+		List<sity.BasicSity> botSities;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
@@ -31,8 +30,19 @@ namespace TownsAndWarriors.game.bot {
 		public override bool TickReact() {
 			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN && 
 				globalGameInfo.tick % values.bot_rushBot_Tick_React == 0) {
-
-				//System.Windows.MessageBox.Show("BOT TURN");
+				REPEAT_FILL_CITY:
+				foreach (var sity in sities) {
+					if (botSities.Contains(sity)) {
+						if (sity.playerId != this.playerId) {
+							botSities.Remove(sity);
+							goto REPEAT_FILL_CITY;
+						}
+					}
+					else if (sity.playerId == this.playerId) {
+						botSities.Add(sity);
+						goto REPEAT_FILL_CITY;
+					}
+				}
 
 				return true;
 			}
