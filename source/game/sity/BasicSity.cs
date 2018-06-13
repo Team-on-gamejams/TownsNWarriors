@@ -17,8 +17,8 @@ namespace TownsAndWarriors.game.sity {
 		public ushort currWarriors, maxWarriors;
 		public double sendPersent, defPersent;
 
-		ushort ticksPerIncome;
-		Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
+		protected ushort ticksPerIncome;
+		protected Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }
@@ -29,6 +29,7 @@ namespace TownsAndWarriors.game.sity {
 			currWarriors = settings.values.basicSity_StartWarriors;
 			sendPersent = settings.values.basicSity_sendWarriorsPersent;
 			defPersent = settings.values.basicSity_defendWarriorsPersent;
+			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
 			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
         }
 
