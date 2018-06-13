@@ -33,9 +33,9 @@ namespace TownsAndWarriors.game.settings {
 		public static byte generator_SityPlacer14_Chance_PosWith4Road = 100;
 		public static byte generator_SityPlacer14_Code_MaxSityPlaceRepeats = 3;
 
-		public static byte generator_CityChooserIdDiffCorners_Bots = 1;
-		public static byte generator_CityChooserIdDiffCorners_TownsPerPlayer = 1;
-		public static byte generator_CityChooserIdDiffCorners_TownsPerBot = 1;
+		public static byte generator_CityId_Bots = 1;
+		public static byte generator_CityId_TownsPerPlayer = 1;
+		public static byte generator_CityId_TownsPerBot = 1;
 
 		public static ushort basicSity_MaxWarriors = 20;
 		public static ushort basicSity_StartWarriors = 10;
@@ -43,5 +43,8 @@ namespace TownsAndWarriors.game.settings {
 		public static float basicSity_sendWarriorsPersent = 0.50f;
 
 		public static ushort basicUnit_ticks_MoveWarrior = 50;
+
+		public static byte bot_rushBot_Tick_IgnoreFirstN = 100;
+		public static byte bot_rushBot_Tick_React = 50;
 	}
 }

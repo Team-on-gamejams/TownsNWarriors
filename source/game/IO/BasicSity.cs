@@ -96,33 +96,7 @@ namespace TownsAndWarriors.game.sity
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
 			};
-			text.MouseMove += (a, b) => {
-				//var dynMethod = elipse.GetType().GetEvent("MouseMove", BindingFlags.NonPublic | BindingFlags.Instance);
-				////MessageBox.Show((dynMethod == null).ToString());
-				//if (dynMethod != null) {
-				//dynMethod.Invoke(this, new object[] { a, b });
-				//}
-
-				//var eventArgs = b; //replace with real args
-
-				//var eventInfo = elipse.GetType().GetEvent("MouseMove", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-				//MessageBox.Show((eventInfo != null).ToString());
-
-				//var method = eventInfo.GetRaiseMethod(true);
-				//eventInfo.AddEventHandler(elipse, null);
-
-				//method.Invoke(elipse, new object[] { b });
-
-				//var eventDelegate = (MulticastDelegate)elipse.GetType().GetField("MouseMove", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(elipse);
-				//if (eventDelegate != null) {
-				//	foreach (var handler in eventDelegate.GetInvocationList()) {
-				//		handler.Method.Invoke(handler.Target, new object[] { elipse, eventArgs });
-				//	}
-				//}
-
-
-			};
+			shape.Children.Add(text);
 
 			shape.MouseEnter += (a, b)=>{
 				var anim = new System.Windows.Media.Animation.DoubleAnimation {

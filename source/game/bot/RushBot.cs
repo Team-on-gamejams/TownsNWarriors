@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using TownsAndWarriors.game.settings;
+
+
 namespace TownsAndWarriors.game.bot {
-	public class SimpleBot : BasicBot {
+	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		int botStreakCnt = 0;
 		bool botStreak = false;
@@ -14,11 +17,10 @@ namespace TownsAndWarriors.game.bot {
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public SimpleBot(game.map.GameMap Map,
+		public RushBot(game.map.GameMap Map,
 			List<game.sity.BasicSity> Sities,
 			List<game.unit.BasicUnit> Units,
-			byte botId	
-		) {
+			byte botId) {
 			map = Map;
 			sities = Sities;
 			units = Units;
@@ -27,7 +29,8 @@ namespace TownsAndWarriors.game.bot {
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public override bool TickReact() {
-			if (globalGameInfo.tick > 100 && globalGameInfo.tick % 50 == 0) {
+			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN && 
+				globalGameInfo.tick % values.bot_rushBot_Tick_React == 0) {
 				if (globalGameInfo.tick % 200 == 0)
 					map.SendWarriors(sities[0], sities[2]);
 
@@ -46,6 +49,7 @@ namespace TownsAndWarriors.game.bot {
 
 				return true;
 			}
+
 			return false;
 		}
 	}

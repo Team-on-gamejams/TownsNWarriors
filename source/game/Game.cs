@@ -57,6 +57,8 @@ namespace TownsAndWarriors.game {
 				new game.map.mapGenerators.SityPlacer14(),
 				new game.map.mapGenerators.CityIdDiffCorners()
 				);
+			for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
+				gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
