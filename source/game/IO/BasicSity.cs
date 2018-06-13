@@ -34,6 +34,9 @@ namespace TownsAndWarriors.game.sity
 				FillShape();
 			};
 
+
+			//shape.IsMouseDirectlyOverChanged
+
 			//Rectangle newRec = new Rectangle();
 			//newRec.Fill = Brushes.Green;
 
