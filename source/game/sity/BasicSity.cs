@@ -154,7 +154,9 @@ namespace TownsAndWarriors.game.sity {
 					currWarriors = maxWarriors;
 			}
 			else {
-				ushort defWarriors = GetDefWarriors();
+				ushort defWarriors = currWarriors;
+				unit.warriorsCnt = (ushort)((2 - this.defPersent) * unit.warriorsCnt);
+
 				if (defWarriors > unit.warriorsCnt) {
 					defWarriors -= unit.warriorsCnt;
 					if(currWarriors > defWarriors)
