@@ -60,7 +60,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 			{
 				if (i % 2 == 0)
 				{
-					sities.Add(new CastleCity());
+					sities.Add(new HorseCity());
 				}
 				else
 				{

@@ -29,8 +29,21 @@
 		</Style.Resources>-->
 	</Style>
 
-	<Style TargetType="Grid" x:Key="BasicCityMouseMove">
-
+	<Style TargetType="Label" x:Key="HorseCityStyle">
+		<!--<Style.Resources>-->
+			<!--<Style TargetType="Label">-->
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="Label">
+							<Grid>
+								<Rectangle Fill="Red">
+								</Rectangle>
+							</Grid>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			<!--</Style>-->
+		<!--</Style.Resources>-->
 	</Style>
 
 </ResourceDictionary>
