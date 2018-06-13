@@ -26,6 +26,9 @@ namespace TownsAndWarriors.game.settings {
 		public static Brush playerTownFill = Brushes.Red;
 		public static Brush playerTownStroke = Brushes.Black;
 
+		public static Brush citySelectedStroke = Brushes.Yellow;
+		public static double citySelectedStrokeThickness = 2;
+
 		public static List<Brush> TownFills = new List<Brush>() {
 			Brushes.Blue,
 			Brushes.Teal,

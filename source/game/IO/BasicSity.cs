@@ -62,29 +62,15 @@ namespace TownsAndWarriors.game.sity
 				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
 			};
 
-			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
-			{
-				if (playerId == 1)
-					selected.Add(this);
-				if (playerId != 1)
-				{
-					//MessageBox.Show(gameMap.ToString());
-					gameMap.SendWarriors(selected, this);
-					selected.Clear();
-				}
-			};
 			shape.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
 				selected.Clear();
 			};
-
-			//тут створювати всі собитія з городом
-
 		}
 
 		public override void UpdateValue()
 		{
-				text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
+			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
 		void FillShape() {
@@ -97,6 +83,28 @@ namespace TownsAndWarriors.game.sity
 				Stroke = settings.colors.neutralTownStroke,
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
+			};
+
+			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
+			{
+				if (playerId == 1)
+				{
+					if (selected.Contains(this) == false)
+					{
+						selected.Add(this);
+						elipse.Stroke = settings.colors.citySelectedStroke;
+						elipse.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+					}				
+				}
+				if (playerId != 1)
+				{
+					gameMap.SendWarriors(selected, this);
+					foreach(var x in selected)
+					{
+						x.elipse.StrokeThickness = 0;
+					}
+					selected.Clear();
+				}
 			};
 
 			if (playerId == 1) {
