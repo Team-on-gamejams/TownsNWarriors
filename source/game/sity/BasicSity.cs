@@ -14,6 +14,7 @@ namespace TownsAndWarriors.game.sity {
 		public static TownsAndWarriors.game.map.GameMap gameMap;
 
 		public ushort currWarriors, maxWarriors;
+		public double sendPersent;
 
 		ushort ticksPerIncome;
 		Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
@@ -27,6 +28,7 @@ namespace TownsAndWarriors.game.sity {
 			currWarriors = settings.values.basicSity_StartWarriors;
 			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
 			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
+			sendPersent = settings.values.basicSity_sendWarriorsPersent;
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -42,8 +44,16 @@ namespace TownsAndWarriors.game.sity {
 			return false;
 		}
 
+		public ushort GetAtkWarriors() {
+			return (ushort)(currWarriors * sendPersent);
+		}
+
+		public ushort GetDefWarriors() {
+			return currWarriors;
+		}
+
 		public BasicUnit SendUnit(BasicSity to) {
-			ushort sendWarriors = (ushort) (currWarriors * settings.values.basicSity_sendWarriorsPersent);
+			ushort sendWarriors = GetAtkWarriors();
 			currWarriors -= sendWarriors;
 			if (currWarriors < 0)
 				currWarriors = 0;
@@ -137,13 +147,17 @@ namespace TownsAndWarriors.game.sity {
 					currWarriors = maxWarriors;
 			}
 			else {
-				if (currWarriors > unit.warriorsCnt)
-					currWarriors -= unit.warriorsCnt;
-				else if (!settings.values.gameplay_EqualsMeansCapture && currWarriors == unit.warriorsCnt) {
+				ushort defWarriors = GetDefWarriors();
+				if (defWarriors > unit.warriorsCnt) {
+					defWarriors -= unit.warriorsCnt;
+					if(currWarriors > defWarriors)
+						currWarriors = defWarriors;
+				}
+				else if (!settings.values.gameplay_EqualsMeansCapture && defWarriors == unit.warriorsCnt) {
 					currWarriors = 0;
 				}
 				else {
-					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
+					currWarriors = (ushort)(unit.warriorsCnt - defWarriors);
 					playerId = unit.playerId;
 					this.shape.Children.Clear();
 					this.FillShape();
