@@ -43,6 +43,9 @@ namespace TownsAndWarriors.game.bot {
 					CalculateWhoNeedToBeRushed();
 				else
 					RushFromAllSities();
+
+
+
 				return true;
 			}
 
@@ -74,13 +77,7 @@ namespace TownsAndWarriors.game.bot {
 		}
 
 		void CalculateWhoNeedToBeRushed() {
-			uint potentialArmy = 0;
-			foreach (var sity in botSities) {
-				ushort currSend = 0, rushesCnt = settings.values.bot_rushBot_RushCnt;
-				while (rushesCnt-- != 0)
-					currSend += (ushort)((sity.currWarriors - currSend) * sity.sendPersent);
-				potentialArmy += currSend;
-			}
+			uint potentialArmy = CalcPotentialArmy(settings.values.bot_rushBot_RushCnt);
 
 			RecalcRushingSities();
 
@@ -92,8 +89,24 @@ namespace TownsAndWarriors.game.bot {
 			if (potentialRush.Count != 0) {
 				rushSity = potentialRush[settings.values.rnd.Next(0, potentialRush.Count)];
 				isRushing = true;
-				rushWaveRemains = settings.values.bot_rushBot_RushCnt;
+				for(byte i = 1; i <= settings.values.bot_rushBot_RushCnt; ++i) {
+					if (CalcPotentialArmy(i) > rushSity.GetDefWarriors() * values.bot_rushBot_MinimumMlt) {
+						rushWaveRemains = i;
+						break;
+					}
+				}
 			}
+		}
+
+		uint CalcPotentialArmy(byte rushesCntBase) {
+			uint potentialArmy = 0;
+			foreach (var sity in botSities) {
+				ushort currSend = 0, rushesCnt = rushesCntBase;
+				while (rushesCnt-- != 0)
+					currSend += (ushort)((sity.GetAtkWarriors() - currSend) * sity.sendPersent);
+				potentialArmy += currSend;
+			}
+			return potentialArmy;
 		}
 
 		void RushFromAllSities() {
@@ -106,5 +119,7 @@ namespace TownsAndWarriors.game.bot {
 				foreach (var sity in botSities) 
 					map.SendWarriors(sity, rushSity);
 		}
+
+	//	void DropOverca
 	}
 }
