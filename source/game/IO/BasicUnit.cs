@@ -20,12 +20,10 @@ namespace TownsAndWarriors.game.unit {
 	public partial class BasicUnit {
 		Label text;
 		Canvas canvas;
-		double cellSizeX, cellSizeY;
 		double pixelPerTurnX, pixelPerTurnY;
 		double shiftX, shiftY;
 
-		public void SetCanvas(Canvas canvas) => this.canvas = canvas;
-		public void SetOneCellSize(int X, int Y) { cellSizeX = X; cellSizeY = Y; }
+		public void SetCanvas(Canvas c) => canvas = c;
 
 		public override void InitializeShape() {
 			text = new Label() {
@@ -37,8 +35,8 @@ namespace TownsAndWarriors.game.unit {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center
 			};
-			shape.Width = cellSizeX / 2;
-			shape.Height = cellSizeY / 2;
+			shape.Width = settings.size.OneCellSizeX / 2;
+			shape.Height = settings.size.OneCellSizeY / 2;
 			shape.Children.Add(new Ellipse() {
 				Fill = Brushes.Pink,
 				Stroke = Brushes.Black,
@@ -49,10 +47,10 @@ namespace TownsAndWarriors.game.unit {
 			});
 			shape.Children.Add(text);
 
-			pixelPerTurnX = cellSizeX / tickPerTurn;
-			pixelPerTurnY = cellSizeY / tickPerTurn;
-			shiftX = cellSizeX / 2 - shape.Width / 2;
-			shiftY = cellSizeY / 2 - shape.Height / 2;
+			pixelPerTurnX = settings.size.OneCellSizeX / tickPerTurn;
+			pixelPerTurnY = settings.size.OneCellSizeY / tickPerTurn;
+			shiftX = settings.size.OneCellSizeX / 2 - shape.Width / 2;
+			shiftY = settings.size.OneCellSizeY / 2 - shape.Height / 2;
 
 			UpdateValue();
 			canvas.Children.Add(shape);
@@ -62,18 +60,18 @@ namespace TownsAndWarriors.game.unit {
 			text.Content = this.warriorsCnt.ToString() + '\n' + this.playerId.ToString();
 
 			if(path[currPathIndex].Key > path[currPathIndex + 1].Key)
-				Canvas.SetLeft(shape, path[currPathIndex].Key * cellSizeX - currTickOnCell * pixelPerTurnX + shiftX);
+				Canvas.SetLeft(shape, path[currPathIndex].Key * settings.size.OneCellSizeX - currTickOnCell * pixelPerTurnX + shiftX);
 			else if (path[currPathIndex].Key < path[currPathIndex + 1].Key)
-				Canvas.SetLeft(shape, path[currPathIndex].Key * cellSizeX + currTickOnCell * pixelPerTurnX + shiftX);
+				Canvas.SetLeft(shape, path[currPathIndex].Key * settings.size.OneCellSizeX + currTickOnCell * pixelPerTurnX + shiftX);
 			else
-				Canvas.SetLeft(shape, path[currPathIndex].Key * cellSizeX + shiftX);
+				Canvas.SetLeft(shape, path[currPathIndex].Key * settings.size.OneCellSizeX + shiftX);
 
 			if (path[currPathIndex].Value > path[currPathIndex + 1].Value)
-				Canvas.SetTop(shape, path[currPathIndex].Value * cellSizeY - currTickOnCell * pixelPerTurnY + shiftY);
+				Canvas.SetTop(shape, path[currPathIndex].Value * settings.size.OneCellSizeY - currTickOnCell * pixelPerTurnY + shiftY);
 			else if (path[currPathIndex].Value < path[currPathIndex + 1].Value)
-				Canvas.SetTop(shape, path[currPathIndex].Value * cellSizeY + currTickOnCell * pixelPerTurnY + shiftY);
+				Canvas.SetTop(shape, path[currPathIndex].Value * settings.size.OneCellSizeY + currTickOnCell * pixelPerTurnY + shiftY);
 			else
-				Canvas.SetTop(shape, path[currPathIndex].Value * cellSizeY + shiftY);
+				Canvas.SetTop(shape, path[currPathIndex].Value * settings.size.OneCellSizeY + shiftY);
 		}
 	}
 }
