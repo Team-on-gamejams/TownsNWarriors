@@ -3,12 +3,30 @@
                     xmlns:local="clr-namespace:TownsAndWarriors.style">
 
 	<Style TargetType="Grid" x:Key="BasicCityStyle">
-		<Style.Resources>
-			<Style TargetType="Ellipse">
+		<!--<Style.Resources>
+			--><!--<Style TargetType="Label">
+				<Style.Resources>
+					<Style TargetType="Ellipse">
+						<Style.Triggers>
+							<EventTrigger RoutedEvent="Grid.MouseEnter">
+								<EventTrigger.Actions>
+									<BeginStoryboard>
+										<Storyboard>
+											<DoubleAnimation Storyboard.TargetProperty="Width" Duration="0:0:0.5" To="40" AutoReverse="True" RepeatBehavior="1x"/>
+											<DoubleAnimation Storyboard.TargetProperty="Height" Duration="0:0:0.5" To="40" AutoReverse="True" RepeatBehavior="1x"/>
+										</Storyboard>
+									</BeginStoryboard>
+								</EventTrigger.Actions>
+							</EventTrigger>
+						</Style.Triggers>
+					</Style>
+				</Style.Resources>
+			</Style>--><!--
+			<Style TargetType="Grid">
 				<Style.Triggers>
 				</Style.Triggers>
 			</Style>
-		</Style.Resources>
+		</Style.Resources>-->
 	</Style>
 
 	<Style TargetType="Grid" x:Key="BasicCityMouseMove">

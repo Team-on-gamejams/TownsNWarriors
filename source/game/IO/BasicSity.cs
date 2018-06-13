@@ -38,21 +38,20 @@ namespace TownsAndWarriors.game.sity
 				FillShape();
 			};
 
-			//Rectangle newRec = new Rectangle();
-			//newRec.Fill = Brushes.Green;
-
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
-				selected.Add(this);
+				if (playerId == 1)
+					selected.Add(this);
+				if (playerId != 1)
+				{
+					//MessageBox.Show(gameMap.ToString());
+					gameMap.SendWarriors(selected, this);
+					selected.Clear();
+				}
 			};
-
-			//shape.MouseMove += delegate (object sender, MouseEventArgs e)
-			//{
-			//	newRec.Fill = Brushes.DarkGray;
-			//};
 			//shape.Children.Add(newRec);
 
-            //тут створювати всі собитія з городом
+			//тут створювати всі собитія з городом
 
 		}
 		public override void UpdateValue()
