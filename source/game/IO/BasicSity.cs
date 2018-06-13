@@ -29,9 +29,9 @@ namespace TownsAndWarriors.game.sity
 			FillShape();
 
 			//Delegates
-			shape.SizeChanged += (a, b) => {
-					shape.Children.Clear();
-					FillShape();
+			settings.size.SizeChanged += () => {
+				shape.Children.Clear();
+				FillShape();
 			};
 
 			//Rectangle newRec = new Rectangle();
@@ -58,7 +58,7 @@ namespace TownsAndWarriors.game.sity
 
 		void FillShape() {
 			//Elipse
-			double min = settings.size.oneCellSizeX < settings.size.oneCellSizeY ? settings.size.oneCellSizeX : settings.size.oneCellSizeY;
+			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
 			var elipse = new Ellipse() {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
