@@ -38,7 +38,7 @@ namespace TownsAndWarriors.game.unit {
 			shape.Width = settings.size.OneCellSizeX / 2;
 			shape.Height = settings.size.OneCellSizeY / 2;
 			shape.Children.Add(new Ellipse() {
-				Fill = Brushes.Pink,
+				Fill = settings.colors.playerTownFill,
 				Stroke = Brushes.Black,
 				Width = shape.Width,
 				Height = shape.Height,
