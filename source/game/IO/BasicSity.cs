@@ -67,25 +67,48 @@ namespace TownsAndWarriors.game.sity
 				cityModel.BeginAnimation(Ellipse.HeightProperty, anim);
 			};
 
-			shape.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
+			grid.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
+				foreach (var x in selected)
+				{
+					SetElipseColor(x.cityModel, x.playerId);
+				}
 				selected.Clear();
 			};
 
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e) {
-				if (playerId == 1) {
-					if (selected.Contains(this) == false) {
-						selected.Add(this);
-						cityModel.Stroke = settings.colors.citySelectedStroke;
-						cityModel.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+				if (e.ClickCount == 1)
+				{
+					if (playerId == 1)
+					{
+						if (selected.Contains(this) == false)
+						{
+							selected.Add(this);
+							cityModel.Stroke = settings.colors.citySelectedStroke;
+							cityModel.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+						}
+					}
+					else if (playerId != 1)
+					{
+						gameMap.SendWarriors(selected, this);
+						foreach (var x in selected)
+						{
+							SetElipseColor(x.cityModel, x.playerId);
+						}
+						selected.Clear();
 					}
 				}
-				else if (playerId != 1) {
-					gameMap.SendWarriors(selected, this);
-					foreach (var x in selected) {
-						SetElipseColor(x.cityModel, x.playerId);
+				else
+				{
+					if (playerId == 1)
+					{
+						gameMap.SendWarriors(selected, this);
+						foreach (var x in selected)
+						{
+							SetElipseColor(x.cityModel, x.playerId);
+						}
+						selected.Clear();
 					}
-					selected.Clear();
 				}
 			};
 		}
