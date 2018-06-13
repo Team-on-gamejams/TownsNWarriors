@@ -16,7 +16,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 		//---------------------------------------------- Methods - main ----------------------------------------------
 		public void PlaceSities(GameMap m, BasicCityId chooserId, Random rnd) {
 			FormSitiesList(m, rnd);
-			
+
 			int cnt = values.generator_SityPlacer14_Code_MaxSityPlaceRepeats;
 			do {
 				if (cnt-- == 0)
@@ -31,6 +31,8 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 			} while (sities.Count != 0);
 
 			chooserId.PlaceId(m, rnd);
+
+			m.Sities = GetSitiesOnMap(m);
 		}
 
 		//-------------------------------------------- Methods - parts --------------------------------------------
@@ -163,6 +165,15 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 					if (m.Map[i][j].Sity != null)
 						++rez;
 			return rez;
+		}
+
+		List<sity.BasicSity> GetSitiesOnMap(GameMap m) {
+			List<sity.BasicSity> list = new List<BasicSity>();
+			for (int i = 0; i < m.SizeY; ++i)
+				for (int j = 0; j < m.SizeX; ++j)
+					if (m.Map[i][j].Sity != null)
+						list.Add(m.Map[i][j].Sity);
+			return list;
 		}
 	}
 }
