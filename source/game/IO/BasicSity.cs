@@ -78,7 +78,7 @@ namespace TownsAndWarriors.game.sity
 				else if (playerId != 1) {
 					gameMap.SendWarriors(selected, this);
 					foreach (var x in selected) {
-						SetCityColor(x.elipse, x.playerId);
+						SetElipseColor(x.elipse, x.playerId);
 					}
 					selected.Clear();
 				}
@@ -102,7 +102,7 @@ namespace TownsAndWarriors.game.sity
 				Height = min * settings.size.sitySizeMult,
 			};
 
-			SetCityColor(this.elipse, this.playerId);
+			SetElipseColor(this.elipse, this.playerId);
 			shape.Children.Add(elipse);
 
 			text = new Label() {
@@ -115,7 +115,7 @@ namespace TownsAndWarriors.game.sity
 			shape.Children.Add(text);
 		}
 
-		void SetCityColor(Ellipse elipse, byte playerId) {
+		static public void SetElipseColor(Shape elipse, byte playerId) {
 			if (playerId == 1) {
 				elipse.Fill = settings.colors.playerTownFill;
 				elipse.Stroke = settings.colors.playerTownStroke;
@@ -133,6 +133,5 @@ namespace TownsAndWarriors.game.sity
 			}
 			elipse.StrokeThickness = settings.colors.cityPassiveStrokeThickness;
 		}
-
 	}
 }

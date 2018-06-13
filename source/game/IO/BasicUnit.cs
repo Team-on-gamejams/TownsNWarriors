@@ -19,6 +19,7 @@ using TownsAndWarriors.game.basicInterfaces;
 namespace TownsAndWarriors.game.unit {
 	public partial class BasicUnit {
 		Label text;
+		Rectangle rectangle;
 		Canvas canvas;
 		double pixelPerTurnX, pixelPerTurnY;
 		double shiftX, shiftY;
@@ -26,38 +27,18 @@ namespace TownsAndWarriors.game.unit {
 		public void SetCanvas(Canvas c) => canvas = c;
 
 		public override void InitializeShape() {
-			text = new Label() {
-				VerticalAlignment = VerticalAlignment.Center,
-				HorizontalAlignment = HorizontalAlignment.Center
-			};
-
 			shape = new Grid() {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center
 			};
-			shape.Width = settings.size.OneCellSizeX / 3;
-			shape.Height = settings.size.OneCellSizeY / 3;
-			shape.Children.Add(new Rectangle() {
-				Fill = settings.colors.playerTownFill,
-				Stroke = Brushes.Black,
-				Width = shape.Width,
-				Height = shape.Height,
-				VerticalAlignment = VerticalAlignment.Center,
-				HorizontalAlignment = HorizontalAlignment.Center
-			});
-			shape.Children.Add(text);
 
-			pixelPerTurnX = settings.size.OneCellSizeX / tickPerTurn;
-			pixelPerTurnY = settings.size.OneCellSizeY / tickPerTurn;
-			shiftX = settings.size.OneCellSizeX / 2 - shape.Width / 2;
-			shiftY = settings.size.OneCellSizeY / 2 - shape.Height / 2;
+			FillShape();
 
-			UpdateValue();
 			canvas.Children.Add(shape);
 		}
 
 		public override void UpdateValue() {
-			text.Content = this.warriorsCnt.ToString() + '\n' + this.playerId.ToString();
+			text.Content = this.warriorsCnt.ToString();
 
 			if(path[currPathIndex].Key > path[currPathIndex + 1].Key)
 				Canvas.SetLeft(shape, path[currPathIndex].Key * settings.size.OneCellSizeX - currTickOnCell * pixelPerTurnX + shiftX);
@@ -72,6 +53,39 @@ namespace TownsAndWarriors.game.unit {
 				Canvas.SetTop(shape, path[currPathIndex].Value * settings.size.OneCellSizeY + currTickOnCell * pixelPerTurnY + shiftY);
 			else
 				Canvas.SetTop(shape, path[currPathIndex].Value * settings.size.OneCellSizeY + shiftY);
+		}
+
+		void FillShape() {
+			RecalcGeometrySize();
+
+			rectangle = new Rectangle() {
+				Fill = settings.colors.neutralTownFill,
+				Stroke = settings.colors.neutralTownStroke,
+				Width = shape.Width,
+				Height = shape.Height,
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center
+			};
+			sity.BasicSity.SetElipseColor(rectangle, this.playerId);
+			shape.Children.Add(rectangle);
+
+			text = new Label() {
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center
+			};
+			shape.Children.Add(text);
+
+			UpdateValue();
+		}
+
+		void RecalcGeometrySize() {
+			shape.Width = settings.size.OneCellSizeX * settings.size.unitSizeMult;
+			shape.Height = settings.size.OneCellSizeY * settings.size.unitSizeMult;
+
+			pixelPerTurnX = settings.size.OneCellSizeX / tickPerTurn;
+			pixelPerTurnY = settings.size.OneCellSizeY / tickPerTurn;
+			shiftX = settings.size.OneCellSizeX / 2 - shape.Width / 2;
+			shiftY = settings.size.OneCellSizeY / 2 - shape.Height / 2;
 		}
 	}
 }
