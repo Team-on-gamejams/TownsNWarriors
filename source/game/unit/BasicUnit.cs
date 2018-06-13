@@ -29,6 +29,7 @@ namespace TownsAndWarriors.game.unit {
 			path = Path;
 			currTickOnCell = 1;
 			tickPerTurn = TownsAndWarriors.game.settings.values.basicUnit_ticks_MoveWarrior;
+
 			playerId = PlayerId;
 			this.destination = destination;
 

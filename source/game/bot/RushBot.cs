@@ -26,7 +26,8 @@ namespace TownsAndWarriors.game.bot {
 		public RushBot(game.map.GameMap Map,
 			List<game.sity.BasicSity> Sities,
 			List<game.unit.BasicUnit> Units,
-			byte botId) {
+			byte botId
+			) {
 			map = Map;
 			sities = Sities;
 			units = Units;
@@ -83,20 +84,15 @@ namespace TownsAndWarriors.game.bot {
 
 			RecalcRushingSities();
 
-			sity.BasicSity weakestSity = null;
+			List<BasicSity> potentialRush = new List<BasicSity>();
 			foreach (var sity in sities)
-				if (sity.playerId != playerId && !rushingSities.Contains(sity)) {
-					weakestSity = sity;
-					break;
-				}
-			foreach (var sity in sities)
-				if (sity.GetDefWarriors() < weakestSity.GetDefWarriors() && sity.playerId != playerId && !rushingSities.Contains(sity))
-					weakestSity = sity;
+				if (sity.GetDefWarriors() * values.bot_rushBot_MinimumMlt < potentialArmy && sity.playerId != playerId && !rushingSities.Contains(sity))
+					potentialRush.Add(sity);
 
-			if (potentialArmy > weakestSity.GetDefWarriors() * values.bot_rushBot_MinimumMlt) {
+			if (potentialRush.Count != 0) {
+				rushSity = potentialRush[settings.values.rnd.Next(0, potentialRush.Count)];
 				isRushing = true;
 				rushWaveRemains = settings.values.bot_rushBot_RushCnt;
-				rushSity = weakestSity;
 			}
 		}
 

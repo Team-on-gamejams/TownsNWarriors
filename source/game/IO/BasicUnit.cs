@@ -31,6 +31,12 @@ namespace TownsAndWarriors.game.unit {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center
 			};
+			settings.size.SizeChanged += () => {
+				RecalcGeometrySize();
+				rectangle.Width = shape.Width;
+				rectangle.Height = shape.Height;
+			};
+
 
 			FillShape();
 

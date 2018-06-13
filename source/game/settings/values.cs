@@ -9,6 +9,16 @@ namespace TownsAndWarriors.game.settings {
 		public static byte locateMemory_SizeForTowns = 12;
 		public static byte locateMemory_SizeForUnits = 12;
 
+		public static Random rnd { get; private set; }
+		public static int seedField;
+		public static int seed {
+			get => seedField;
+			set {
+				seedField = value;
+				rnd = new Random(seed);
+			}
+		}
+
 		public static ushort fieldSizeX = 10;
 		public static ushort fieldSizeY = 10;
 		public static ushort milisecondsPerTick = 20;
@@ -33,7 +43,7 @@ namespace TownsAndWarriors.game.settings {
 		public static byte generator_SityPlacer14_Chance_PosWith4Road = 100;
 		public static byte generator_SityPlacer14_Code_MaxSityPlaceRepeats = 3;
 
-		public static byte generator_CityId_Bots = 1;
+		public static byte generator_CityId_Bots = 3;
 		public static byte generator_CityId_TownsPerPlayer = 1;
 		public static byte generator_CityId_TownsPerBot = 1;
 
@@ -42,6 +52,11 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort basicSity_ticks_NewWarrior = 50;
 		public static float basicSity_sendWarriorsPersent = 0.50f;
 		public static float basicSity_defendWarriorsPersent = 1.0f;
+
+		public static ushort castleCity_MaxWarriors = 30;
+		public static ushort castleCity_StartWarriors = 15;
+		public static float castleCity_sendWarriorsPersent = 0.50f;
+		public static float castleCity_defendWarriorsPersent = 1.5f;
 
 		public static ushort basicUnit_ticks_MoveWarrior = 7;
 

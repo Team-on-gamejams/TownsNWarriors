@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.settings;
 
+using static TownsAndWarriors.game.settings.values;
+
 namespace TownsAndWarriors.game.map.mapGenerators {
 	public class SityPlacer14 : BasicSityPlacer {
 		//---------------------------------------------- Fields ----------------------------------------------
@@ -14,7 +16,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 		List<KeyValuePair<int, int>> bestSitiesPos = new List<KeyValuePair<int, int>>();
 
 		//---------------------------------------------- Methods - main ----------------------------------------------
-		public void PlaceSities(GameMap m, BasicCityId chooserId, Random rnd) {
+		public void PlaceSities(GameMap m, BasicCityId chooserId) {
 			FormSitiesList(m, rnd);
 
 			int cnt = values.generator_SityPlacer14_Code_MaxSityPlaceRepeats;
@@ -55,7 +57,16 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 				values.generator_SityPlacer14_Quad_Sities_Max * gameQuads);
 
 			for (int i = 0; i < sitiesCnt; ++i)
-				sities.Add(new BasicSity());
+			{
+				if (i % 2 == 0)
+				{
+					sities.Add(new CastleCity());
+				}
+				else
+				{
+					sities.Add(new BasicSity());
+				}
+			}			
 		}
 
 		void FormBestPosition(GameMap m, Random rnd) {

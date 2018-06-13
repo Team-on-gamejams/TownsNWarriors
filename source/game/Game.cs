@@ -49,14 +49,17 @@ namespace TownsAndWarriors.game {
 			settings.size.OneCellSizeX = 0;
 			settings.size.OneCellSizeY = 0;
 
+			settings.values.seed = (int)
+				DateTime.Now.Ticks;
+				//1340092764;
+
 			gameMap = GameMap.GenerateRandomMap(
-				(int)DateTime.Now.Ticks, 
-				//1340092764,
 				x, y, 
 				new game.map.mapGenerators.TunnelMapGenerator(),
 				new game.map.mapGenerators.SityPlacer14(),
 				new game.map.mapGenerators.CityIdDiffCorners()
 				);
+
 			for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
 				gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
 		}
