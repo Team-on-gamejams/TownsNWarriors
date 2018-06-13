@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 using TownsAndWarriors.game.IO;
 using TownsAndWarriors.game.basicInterfaces;
@@ -26,14 +27,13 @@ namespace TownsAndWarriors.game.sity {
 		public BasicSity() {
 			maxWarriors = settings.values.basicSity_MaxWarriors;
 			currWarriors = settings.values.basicSity_StartWarriors;
-			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
-			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
 			sendPersent = settings.values.basicSity_sendWarriorsPersent;
 			defPersent = settings.values.basicSity_defendWarriorsPersent;
-		}
+			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
+        }
 
-		//---------------------------------------------- Methods ----------------------------------------------
-		public bool TickReact() {
+        //---------------------------------------------- Methods ----------------------------------------------
+        public bool TickReact() {
 			if (playerId != 0 && maxWarriors > currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0) {
 				++currWarriors;
 				return true;
@@ -62,8 +62,9 @@ namespace TownsAndWarriors.game.sity {
 			if (!pathToSities.ContainsKey(to)) 
 				BuildPath();
 
-			BasicUnit unit = new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
-			return unit;
+            BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
+
+            return unit;
 
 			void BuildPath() {
 				PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
@@ -140,6 +141,10 @@ namespace TownsAndWarriors.game.sity {
 				}
 			}
 		}
+
+        protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
+            return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
+        }
 
 		public void GetUnits(BasicUnit unit) {
 			if(playerId == unit.playerId) {
