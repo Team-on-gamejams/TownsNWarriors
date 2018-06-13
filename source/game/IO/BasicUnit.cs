@@ -35,9 +35,9 @@ namespace TownsAndWarriors.game.unit {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center
 			};
-			shape.Width = settings.size.OneCellSizeX / 2;
-			shape.Height = settings.size.OneCellSizeY / 2;
-			shape.Children.Add(new Ellipse() {
+			shape.Width = settings.size.OneCellSizeX / 3;
+			shape.Height = settings.size.OneCellSizeY / 3;
+			shape.Children.Add(new Rectangle() {
 				Fill = settings.colors.playerTownFill,
 				Stroke = Brushes.Black,
 				Width = shape.Width,

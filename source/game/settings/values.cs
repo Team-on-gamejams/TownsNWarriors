@@ -42,7 +42,7 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort basicSity_ticks_NewWarrior = 50;
 		public static float basicSity_sendWarriorsPersent = 0.50f;
 
-		public static ushort basicUnit_ticks_MoveWarrior = 5;
+		public static ushort basicUnit_ticks_MoveWarrior = 7;
 
 		public static byte bot_rushBot_Tick_IgnoreFirstN = 0;
 		public static byte bot_rushBot_Tick_React = 50;
