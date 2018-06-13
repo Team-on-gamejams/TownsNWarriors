@@ -66,6 +66,23 @@ namespace TownsAndWarriors.game.sity
 			{
 				selected.Clear();
 			};
+
+			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e) {
+				if (playerId == 1) {
+					if (selected.Contains(this) == false) {
+						selected.Add(this);
+						elipse.Stroke = settings.colors.citySelectedStroke;
+						elipse.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+					}
+				}
+				else if (playerId != 1) {
+					gameMap.SendWarriors(selected, this);
+					foreach (var x in selected) {
+						SetCityColor(x.elipse, x.playerId);
+					}
+					selected.Clear();
+				}
+			};
 		}
 
 		public override void UpdateValue()
@@ -85,28 +102,20 @@ namespace TownsAndWarriors.game.sity
 				Height = min * settings.size.sitySizeMult,
 			};
 
-			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
-			{
-				if (playerId == 1)
-				{
-					if (selected.Contains(this) == false)
-					{
-						selected.Add(this);
-						elipse.Stroke = settings.colors.citySelectedStroke;
-						elipse.StrokeThickness = settings.colors.citySelectedStrokeThickness;
-					}				
-				}
-				if (playerId != 1)
-				{
-					gameMap.SendWarriors(selected, this);
-					foreach(var x in selected)
-					{
-						x.elipse.StrokeThickness = 0;
-					}
-					selected.Clear();
-				}
-			};
+			SetCityColor(this.elipse, this.playerId);
+			shape.Children.Add(elipse);
 
+			text = new Label() {
+				Foreground = Brushes.Black,
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Width = min * settings.size.sitySizeMult,
+				Height = min * settings.size.sitySizeMult,
+			};
+			shape.Children.Add(text);
+		}
+
+		void SetCityColor(Ellipse elipse, byte playerId) {
 			if (playerId == 1) {
 				elipse.Fill = settings.colors.playerTownFill;
 				elipse.Stroke = settings.colors.playerTownStroke;
@@ -122,17 +131,8 @@ namespace TownsAndWarriors.game.sity
 				else
 					elipse.Stroke = settings.colors.TownStrokes[playerId - 2];
 			}
-
-			shape.Children.Add(elipse);
-
-			text = new Label() {
-				Foreground = Brushes.Black,
-				VerticalAlignment = VerticalAlignment.Center,
-				HorizontalAlignment = HorizontalAlignment.Center,
-				Width = min * settings.size.sitySizeMult,
-				Height = min * settings.size.sitySizeMult,
-			};
-			shape.Children.Add(text);
+			elipse.StrokeThickness = settings.colors.cityPassiveStrokeThickness;
 		}
+
 	}
 }

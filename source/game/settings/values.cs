@@ -14,7 +14,7 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort milisecondsPerTick = 20;
 
 		public static bool gameplay_SaveWarriorsOverCap = true;
-		public static bool gameplay_EqualsMeansCapture = false;
+		public static bool gameplay_EqualsMeansCapture = true;
 		public static bool gameplay_RemoveOvercapedUnits = true;
 
 		public static byte generator_TunenelMapGenerator_SkipChance = 10;
