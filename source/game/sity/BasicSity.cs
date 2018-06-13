@@ -70,7 +70,7 @@ namespace TownsAndWarriors.game.sity {
 					}
 				}
 
-				bool findSity = false;
+				//bool findSity = false;
 				Rec(fromX, fromY, 0);
 
 				List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
@@ -92,10 +92,10 @@ namespace TownsAndWarriors.game.sity {
 				//System.Windows.MessageBox.Show(str);
 
 				void Rec(int x, int y, int value) {
-					if (findSity)
-						return;
-					if (x == toX && y == toY)
-						findSity = true;
+				//	if (findSity)
+					//	return;
+					//if (x == toX && y == toY)
+					//	findSity = true;
 
 					if (finder[y, x].num != -1 && finder[y, x].num < value)
 						return;
