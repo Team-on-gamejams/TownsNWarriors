@@ -23,6 +23,7 @@ namespace TownsAndWarriors.game.sity
 	public partial class BasicSity
 	{
 		Label text;
+		Ellipse elipse;
 
 		public static List<BasicSity> selected = new List<BasicSity>();
 
@@ -36,6 +37,29 @@ namespace TownsAndWarriors.game.sity
 			settings.size.SizeChanged += () => {
 				shape.Children.Clear();
 				FillShape();
+			};
+
+			shape.MouseEnter += (a, b) => {
+				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
+
+				var anim = new System.Windows.Media.Animation.DoubleAnimation {
+					From = min * settings.size.sitySizeMult,
+					To = min,
+					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
+				};
+				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
+				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
+			};
+			shape.MouseLeave += (a, b) => {
+				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
+
+				var anim = new System.Windows.Media.Animation.DoubleAnimation {
+					To = min * settings.size.sitySizeMult,
+					From = min,
+					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
+				};
+				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
+				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
 			};
 
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e)
@@ -54,6 +78,7 @@ namespace TownsAndWarriors.game.sity
 			//тут створювати всі собитія з городом
 
 		}
+
 		public override void UpdateValue()
 		{
 				text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
@@ -62,7 +87,7 @@ namespace TownsAndWarriors.game.sity
 		void FillShape() {
 			//Elipse
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
-			var elipse = new Ellipse() {
+			elipse = new Ellipse() {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				Fill = settings.colors.neutralTownFill,
@@ -97,25 +122,6 @@ namespace TownsAndWarriors.game.sity
 				Height = min * settings.size.sitySizeMult,
 			};
 			shape.Children.Add(text);
-
-			shape.MouseEnter += (a, b)=>{
-				var anim = new System.Windows.Media.Animation.DoubleAnimation {
-					From = min * settings.size.sitySizeMult,
-					To = min,
-					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
-				};
-				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
-				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
-			};
-			shape.MouseLeave += (a, b) => {
-				var anim = new System.Windows.Media.Animation.DoubleAnimation {
-					To = min * settings.size.sitySizeMult,
-					From  = min,
-					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
-				};
-				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
-				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
-			};
 		}
 	}
 }
