@@ -22,8 +22,13 @@ namespace TownsAndWarriors.game.sity
 {
 	public partial class BasicSity
 	{
-		Label text;
-		Ellipse elipse;
+		protected Label text;
+		protected Shape cityModel;
+
+		public Shape CityModel
+		{
+			get { return cityModel; }
+		}
 
 		public static List<BasicSity> selected = new List<BasicSity>();
 
@@ -47,8 +52,8 @@ namespace TownsAndWarriors.game.sity
 					To = min,
 					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
 				};
-				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
-				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
+				cityModel.BeginAnimation(Ellipse.WidthProperty, anim);
+				cityModel.BeginAnimation(Ellipse.HeightProperty, anim);
 			};
 			shape.MouseLeave += (a, b) => {
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
@@ -58,8 +63,8 @@ namespace TownsAndWarriors.game.sity
 					From = min,
 					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
 				};
-				elipse.BeginAnimation(Ellipse.WidthProperty, anim);
-				elipse.BeginAnimation(Ellipse.HeightProperty, anim);
+				cityModel.BeginAnimation(Ellipse.WidthProperty, anim);
+				cityModel.BeginAnimation(Ellipse.HeightProperty, anim);
 			};
 
 			shape.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
@@ -71,14 +76,14 @@ namespace TownsAndWarriors.game.sity
 				if (playerId == 1) {
 					if (selected.Contains(this) == false) {
 						selected.Add(this);
-						elipse.Stroke = settings.colors.citySelectedStroke;
-						elipse.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+						cityModel.Stroke = settings.colors.citySelectedStroke;
+						cityModel.StrokeThickness = settings.colors.citySelectedStrokeThickness;
 					}
 				}
 				else if (playerId != 1) {
 					gameMap.SendWarriors(selected, this);
 					foreach (var x in selected) {
-						SetElipseColor(x.elipse, x.playerId);
+						SetElipseColor(x.cityModel, x.playerId);
 					}
 					selected.Clear();
 				}
@@ -90,10 +95,10 @@ namespace TownsAndWarriors.game.sity
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
-		void FillShape() {
+		protected virtual void FillShape() {
 			//Elipse
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
-			elipse = new Ellipse() {
+			cityModel = new Ellipse() {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				Fill = settings.colors.neutralTownFill,
@@ -102,8 +107,8 @@ namespace TownsAndWarriors.game.sity
 				Height = min * settings.size.sitySizeMult,
 			};
 
-			SetElipseColor(this.elipse, this.playerId);
-			shape.Children.Add(elipse);
+			SetElipseColor(this.cityModel, this.playerId);
+			shape.Children.Add(cityModel);
 
 			text = new Label() {
 				Foreground = Brushes.Black,
