@@ -70,19 +70,19 @@ namespace TownsAndWarriors.game.sity
 			{
 				//shape.Background = Brushes.DarkGray;
 				// анимация для ширины
-				DoubleAnimation widthAnimation = new DoubleAnimation();
-				widthAnimation.From = elipse.ActualWidth;
-				widthAnimation.To = 60;
-				widthAnimation.Duration = TimeSpan.FromSeconds(5);
+				//DoubleAnimation widthAnimation = new DoubleAnimation();
+				//widthAnimation.From = elipse.ActualWidth;
+				//widthAnimation.To = 60;
+				//widthAnimation.Duration = TimeSpan.FromSeconds(5);
 
-				// анимация для высоты
-				DoubleAnimation heightAnimation = new DoubleAnimation();
-				heightAnimation.From = elipse.ActualHeight;
-				heightAnimation.To = 60;
-				heightAnimation.Duration = TimeSpan.FromSeconds(5);
+				//// анимация для высоты
+				//DoubleAnimation heightAnimation = new DoubleAnimation();
+				//heightAnimation.From = elipse.ActualHeight;
+				//heightAnimation.To = 60;
+				//heightAnimation.Duration = TimeSpan.FromSeconds(5);
 
-				helloButton.BeginAnimation(Button.WidthProperty, widthAnimation);
-				helloButton.BeginAnimation(Button.HeightProperty, heightAnimation);
+				//helloButton.BeginAnimation(Button.WidthProperty, widthAnimation);
+				//helloButton.BeginAnimation(Button.HeightProperty, heightAnimation);
 			};
 
 			if (playerId == 1) {
