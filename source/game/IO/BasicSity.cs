@@ -18,14 +18,17 @@ namespace TownsAndWarriors.game.sity
 {
 	public partial class BasicSity
 	{
-		Label text = new Label();
+		Label text;
 
 		public static List<BasicSity> selected = new List<BasicSity>();
 
 		public override void InitializeShape()
 		{
 			shape = new Grid();
-			shape.Style = (Style)shape.FindResource("BasicCityStyle"); 
+			shape.Style = (Style)shape.FindResource("BasicCityStyle");
+			text = new Label() { Foreground = Brushes.Black,
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center };
 			FillShape();
 
 			//Delegates
@@ -57,9 +60,6 @@ namespace TownsAndWarriors.game.sity
 		}
 
 		void FillShape() {
-			//Label
-			shape.Children.Add(text);
-
 			//Elipse
 			double min = settings.size.oneCellSizeX < settings.size.oneCellSizeY ? settings.size.oneCellSizeX : settings.size.oneCellSizeY;
 			var elipse = new Ellipse() {
@@ -86,6 +86,9 @@ namespace TownsAndWarriors.game.sity
 			}
 
 			shape.Children.Add(elipse);
+
+			//Label
+			shape.Children.Add(text);
 		}
 	}
 }
