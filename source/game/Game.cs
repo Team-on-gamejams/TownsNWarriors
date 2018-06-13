@@ -68,7 +68,9 @@ namespace TownsAndWarriors.game {
 			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 			timer.Interval = settings.values.milisecondsPerTick;
 			timer.Tick += (a, b) => {
-				if (isPlay) Loop();
+				if (isPlay) {
+					Loop();
+				}
 			};
 			timer.Start();
 		}
@@ -80,9 +82,11 @@ namespace TownsAndWarriors.game {
 		}
 
 		void Loop() {
+			++game.globalGameInfo.tick;
+			//MessageBox.Show("game" + game.globalGameInfo.tick.ToString());
 			gameMap.UpdateMap();
 			gameMap.Tick();
-			++game.globalGameInfo.tick;
+
 		}
 
 		void SetGrowTimer() {

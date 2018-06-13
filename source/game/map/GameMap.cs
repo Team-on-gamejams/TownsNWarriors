@@ -65,6 +65,7 @@ namespace TownsAndWarriors.game.map {
 			foreach (var bot in bots) 
 				if(bot != null)
 					bot.TickReact();
+			//System.Windows.MessageBox.Show("map:" + game.globalGameInfo.tick.ToString());
 		}
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
