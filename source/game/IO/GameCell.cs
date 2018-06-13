@@ -21,7 +21,7 @@ namespace TownsAndWarriors.game.map {
 			FillShape();
 
 			//Delegates
-			shape.SizeChanged += (a, b) => {
+			settings.size.SizeChanged += () => {
 				shape.Children.Clear();
 				FillShape();
 			};
@@ -38,34 +38,34 @@ namespace TownsAndWarriors.game.map {
 			Rectangle rect;
 			if (IsOpenTop) {
 				rect = FormRect();
-				rect.Width = settings.size.roadWidth * settings.size.oneCellSizeX;
+				rect.Width = settings.size.roadWidth * settings.size.OneCellSizeX;
 				rect.VerticalAlignment = VerticalAlignment.Top;
 				shape.Children.Add(rect);
 			}
 			if (IsOpenBottom) {
 				rect = FormRect();
-				rect.Width = settings.size.roadWidth * settings.size.oneCellSizeX;
+				rect.Width = settings.size.roadWidth * settings.size.OneCellSizeX;
 				rect.VerticalAlignment = VerticalAlignment.Bottom;
 				shape.Children.Add(rect);
 			}
 			if (IsOpenLeft) {
 				rect = FormRect();
-				rect.Height = settings.size.roadHeight * settings.size.oneCellSizeY;
+				rect.Height = settings.size.roadHeight * settings.size.OneCellSizeY;
 				rect.HorizontalAlignment = HorizontalAlignment.Left;
 				shape.Children.Add(rect);
 			}
 			if (IsOpenRight) {
 				rect = FormRect();
-				rect.Height = settings.size.roadHeight * settings.size.oneCellSizeY;
+				rect.Height = settings.size.roadHeight * settings.size.OneCellSizeY;
 				rect.HorizontalAlignment = HorizontalAlignment.Right;
 				shape.Children.Add(rect);
 			}
-			if(IsOpenTop || IsOpenBottom || IsOpenLeft || IsOpenRight) {
+			if((IsOpenTop || IsOpenBottom) && (IsOpenLeft || IsOpenRight)) {
 				rect = FormRect();
 				rect.HorizontalAlignment = HorizontalAlignment.Center;
 				rect.VerticalAlignment = VerticalAlignment.Center;
-				rect.Height = settings.size.roadHeight * settings.size.oneCellSizeY;
-				rect.Width = settings.size.roadWidth * settings.size.oneCellSizeX;
+				rect.Height = settings.size.roadHeight * settings.size.OneCellSizeY;
+				rect.Width = settings.size.roadWidth * settings.size.OneCellSizeX;
 				shape.Children.Add(rect);
 			}
 		}
@@ -73,8 +73,8 @@ namespace TownsAndWarriors.game.map {
 		Rectangle FormRect() {
 			return new Rectangle() {
 				Fill = Brushes.LightGray,
-				Height = settings.size.oneCellSizeY / 2,
-				Width = settings.size.oneCellSizeX / 2
+				Height = settings.size.OneCellSizeY / 2,
+				Width = settings.size.OneCellSizeX / 2
 			};
 		}
 	}
