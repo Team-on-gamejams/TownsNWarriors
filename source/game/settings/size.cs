@@ -39,6 +39,6 @@ namespace TownsAndWarriors.game.settings {
 		public static double roadWidth = 0.2;
 		public static double roadHeight = 0.2;
 
-		public static byte growIncr = 3;
+		public static byte growIncr = 5;
 	}
 }
