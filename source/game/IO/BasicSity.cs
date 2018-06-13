@@ -48,14 +48,9 @@ namespace TownsAndWarriors.game.sity
 			{
 				selected.Add(this);
 			};
-
-			//shape.MouseMove += delegate (object sender, MouseEventArgs e)
-			//{
-			//	newRec.Fill = Brushes.DarkGray;
-			//};
 			//shape.Children.Add(newRec);
 
-            //тут створювати всі собитія з городом
+			//тут створювати всі собитія з городом
 
 		}
 		public override void UpdateValue()
@@ -73,6 +68,25 @@ namespace TownsAndWarriors.game.sity
 				Stroke = settings.colors.neutralTownStroke,
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
+			};
+
+			shape.MouseMove += delegate (object sender, MouseEventArgs e)
+			{
+				//shape.Background = Brushes.DarkGray;
+				// анимация для ширины
+				//DoubleAnimation widthAnimation = new DoubleAnimation();
+				//widthAnimation.From = elipse.ActualWidth;
+				//widthAnimation.To = 60;
+				//widthAnimation.Duration = TimeSpan.FromSeconds(5);
+
+				//// анимация для высоты
+				//DoubleAnimation heightAnimation = new DoubleAnimation();
+				//heightAnimation.From = elipse.ActualHeight;
+				//heightAnimation.To = 60;
+				//heightAnimation.Duration = TimeSpan.FromSeconds(5);
+
+				//helloButton.BeginAnimation(Button.WidthProperty, widthAnimation);
+				//helloButton.BeginAnimation(Button.HeightProperty, heightAnimation);
 			};
 
 			if (playerId == 1) {

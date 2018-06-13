@@ -3,12 +3,12 @@
                     xmlns:local="clr-namespace:TownsAndWarriors.style">
 
 	<Style TargetType="Grid" x:Key="BasicCityStyle">
-		<Style.Resources>
-			<Style TargetType="Label">
+		<!--<Style.Resources>
+			--><!--<Style TargetType="Label">
 				<Style.Resources>
 					<Style TargetType="Ellipse">
 						<Style.Triggers>
-							<EventTrigger RoutedEvent="Grid.MouseMove">
+							<EventTrigger RoutedEvent="Grid.MouseEnter">
 								<EventTrigger.Actions>
 									<BeginStoryboard>
 										<Storyboard>
@@ -21,12 +21,12 @@
 						</Style.Triggers>
 					</Style>
 				</Style.Resources>
-			</Style>
-			<Style TargetType="Ellipse">
+			</Style>--><!--
+			<Style TargetType="Grid">
 				<Style.Triggers>
 				</Style.Triggers>
 			</Style>
-		</Style.Resources>
+		</Style.Resources>-->
 	</Style>
 
 	<Style TargetType="Grid" x:Key="BasicCityMouseMove">
