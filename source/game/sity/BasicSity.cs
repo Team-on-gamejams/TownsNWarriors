@@ -17,8 +17,8 @@ namespace TownsAndWarriors.game.sity {
 		public ushort currWarriors, maxWarriors;
 		public double sendPersent, defPersent;
 
-		ushort ticksPerIncome;
-		Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
+		protected ushort ticksPerIncome;
+		protected Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }

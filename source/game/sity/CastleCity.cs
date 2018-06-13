@@ -4,17 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using TownsAndWarriors.game.unit;
+
 namespace TownsAndWarriors.game.sity
 {
     public partial class CastleCity : BasicSity
     {
-        public CastleCity()
+        public CastleCity() : base()
         {
-            maxWarriors = settings.values.basicSity_MaxWarriors;
-            currWarriors = settings.values.basicSity_StartWarriors;
-            sendPersent = settings.values.basicSity_sendWarriorsPersent;
-            defPersent = settings.values.basicSity_defendWarriorsPersent;
-            pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
+            maxWarriors = settings.values.castleCity_MaxWarriors;
+            currWarriors = settings.values.castleCity_StartWarriors;
+            sendPersent = settings.values.castleCity_sendWarriorsPersent;
+            defPersent = settings.values.castleCity_defendWarriorsPersent;
         }
-    }
+
+		protected override BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to)
+		{
+			return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
+		}
+	}
 }
