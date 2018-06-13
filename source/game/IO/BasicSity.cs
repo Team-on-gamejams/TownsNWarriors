@@ -73,7 +73,10 @@ namespace TownsAndWarriors.game.sity
 					selected.Clear();
 				}
 			};
-			//shape.Children.Add(newRec);
+			shape.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
+			{
+				selected.Clear();
+			};
 
 			//тут створювати всі собитія з городом
 
