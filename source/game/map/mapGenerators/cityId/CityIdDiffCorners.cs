@@ -11,7 +11,7 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 		//---------------------------------------------- Methods - main ----------------------------------------------
 		public void PlaceId(GameMap m, Random rnd) {
 
-			int playerTowns = settings.values.generator_CityChooserIdDiffCorners_TownsPerPlayer;
+			int playerTowns = settings.values.generator_CityId_TownsPerPlayer;
 			while (playerTowns-- != 0) {
 				int mini = m.SizeY, minj = m.SizeX;
 				for (int i = 0; i < m.SizeY; ++i) 
@@ -24,9 +24,9 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 			}
 
 			bool end = false;
-			int BotsCnt = settings.values.generator_CityChooserIdDiffCorners_Bots;
+			int BotsCnt = settings.values.generator_CityId_Bots;
 			while (BotsCnt-- != 0) {
-				int BotsTowns = settings.values.generator_CityChooserIdDiffCorners_TownsPerBot;
+				int BotsTowns = settings.values.generator_CityId_TownsPerBot;
 				while (BotsTowns-- != 0) {
 					int maxi = 0, maxj = 0;
 					for (int i = m.SizeY - 1; i >= 0; --i)

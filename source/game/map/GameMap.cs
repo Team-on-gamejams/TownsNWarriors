@@ -9,6 +9,7 @@ using TownsAndWarriors.game.settings;
 
 using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.unit;
+using TownsAndWarriors.game.bot;
 
 namespace TownsAndWarriors.game.map {
 	public partial class GameMap {
@@ -20,7 +21,7 @@ namespace TownsAndWarriors.game.map {
 		List<BasicSity> sities;
 		List<BasicUnit> units;
 
-		game.bot.BasicBot bot;
+		List<BasicBot> bots;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public List<BasicSity> Sities { get => sities; set => sities = value; }
@@ -42,7 +43,11 @@ namespace TownsAndWarriors.game.map {
 
 			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
 			units = new List<BasicUnit>(values.locateMemory_SizeForUnits);
-			bot = new game.bot.SimpleBot(this, sities, units, 2);
+			bots = new List<BasicBot>(settings.values.generator_CityId_Bots);
+			for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
+				bots.Add(null);
+
+			BasicSity.gameMap = this;
 		}
 
 
@@ -57,7 +62,9 @@ namespace TownsAndWarriors.game.map {
 					goto REPEAT_UNITS_TURN;
 			}
 
-			//bot.TickReact();
+			foreach (var bot in bots) 
+				if(bot != null)
+					bot.TickReact();
 		}
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
@@ -75,6 +82,10 @@ namespace TownsAndWarriors.game.map {
 			unit.InitializeShape();
 
 			units.Add(unit);
+		}
+
+		public void SetBot(int id, BasicBot type) {
+			bots[id] = type;
 		}
 
 		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY, 
