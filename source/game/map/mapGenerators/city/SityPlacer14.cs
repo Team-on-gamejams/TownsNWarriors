@@ -57,7 +57,9 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 				values.generator_SityPlacer14_Quad_Sities_Max * gameQuads);
 
 			for (int i = 0; i < sitiesCnt; ++i){
-				sities.Add(new BasicSity());
+				var bs = new BasicSity();
+				bs.GetSettings(new settings.city.BasicCitySettings());
+				sities.Add(bs);
 			}
 		}
 
