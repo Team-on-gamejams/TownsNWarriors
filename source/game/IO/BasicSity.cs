@@ -71,7 +71,14 @@ namespace TownsAndWarriors.game.sity
 			{
 				foreach (var x in selected)
 				{
-					SetElipseColor(x.cityModel, x.playerId);
+					if (x is HorseCity)
+					{
+						SetUiColor(((HorseCity)x).Label, x.playerId);
+					}
+					else
+					{
+						SetElipseColor(x.CityModel, x.playerId);
+					}
 				}
 				selected.Clear();
 			};
@@ -93,7 +100,14 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
-							SetElipseColor(x.cityModel, x.playerId);
+							if (x is HorseCity)
+							{
+								SetUiColor(((HorseCity)x).Label, x.playerId);
+							}
+							else
+							{
+								SetElipseColor(x.CityModel, x.playerId);
+							}
 						}
 						selected.Clear();
 					}
@@ -105,7 +119,14 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
-							SetElipseColor(x.cityModel, x.playerId);
+							if (x is HorseCity)
+							{
+								SetUiColor(((HorseCity)x).Label, x.playerId);
+							}
+							else
+							{
+								SetElipseColor(x.CityModel, x.playerId);
+							}
 						}
 						selected.Clear();
 					}
@@ -160,6 +181,28 @@ namespace TownsAndWarriors.game.sity
 					elipse.Stroke = settings.colors.TownStrokes[playerId - 2];
 			}
 			elipse.StrokeThickness = settings.colors.cityPassiveStrokeThickness;
+		}
+
+		static public void SetUiColor(Label label, byte playerId)
+		{
+			if (playerId == 1)
+			{
+				label.Background = settings.colors.playerTownFill;
+				label.BorderBrush = settings.colors.playerTownStroke;
+			}
+			else if (playerId != 0)
+			{
+				if (settings.colors.TownFills.Count <= playerId - 2)
+					label.Background = settings.colors.TownFills[settings.colors.TownFills.Count - 1];
+				else
+					label.Background = settings.colors.TownFills[playerId - 2];
+			}
+			if (settings.colors.TownStrokes.Count <= playerId - 2)
+				label.BorderBrush = settings.colors.TownStrokes[settings.colors.TownStrokes.Count - 1];
+			//else
+			//	label.BorderBrush = settings.colors.TownStrokes[playerId - 2];
+
+				label.BorderThickness = new Thickness(settings.colors.cityPassiveStrokeThickness);
 		}
 	}
 }
