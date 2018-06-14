@@ -16,8 +16,8 @@ namespace TownsAndWarriors.window {
 	/// <summary>
 	/// Interaction logic for HightScores.xaml
 	/// </summary>
-	public partial class HightScores : Window {
-		public HightScores() {
+	public partial class HightScoresWindow : Window {
+		public HightScoresWindow() {
 			InitializeComponent();
 
 			this.MinHeight = 450;
