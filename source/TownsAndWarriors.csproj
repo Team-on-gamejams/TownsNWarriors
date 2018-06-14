@@ -98,6 +98,7 @@
     <Compile Include="game\IO\GameCell.cs" />
     <Compile Include="game\IO\GameMap.cs" />
     <Compile Include="game\IO\HorseCity.cs" />
+    <Compile Include="game\IO\HorseUnit.cs" />
     <Compile Include="game\map\mapGenerators\cityId\BasicCityId.cs" />
     <Compile Include="game\map\mapGenerators\cityId\CityIdDiffCorners.cs" />
     <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="game\map\GameMap.cs" />
     <Compile Include="game\settings\values.cs" />
     <Compile Include="game\basicInterfaces\tickable.cs" />
+    <Compile Include="game\unit\HorseUnit.cs" />
     <Compile Include="window\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>

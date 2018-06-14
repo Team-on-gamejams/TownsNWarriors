@@ -153,13 +153,10 @@ namespace TownsAndWarriors.game.sity
 			label.VerticalAlignment = VerticalAlignment.Center;
 			label.HorizontalAlignment = HorizontalAlignment.Center;
 			label.Background = settings.colors.neutralTownFill;
-			//Stroke = settings.colors.neutralTownStroke;
 			label.Width = min * settings.size.sitySizeMult;
 			label.Height = min * settings.size.sitySizeMult;
 
-			//SetElipseColor(this.cityModel, this.playerId);
 			SetUiColor(this.label, this.playerId);
-			//shape.Children.Add(cityModel);
 			shape.Children.Add(label);
 
 			text = new Label()

@@ -30,35 +30,31 @@
 	</Style>
 
 	<Style TargetType="Label" x:Key="HorseCityStyle">
-		<!--<Style.Resources>-->
-			<!--<Style TargetType="Label">-->
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="Label">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition/>
-									<RowDefinition/>
-									<RowDefinition/>
-								</Grid.RowDefinitions>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
 
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition/>
-									<ColumnDefinition/>
-									<ColumnDefinition/>
-								</Grid.ColumnDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
 
-								<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0"
+						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0"
 														Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}">
-								</Rectangle>	
+						</Rectangle>
 
-								<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
-							</Grid>
-								</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			<!--</Style>-->
-		<!--</Style.Resources>-->
+						<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 </ResourceDictionary>
