@@ -224,6 +224,31 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="audio\sounds\gg.mp3" />
+    <Resource Include="img\cities\castle_p0_s4_l5.png" />
+    <Resource Include="img\cities\castle_p1_s4_l5.png" />
+    <Resource Include="img\cities\castle_p2_s4_l5.png" />
+    <Resource Include="img\cities\castle_p3_s4_l5.png" />
+    <Resource Include="img\cities\castle_p4_s4_l5.png" />
+    <Resource Include="img\cities\city_p0_s4_l5.png" />
+    <Resource Include="img\cities\city_p1_s4_l5.png" />
+    <Resource Include="img\cities\city_p2_s4_l5.png" />
+    <Resource Include="img\cities\city_p3_s4_l5.png" />
+    <Resource Include="img\cities\city_p4_s4_l5.png" />
+    <Resource Include="img\cities\forge_p0_s4_l5.png" />
+    <Resource Include="img\cities\forge_p1_s4_l5.png" />
+    <Resource Include="img\cities\forge_p2_s4_l5.png" />
+    <Resource Include="img\cities\forge_p3_s4_l5.png" />
+    <Resource Include="img\cities\forge_p4_s4_l5.png" />
+    <Resource Include="img\cities\stable_p0_s4_l5.png" />
+    <Resource Include="img\cities\stable_p1_s4_l5.png" />
+    <Resource Include="img\cities\stable_p2_s4_l5.png" />
+    <Resource Include="img\cities\stable_p3_s4_l5.png" />
+    <Resource Include="img\cities\stable_p4_s4_l5.png" />
+    <Resource Include="img\cities\tower_p0_s4_l5.png" />
+    <Resource Include="img\cities\tower_p1_s4_l5.png" />
+    <Resource Include="img\cities\tower_p2_s4_l5.png" />
+    <Resource Include="img\cities\tower_p3_s4_l5.png" />
+    <Resource Include="img\cities\tower_p4_s4_l5.png" />
     <Resource Include="codeTemplates\Window template.txt" />
     <Resource Include="img\window\mainWindow\backgroundUser1.jpg" />
     <Resource Include="img\window\mainWindow\backgroundUser2.jpg" />

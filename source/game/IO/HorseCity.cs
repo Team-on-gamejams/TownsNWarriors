@@ -139,22 +139,19 @@ namespace TownsAndWarriors.game.sity
 		{
 			//Shape
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
-			cityModel = new Rectangle()
-			{
-				VerticalAlignment = VerticalAlignment.Center,
-				HorizontalAlignment = HorizontalAlignment.Center,
-				Fill = settings.colors.neutralTownFill,
-				Stroke = settings.colors.neutralTownStroke,
-				Width = min * settings.size.sitySizeMult,
-				Height = min * settings.size.sitySizeMult,
-			};
 			label = new Label();
 			label.Style = (Style)label.FindResource("HorseCityStyle");
-			label.VerticalAlignment = VerticalAlignment.Center;
-			label.HorizontalAlignment = HorizontalAlignment.Center;
-			label.Background = settings.colors.neutralTownFill;
-			label.Width = min * settings.size.sitySizeMult;
-			label.Height = min * settings.size.sitySizeMult;
+			switch (settings.values.style_Num)
+			{
+				case 0:
+					label.Style = (Style)label.FindResource("HorseCityStyle");
+					break;
+				case 1:
+					label.Style = (Style)label.FindResource("HorseCityStyle1");
+					break;
+			}
+			label.Width = min * settings.size.sitySizeMult + 10;
+			label.Height = min * settings.size.sitySizeMult + 10;
 
 			SetUiColor(this.label, this.playerId);
 			shape.Children.Add(label);

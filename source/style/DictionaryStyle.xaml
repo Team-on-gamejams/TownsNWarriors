@@ -32,6 +32,9 @@
 	</Style>
 
 	<Style TargetType="Label" x:Key="HorseCityStyle">
+		<Setter Property="VerticalAlignment"  Value="Center"/>
+		<Setter Property="HorizontalAlignment"  Value="Center"/>
+		<Setter Property="VerticalAlignment"  Value="Center"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">
@@ -53,6 +56,17 @@
 						</Rectangle>
 
 						<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style TargetType="Label" x:Key="HorseCityStyle1">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Image Source="..\img\cities\stable_p0_s4_l5.png" />
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
