@@ -129,6 +129,7 @@ namespace TownsAndWarriors.game.sity
 				}
 			};
 		}
+
 		protected override void FillShape()
 		{
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
