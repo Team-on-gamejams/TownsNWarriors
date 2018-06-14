@@ -46,8 +46,12 @@ namespace TownsAndWarriors.game.unit {
 				++currPathIndex;
 				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
-				if (currPathIndex == path.Count - 1) {
-					destination.GetUnits(this);
+				if( (BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity != null &&
+					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.playerId != this.playerId) ||
+					(currPathIndex == path.Count - 1)
+					) {
+					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
+					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.GetUnits(this);
 					canvas.Children.Remove(shape);
 					return true;
 				}

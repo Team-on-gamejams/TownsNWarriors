@@ -43,8 +43,16 @@ namespace TownsAndWarriors.window {
 		}
 
 		private void Button_Click_Credits(object sender, RoutedEventArgs e) {
-			CreditsWindow creditsWindow = new CreditsWindow();
-			ReopenWindow(this, creditsWindow);
+			//CreditsWindow creditsWindow = new CreditsWindow();
+			//ReopenWindow(this, creditsWindow);
+
+			GameWindow gameWindow = new GameWindow();
+			MainWindow.ReopenWindow(this, gameWindow);
+
+			game.Game game = new game.Game(gameWindow, TownsAndWarriors.game.settings.values.fieldSizeX, TownsAndWarriors.game.settings.values.fieldSizeY);
+			game.Play();
+
+			this.Close();
 		}
 
 		private void Button_Click_Exit(object sender, RoutedEventArgs e) {
