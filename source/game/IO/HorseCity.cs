@@ -140,20 +140,22 @@ namespace TownsAndWarriors.game.sity
 			//Shape
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
 			label = new Label();
-			label.Style = (Style)label.FindResource("HorseCityStyle");
+			label.Width = min * settings.size.sitySizeMult;
+			label.Height = min * settings.size.sitySizeMult;
 			switch (settings.values.style_Num)
 			{
 				case 0:
+					label.Background = settings.colors.neutralTownFill;
 					label.Style = (Style)label.FindResource("HorseCityStyle");
+					SetUiColor(this.label, this.playerId);
 					break;
 				case 1:
 					label.Style = (Style)label.FindResource("HorseCityStyle1");
+					label.Background = new ImageBrush() { ImageSource = new BitmapImage() { UriSource = new Uri(@"..\..\img\cities\stable_p0_s4_l5.png", UriKind.Relative) } };
+					SetImgColor(label, playerId);
 					break;
 			}
-			label.Width = min * settings.size.sitySizeMult + 10;
-			label.Height = min * settings.size.sitySizeMult + 10;
-
-			SetUiColor(this.label, this.playerId);
+			
 			shape.Children.Add(label);
 
 			text = new Label()

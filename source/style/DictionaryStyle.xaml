@@ -65,8 +65,7 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">
-					<Grid>
-						<Image Source="..\img\cities\stable_p0_s4_l5.png" />
+					<Grid Background="{TemplateBinding Background}">
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
