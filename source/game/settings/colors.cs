@@ -30,17 +30,18 @@ namespace TownsAndWarriors.game.settings {
 		public static double citySelectedStrokeThickness = 2;
 
 		public static double cityPassiveStrokeThickness = 1;
+
 		public static List<Brush> TownFills = new List<Brush>() {
 			Brushes.Blue,
+			Brushes.Yellow,
+			Brushes.DarkGreen,
 			Brushes.Teal,
 			Brushes.Purple,
-			Brushes.Yellow,
 			Brushes.Orange,
 			Brushes.Green,
 			Brushes.Pink,
 			Brushes.Gray,
 			Brushes.LightBlue,
-			Brushes.DarkGreen,
 			Brushes.Brown,
 			Brushes.Maroon,
 			Brushes.Navy,
@@ -56,6 +57,33 @@ namespace TownsAndWarriors.game.settings {
 			Brushes.DarkGreen,
 			Brushes.Peru,
 		};
+
+		//public static List<Brush> TownFills = new List<Brush>() {
+		//	Brushes.Blue,
+		//	Brushes.Teal,
+		//	Brushes.Purple,
+		//	Brushes.Yellow,
+		//	Brushes.Orange,
+		//	Brushes.Green,
+		//	Brushes.Pink,
+		//	Brushes.Gray,
+		//	Brushes.LightBlue,
+		//	Brushes.DarkGreen,
+		//	Brushes.Brown,
+		//	Brushes.Maroon,
+		//	Brushes.Navy,
+		//	Brushes.Navy,
+		//	Brushes.Turquoise,
+		//	Brushes.Violet,
+		//	Brushes.Wheat,
+		//	Brushes.PeachPuff,
+		//	Brushes.MintCream,
+		//	Brushes.Lavender,
+		//	Brushes.DarkGray,
+		//	Brushes.Snow,
+		//	Brushes.DarkGreen,
+		//	Brushes.Peru,
+		//};
 		public static List<Brush> TownStrokes = new List<Brush>() {
 			Brushes.Black
 		};
