@@ -62,27 +62,67 @@ namespace TownsAndWarriors.game.sity
 
 			shape.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
+				foreach (var x in selected)
+				{
+					if (x is HorseCity)
+					{
+						SetUiColor(((HorseCity)x).Label, x.playerId);
+					}
+					else
+					{
+						SetElipseColor(x.CityModel, x.playerId);
+					}
+				}
 				selected.Clear();
 			};
 
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e) {
-				if (playerId == 1)
+				if (e.ClickCount == 1)
 				{
-					if (selected.Contains(this) == false)
+					if (playerId == 1)
 					{
-						selected.Add(this);
-						cityModel.Stroke = settings.colors.citySelectedStroke;
-						cityModel.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+						if (selected.Contains(this) == false)
+						{
+							selected.Add(this);
+							cityModel.Stroke = settings.colors.citySelectedStroke;
+							cityModel.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+						}
+					}
+					else if (playerId != 1)
+					{
+						gameMap.SendWarriors(selected, this);
+						foreach (var x in selected)
+						{
+							if (x is HorseCity)
+							{
+								SetUiColor(((HorseCity)x).Label, x.playerId);
+							}
+							else
+							{
+								SetElipseColor(x.CityModel, x.playerId);
+							}
+						}
+						selected.Clear();
 					}
 				}
-				else if (playerId != 1)
+				else
 				{
-					gameMap.SendWarriors(selected, this);
-					foreach (var x in selected)
+					if (playerId == 1)
 					{
-						SetElipseColor(x.CityModel, x.playerId);
+						gameMap.SendWarriors(selected, this);
+						foreach (var x in selected)
+						{
+							if (x is HorseCity)
+							{
+								SetUiColor(((HorseCity)x).Label, x.playerId);
+							}
+							else
+							{
+								SetElipseColor(x.CityModel, x.playerId);
+							}
+						}
+						selected.Clear();
 					}
-					selected.Clear();
 				}
 			};
 		}

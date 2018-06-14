@@ -4,7 +4,8 @@
 
 	<Style TargetType="Grid" x:Key="BasicCityStyle">
 		<!--<Style.Resources>
-			--><!--<Style TargetType="Label">
+			-->
+		<!--<Style TargetType="Label">
 				<Style.Resources>
 					<Style TargetType="Ellipse">
 						<Style.Triggers>
@@ -21,7 +22,8 @@
 						</Style.Triggers>
 					</Style>
 				</Style.Resources>
-			</Style>--><!--
+			</Style>-->
+		<!--
 			<Style TargetType="Grid">
 				<Style.Triggers>
 				</Style.Triggers>
@@ -29,8 +31,32 @@
 		</Style.Resources>-->
 	</Style>
 
-	<Style TargetType="Grid" x:Key="BasicCityMouseMove">
+	<Style TargetType="Label" x:Key="HorseCityStyle">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
 
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+
+						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0"
+														Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}">
+						</Rectangle>
+
+						<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 </ResourceDictionary>

@@ -58,7 +58,13 @@ namespace TownsAndWarriors.game.settings {
 		public static float castleCity_sendWarriorsPersent = 0.50f;
 		public static float castleCity_defendWarriorsPersent = 1.5f;
 
-		public static ushort basicUnit_ticks_MoveWarrior = 7;
+		public static ushort horceCity_MaxWarriors = 20;
+		public static ushort horceCity_StartWarriors = 10;
+		public static float horceCity_sendWarriorsPersent = 0.50f;
+		public static float horceCity_defendWarriorsPersent = 1.0f;
+
+		public static ushort basicUnit_ticks_MoveWarrior = 10;
+		public static ushort horseUnit_ticks_MoveWarrior = 7;
 
 		public static byte bot_rushBot_Tick_IgnoreFirstN = 0;
 		public static byte bot_rushBot_Tick_React = 50;
