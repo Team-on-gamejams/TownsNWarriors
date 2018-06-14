@@ -58,7 +58,7 @@ namespace TownsAndWarriors.game.sity
 			settings.size.SizeChanged += () => {
 				shape.Children.Clear();
 				FillShape();
-
+				shape.Children.Add(selection);
 			};
 
 			shape.MouseEnter += (a, b) => {
@@ -102,6 +102,9 @@ namespace TownsAndWarriors.game.sity
 			};
 
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e) {
+				if(!shape.Children.Contains(selection))
+					shape.Children.Add(selection);
+
 				if (e.ClickCount == 1)
 				{
 					if (playerId == 1)
@@ -141,6 +144,7 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
+							x.selection.Opacity = 0;
 							switch (settings.values.style_Num)
 							{
 								case 0:
