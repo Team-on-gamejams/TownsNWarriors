@@ -235,7 +235,7 @@ namespace TownsAndWarriors.game.sity {
 			}
 			else {
 				ushort defWarriors = currWarriors;
-				unit.warriorsCnt = (ushort)((2 - this.defPersent) * unit.warriorsCnt);
+				unit.warriorsCnt = (ushort)Math.Round((2 - this.defPersent) * unit.warriorsCnt);
 
 				if (defWarriors > unit.warriorsCnt) {
 					defWarriors -= unit.warriorsCnt;

@@ -36,16 +36,16 @@ namespace TownsAndWarriors.game.bot {
 
 		//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
-			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN && 
+			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN &&
 				globalGameInfo.tick % values.bot_rushBot_Tick_React == 0) {
 
 				RecalcRushingSities();
 				RecalcBotSities();
 				RecalcCanAttackDirectly();
 
-				if (!isRushing) 
+				if (!isRushing)
 					CalculateWhoNeedToBeRushed();
-				if(isRushing)
+				if (isRushing)
 					RushFromAllSities();
 
 				if (values.bot_rushBot_IsProtectSities)
@@ -92,18 +92,18 @@ namespace TownsAndWarriors.game.bot {
 		void RecalcCanAttackDirectly() {
 			canAttackDirectly.Clear();
 			foreach (var sity in sities) {
-				if (sity.playerId != playerId) {
+				if (!botSities.Contains(sity)) {
 					bool directly = false;
 					foreach (var bs in botSities) {
 						bool tmp;
 						sity.GetShortestPath(sity, out tmp);
 						if (tmp) {
 							directly = true;
+							break;
 						}
 					}
-					if (directly) {
+					if (directly) 
 						canAttackDirectly.Add(sity);
-					}
 				}
 			}
 		}
@@ -113,14 +113,13 @@ namespace TownsAndWarriors.game.bot {
 
 		void CalculateWhoNeedToBeRushed() {
 			List<List<BasicSity>> potentialRushes = new List<List<BasicSity>>();
-			for(byte i = 1; i <= settings.values.bot_rushBot_RushCnt; ++i ) {
+			for (byte i = 1; i <= settings.values.bot_rushBot_RushCnt; ++i) {
 				potentialRushes.Add(new List<BasicSity>());
-				uint potentialArmy = CalcPotentialArmy(i);
 
 				foreach (var sity in canAttackDirectly) {
-					if (sity.playerId != playerId &&
-						!rushingSities.Contains(sity) &&
-						GetEnemyArmy(sity) < potentialArmy * (2 - sity.defPersent)
+					uint potentialArmy = CalcPotentialArmy(i, sity.defPersent);
+					if ( !rushingSities.Contains(sity) &&
+						 GetEnemyArmy(sity) < potentialArmy
 					) {
 						bool isInPrev = false;
 						foreach (var rush in potentialRushes) {
@@ -129,59 +128,53 @@ namespace TownsAndWarriors.game.bot {
 								break;
 							}
 						}
-						if(!isInPrev)
+						if (!isInPrev)
 							potentialRushes[i - 1].Add(sity);
 					}
 				}
 
 			}
 
-			if (potentialRushes.Count != 0) {
-				bool canRush = false;
+
+			List<KeyValuePair<byte, byte>> rushChance = new List<KeyValuePair<byte, byte>>(potentialRushes.Count);
+
+			int tmp = 0;
+			while (tmp != potentialRushes.Count) {
+				if (potentialRushes[tmp].Count != 0)
+					rushChance.Add(new KeyValuePair<byte, byte>(values.bot_rushBot_RushWavesChance[tmp].Key, values.bot_rushBot_RushWavesChance[tmp].Value));
+				++tmp;
+			}
+
+			//System.Windows.MessageBox.Show(rushChance.Count.ToString());
+
+			if (rushChance.Count != 0) {
 				int potentialRushPos = 0;
 
-				if (potentialRushes.Count == 1)
-					potentialRushPos = 0;
-				else {
-					int tmp = 0;
-					List<KeyValuePair<byte, byte>> rushChance = new List<KeyValuePair<byte, byte>>(potentialRushes.Count);
-					while (tmp != potentialRushes.Count) {
-						if(potentialRushes[tmp].Count != 0) 
-						rushChance.Add(new KeyValuePair<byte, byte>(values.bot_rushBot_RushWavesChance[tmp].Key, values.bot_rushBot_RushWavesChance[tmp].Value));
-						++tmp;
-					}
+				byte sumPersent = 0;
+				foreach (var i in rushChance)
+					sumPersent += i.Value;
+				if (sumPersent != 100) {
+					for (int i = 0; i < rushChance.Count; ++i)
+						rushChance[i] = new KeyValuePair<byte, byte>(rushChance[i].Key,
+							(byte)Math.Round((double)(rushChance[i].Value) / sumPersent * 100));
+				}
 
-					if (rushChance.Count != 0) {
-						canRush = true;
-
-						byte sumPersent = 0;
-						foreach (var i in rushChance)
-							sumPersent += i.Value;
-						if (sumPersent != 100) {
-							for (int i = 0; i < rushChance.Count; ++i)
-								rushChance[i] = new KeyValuePair<byte, byte>(rushChance[i].Key,
-									(byte)Math.Round((double)(rushChance[i].Value) / sumPersent * 100));
-						}
-
-						byte randPersent = (byte)values.rnd.Next(0, 100);
-						for (int i = 0; i < rushChance.Count; ++i) {
-							if (randPersent <= rushChance[i].Value) {
-								potentialRushPos = rushChance[i].Key - 1;
-								break;
-							}
-						}
+				byte randPersent = (byte)values.rnd.Next(0, 100);
+				for (int i = 0; i < rushChance.Count; ++i) {
+					if (randPersent <= rushChance[i].Value) {
+						potentialRushPos = rushChance[i].Key - 1;
+						break;
 					}
 					else
-						canRush = false;
+						randPersent -= rushChance[i].Value;
 				}
 
-				if (canRush) {
-					var potentialRush = potentialRushes[potentialRushPos];
-					rushSity = potentialRush[settings.values.rnd.Next(0, potentialRush.Count)];
-					isRushing = true;
-					rushWaveRemains = (byte)(potentialRushPos + 1);
-				}
+				var potentialRush = potentialRushes[potentialRushPos];
+				rushSity = potentialRush[settings.values.rnd.Next(0, potentialRush.Count)];
+				isRushing = true;
+				rushWaveRemains = (byte)(potentialRushPos + 1);
 			}
+			
 		}
 
 		void RushFromAllSities() {
@@ -209,13 +202,13 @@ namespace TownsAndWarriors.game.bot {
 
 		//---------------------------------------------- Methods - Support  ----------------------------------------------
 
-		uint CalcPotentialArmy(byte rushesCntBase) {
+		uint CalcPotentialArmy(byte rushesCntBase, double enemyDefMult) {
 			uint potentialArmy = 0;
 			foreach (var sity in botSities) {
 				ushort currSend = 0, rushesCnt = rushesCntBase;
 				while (rushesCnt-- != 0)
 					currSend += (ushort)((sity.currWarriors - currSend) * sity.sendPersent);
-				potentialArmy += currSend;
+				potentialArmy += (uint)Math.Round((2 - enemyDefMult) * currSend);
 			}
 			//System.Windows.MessageBox.Show(botSities[0].playerId.ToString() + "  " + potentialArmy.ToString());
 			return potentialArmy;

@@ -67,7 +67,7 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort horseUnit_ticks_MoveWarrior = 7;
 
 		public static byte bot_rushBot_Tick_IgnoreFirstN = 0;
-		public static byte bot_rushBot_Tick_React = 50;
+		public static byte bot_rushBot_Tick_React = (byte)(basicUnit_ticks_MoveWarrior / 2);
 		public static byte bot_rushBot_MinimumMore = 1;
 		public static bool bot_rushBot_IsDropOvercapacityUnits = true;
 		public static bool bot_rushBot_NearMaxMeansOvercapacityToo = true;
