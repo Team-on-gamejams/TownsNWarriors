@@ -150,8 +150,8 @@ namespace TownsAndWarriors.game.sity
 					SetUiColor(this.label, this.playerId);
 					break;
 				case 1:
-					label.Style = (Style)label.FindResource("HorseCityStyle1");
-					label.Background = new ImageBrush() { ImageSource = new BitmapImage() { UriSource = new Uri(@"..\..\img\cities\stable_p0_s4_l5.png", UriKind.Relative) } };
+					//label.Style = (Style)label.FindResource("HorseCityStyle1");
+					label.Background = new ImageBrush() { ImageSource = new BitmapImage() { UriSource = new Uri(@"C:\Users\Vlad\source\repos\TownsNWarriors\source\img\cities\stable_p0_s4_l5.png", UriKind.Relative) } };
 					SetImgColor(label, playerId);
 					break;
 			}

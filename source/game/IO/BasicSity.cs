@@ -209,7 +209,7 @@ namespace TownsAndWarriors.game.sity
 		{
 			if (playerId == 1)
 			{
-				label.Background = new ImageBrush() { ImageSource = new BitmapImage() { UriSource = new Uri(@"..\..\img\cities\stable_p1_s4_l5.png", UriKind.Relative) } };
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage() { UriSource = new Uri(@"C:\Users\Vlad\source\repos\TownsNWarriors\source\img\cities\stable_p0_s4_l5.png", UriKind.Relative) } };
 			}
 		}
 	}

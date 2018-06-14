@@ -51,10 +51,8 @@
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
 
-						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0"
-														Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}">
+						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
 						</Rectangle>
-
 						<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
 					</Grid>
 				</ControlTemplate>
