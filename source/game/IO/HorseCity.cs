@@ -22,18 +22,9 @@ namespace TownsAndWarriors.game.sity
 {
 	public partial class HorseCity
 	{
-		Label label;
-		public Label Label
-		{
-			get
-			{
-				return label;
-			}
-		}
+		
 		public override void InitializeShape()
 		{
-			
-
 			shape = new Grid();
 			shape.Style = (Style)shape.FindResource("BasicCityStyle");
 			FillShape();
@@ -73,13 +64,14 @@ namespace TownsAndWarriors.game.sity
 			{
 				foreach (var x in selected)
 				{
-					if (x is HorseCity)
+					switch (settings.values.style_Num)
 					{
-						SetUiColor(((HorseCity)x).label, x.playerId);
-					}
-					else
-					{
-						SetElipseColor(x.CityModel, x.playerId);
+						case 0:
+							SetUiColor(this.label, this.playerId);
+							break;
+						case 1:
+							SetImgColor(this.label, this.playerId);
+							break;
 					}
 				}
 				selected.Clear();
@@ -101,14 +93,15 @@ namespace TownsAndWarriors.game.sity
 					{
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
-						{	
-							if (x is HorseCity)
+						{
+							switch (settings.values.style_Num)
 							{
-								SetUiColor(((HorseCity)x).label, x.playerId);
-							}
-							else
-							{
-								SetElipseColor(x.CityModel, x.playerId);
+								case 0:
+									SetUiColor(this.label, this.playerId);
+									break;
+								case 1:
+									SetImgColor(this.label, this.playerId);
+									break;
 							}
 						}
 						selected.Clear();
@@ -121,13 +114,14 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
-							if (x is HorseCity)
+							switch (settings.values.style_Num)
 							{
-								SetUiColor(((HorseCity)x).label, x.playerId);
-							}
-							else
-							{
-								SetElipseColor(x.CityModel, x.playerId);
+								case 0:
+									SetUiColor(this.label, this.playerId);
+									break;
+								case 1:
+									SetImgColor(this.label, this.playerId);
+									break;
 							}
 						}
 						selected.Clear();
@@ -150,8 +144,8 @@ namespace TownsAndWarriors.game.sity
 					SetUiColor(this.label, this.playerId);
 					break;
 				case 1:
-					label.Style = (Style)label.FindResource("HorseCityStyle1");
-					label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\forge_p0_s4_l5.png", UriKind.Relative)) };
+					label.Style = (Style)label.FindResource("ColorCityStyle1");
+					label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\stable_p0_s4_l5.png", UriKind.Relative)) };
 					SetImgColor(label, playerId);
 					break;
 			}
@@ -167,6 +161,18 @@ namespace TownsAndWarriors.game.sity
 				Height = min * settings.size.sitySizeMult,
 			};
 			shape.Children.Add(text);
+		}
+
+		public override void SetImgColor(Label label, byte playerId)
+		{
+			if (playerId == 1)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\stable_p1_s4_l5.png", UriKind.Relative)) };
+			}
+			else if (playerId == 2)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\stable_p2_s4_l5.png", UriKind.Relative)) };
+			}
 		}
 	}
 }
