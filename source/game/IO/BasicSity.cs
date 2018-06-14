@@ -22,8 +22,18 @@ namespace TownsAndWarriors.game.sity
 {
 	public partial class BasicSity
 	{
+		protected Label label;
+		public Label Label
+		{
+			get
+			{
+				return label;
+			}
+		}
 		protected Label text;
 		protected Shape cityModel;
+
+		protected Label selection;
 
 		public Shape CityModel
 		{
@@ -37,6 +47,12 @@ namespace TownsAndWarriors.game.sity
 			shape = new Grid();
 			shape.Style = (Style)shape.FindResource("BasicCityStyle");
 			FillShape();
+
+			selection = new Label();
+			selection.Background = new ImageBrush(new BitmapImage(new Uri(@"..\..\img\war\our_selector.png", UriKind.Relative)));
+			selection.Opacity = 0;
+			Grid.SetZIndex(selection, 10);
+			shape.Children.Add(selection);
 
 			//Delegates
 			settings.size.SizeChanged += () => {
@@ -52,8 +68,8 @@ namespace TownsAndWarriors.game.sity
 					To = min,
 					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
 				};
-				cityModel.BeginAnimation(Ellipse.WidthProperty, anim);
-				cityModel.BeginAnimation(Ellipse.HeightProperty, anim);
+				label.BeginAnimation(Label.WidthProperty, anim);
+				label.BeginAnimation(Label.HeightProperty, anim);
 			};
 			shape.MouseLeave += (a, b) => {
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
@@ -63,21 +79,22 @@ namespace TownsAndWarriors.game.sity
 					From = min,
 					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
 				};
-				cityModel.BeginAnimation(Ellipse.WidthProperty, anim);
-				cityModel.BeginAnimation(Ellipse.HeightProperty, anim);
+				label.BeginAnimation(Label.WidthProperty, anim);
+				label.BeginAnimation(Label.HeightProperty, anim);
 			};
 
 			grid.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
 			{
 				foreach (var x in selected)
 				{
-					if (x is HorseCity)
+					switch (settings.values.style_Num)
 					{
-						SetUiColor(((HorseCity)x).Label, x.playerId);
-					}
-					else
-					{
-						SetElipseColor(x.CityModel, x.playerId);
+						case 0:
+							SetUiColor(this.label, this.playerId);
+							break;
+						case 1:
+							SetImgColor(this.label, this.playerId);
+							break;
 					}
 				}
 				selected.Clear();
@@ -91,8 +108,10 @@ namespace TownsAndWarriors.game.sity
 						if (selected.Contains(this) == false)
 						{
 							selected.Add(this);
-							cityModel.Stroke = settings.colors.citySelectedStroke;
-							cityModel.StrokeThickness = settings.colors.citySelectedStrokeThickness;
+							selection.Opacity = 1;
+							label.BorderBrush = settings.colors.citySelectedStroke;
+							label.BorderThickness = new Thickness(settings.colors.citySelectedStrokeThickness);
+
 						}
 					}
 					else if (playerId != 1)
@@ -100,13 +119,15 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
-							if (x is HorseCity)
+							x.selection.Opacity = 0;
+							switch (settings.values.style_Num)
 							{
-								SetUiColor(((HorseCity)x).Label, x.playerId);
-							}
-							else
-							{
-								SetElipseColor(x.CityModel, x.playerId);
+								case 0:
+									SetUiColor(this.label, this.playerId);
+									break;
+								case 1:
+									SetImgColor(this.label, this.playerId);
+									break;
 							}
 						}
 						selected.Clear();
@@ -119,13 +140,14 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
-							if (x is HorseCity)
+							switch (settings.values.style_Num)
 							{
-								SetUiColor(((HorseCity)x).Label, x.playerId);
-							}
-							else
-							{
-								SetElipseColor(x.CityModel, x.playerId);
+								case 0:
+									SetUiColor(this.label, this.playerId);
+									break;
+								case 1:
+									SetImgColor(this.label, this.playerId);
+									break;
 							}
 						}
 						selected.Clear();
@@ -142,17 +164,25 @@ namespace TownsAndWarriors.game.sity
 		protected virtual void FillShape() {
 			//Elipse
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
-			cityModel = new Ellipse() {
-				VerticalAlignment = VerticalAlignment.Center,
-				HorizontalAlignment = HorizontalAlignment.Center,
-				Fill = settings.colors.neutralTownFill,
-				Stroke = settings.colors.neutralTownStroke,
-				Width = min * settings.size.sitySizeMult,
-				Height = min * settings.size.sitySizeMult,
-			};
 
-			SetElipseColor(this.cityModel, this.playerId);
-			shape.Children.Add(cityModel);
+			label = new Label();
+			label.Width = min * settings.size.sitySizeMult;
+			label.Height = min * settings.size.sitySizeMult;
+			switch (settings.values.style_Num)
+			{
+				case 0:
+					label.Background = settings.colors.neutralTownFill;
+					label.Style = (Style)label.FindResource("BaseCityStyle");
+					SetUiColor(this.label, this.playerId);
+					break;
+				case 1:
+					label.Style = (Style)label.FindResource("ColorCityStyle1");
+					label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\city_p0_s4_l5.png", UriKind.Relative)) };
+					SetImgColor(this.label, this.playerId);
+					break;
+			}
+
+			shape.Children.Add(label);
 
 			text = new Label() {
 				Foreground = Brushes.Black,
@@ -199,10 +229,28 @@ namespace TownsAndWarriors.game.sity
 			}
 			if (settings.colors.TownStrokes.Count <= playerId - 2)
 				label.BorderBrush = settings.colors.TownStrokes[settings.colors.TownStrokes.Count - 1];
-			//else
-			//	label.BorderBrush = settings.colors.TownStrokes[playerId - 2];
 
-				label.BorderThickness = new Thickness(settings.colors.cityPassiveStrokeThickness);
+			label.BorderThickness = new Thickness(settings.colors.cityPassiveStrokeThickness);
+		}
+
+		public virtual void SetImgColor(Label label, byte playerId)
+		{
+			if (playerId == 1)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\city_p1_s4_l5.png", UriKind.Relative)) };
+			}
+			else if (playerId == 2)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\city_p2_s4_l5.png", UriKind.Relative)) };
+			}
+			else if (playerId == 4)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\city_p3_s4_l5.png", UriKind.Relative)) };
+			}
+			else if (playerId == 3)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\city_p4_s4_l5.png", UriKind.Relative)) };
+			}
 		}
 	}
 }

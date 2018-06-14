@@ -31,7 +31,25 @@
 		</Style.Resources>-->
 	</Style>
 
-	<Style TargetType="Label" x:Key="HorseCityStyle">
+	<Style TargetType="Label" x:Key="InterfaceBaseCityStyle">
+		<Setter Property="VerticalAlignment"  Value="Center"/>
+		<Setter Property="HorizontalAlignment"  Value="Center"/>
+	</Style>
+
+	<Style TargetType="Label" x:Key="BaseCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Ellipse Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
+						</Ellipse>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="HorseCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">
@@ -48,11 +66,49 @@
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
 
-						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0"
-														Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}">
+						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
 						</Rectangle>
-
 						<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="CastleCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+
+						<Rectangle  Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
+						</Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="ColorCityStyle1">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid Background="{TemplateBinding Background}">
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition Height="0.5*"/>
+						</Grid.RowDefinitions>
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>

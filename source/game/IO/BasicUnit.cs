@@ -19,7 +19,7 @@ using TownsAndWarriors.game.basicInterfaces;
 namespace TownsAndWarriors.game.unit {
 	public partial class BasicUnit {
 		protected Label text;
-		protected Ellipse rectangle;
+		protected Shape rectangle;
 		Canvas canvas;
 		double pixelPerTurnX, pixelPerTurnY;
 		double shiftX, shiftY;
@@ -64,7 +64,7 @@ namespace TownsAndWarriors.game.unit {
 		protected virtual void FillShape() {
 			RecalcGeometrySize();
 
-			rectangle = new Ellipse() {
+			rectangle = new Rectangle() {
 				Fill = settings.colors.neutralTownFill,
 				Stroke = settings.colors.neutralTownStroke,
 				Width = shape.Width,

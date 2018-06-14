@@ -56,6 +56,10 @@ namespace TownsAndWarriors.game.sity {
 
 		public BasicUnit SendUnit(BasicSity to) {
 			ushort sendWarriors = GetAtkWarriors();
+			if(sendWarriors == 0) {
+
+				return null;
+			}
 			currWarriors -= sendWarriors;
 			if (currWarriors < 0)
 				currWarriors = 0;
@@ -86,8 +90,12 @@ namespace TownsAndWarriors.game.sity {
 				}
 			}
 
-			Rec(fromX, fromY, 0);
-
+			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
+			while (recList.Count != 0) {
+				Rec(recList[0]);
+				recList.RemoveAt(0);
+			}
+					
 			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
 			UnRec(toX, toY, finder[toY, toX].num);
 			reversedPath.Reverse();
@@ -101,23 +109,25 @@ namespace TownsAndWarriors.game.sity {
 				rez = false;
 			}
 
-			void Rec(int x, int y, int value) {
-				if (finder[y, x].num != -1 && finder[y, x].num < value)
-					return;
+			void Rec(RecInfo info) {
+				int x = info.x, y = info.y;
 
-				finder[y, x].num = value++;
+				if (finder[y, x].num != -1 && finder[y, x].num < info.value)
+					return;
 
 				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId)
 					return;
 
+				finder[y, x].num = info.value++;
+
 				if (finder[y, x].IsOpenBottom)
-					Rec(x, y + 1, value);
+					recList.Add(new RecInfo() { x = x, y = y + 1, value = info.value });
 				if (finder[y, x].IsOpenRight)
-					Rec(x + 1, y, value);
+					recList.Add(new RecInfo() { x = x + 1, y = y, value = info.value });
 				if (finder[y, x].IsOpenTop)
-					Rec(x, y - 1, value);
+					recList.Add(new RecInfo() { x = x, y = y - 1, value = info.value });
 				if (finder[y, x].IsOpenLeft)
-					Rec(x - 1, y, value);
+					recList.Add(new RecInfo() { x = x - 1, y = y, value = info.value });
 			}
 
 			bool UnRec(int x, int y, int prevValue) {
@@ -156,47 +166,34 @@ namespace TownsAndWarriors.game.sity {
 				}
 			}
 
-			//bool findSity = false;
-			Rec(fromX, fromY, 0);
+
+			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
+			while (recList.Count != 0) {
+				Rec(recList[0]);
+				recList.RemoveAt(0);
+			}
 
 			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
 			UnRec(toX, toY, finder[toY, toX].num);
 			reversedPath.Reverse();
 			pathToSities.Add(to, reversedPath);
 
-			//string str = "";
-			//for (int i = 0; i < finder.GetLength(0); ++i) {
-			//	for (int j = 0; j < finder.GetLength(1); ++j)
-			//		str += finder[i, j].num.ToString() + " ";
-			//	str += "\n";
-			//}
-			//System.Windows.MessageBox.Show(str);
+			void Rec(RecInfo info) {
+				int x = info.x, y = info.y;
 
-			//str = "";
-			//for (int i = 0; i < reversedPath.Count; ++i)
-			//	str += reversedPath[i].ToString() + "\n";
-			//System.Windows.MessageBox.Show(str);
-
-			void Rec(int x, int y, int value) {
-				//	if (findSity)
-				//	return;
-				//if (x == toX && y == toY)
-				//	findSity = true;
-
-
-				if (finder[y, x].num != -1 && finder[y, x].num < value)
+				if (finder[y, x].num != -1 && finder[y, x].num < info.value)
 					return;
 
-				finder[y, x].num = value++;
+				finder[y, x].num = info.value++;
 
 				if (finder[y, x].IsOpenBottom)
-					Rec(x, y + 1, value);
+					recList.Add(new RecInfo() { x = x, y = y + 1, value = info.value });
 				if (finder[y, x].IsOpenRight)
-					Rec(x + 1, y, value);
+					recList.Add(new RecInfo() { x = x + 1, y = y, value = info.value });
 				if (finder[y, x].IsOpenTop)
-					Rec(x, y - 1, value);
+					recList.Add(new RecInfo() { x = x, y = y - 1, value = info.value });
 				if (finder[y, x].IsOpenLeft)
-					Rec(x - 1, y, value);
+					recList.Add(new RecInfo() { x = x - 1, y = y, value = info.value });
 			}
 
 			bool UnRec(int x, int y, int prevValue) {
@@ -221,6 +218,10 @@ namespace TownsAndWarriors.game.sity {
 			pathToSities.Remove(to);
 			isDirectly = BuildPathWithoutEnemySitiesPath(to);
 			return pathToSities[to].Count - 1;
+		}
+
+		public int TickToGoTo(BasicSity to, out bool isDirectly) {
+			return GetShortestPath(to, out isDirectly) * this.ticksPerIncome;
 		}
 
 		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
@@ -268,5 +269,10 @@ namespace TownsAndWarriors.game.sity {
 				IsOpenTop = cell.IsOpenTop;
 			}
 		}
+
+		class RecInfo {
+			public int x, y, value;
+		}
+
 	}
 }

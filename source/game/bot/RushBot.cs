@@ -79,18 +79,10 @@ namespace TownsAndWarriors.game.bot {
 		//---------------------------------------------- Methods - fillData ----------------------------------------------
 
 		void RecalcBotSities() {
-			REPEAT_FILL_CITY:
+			botSities.Clear();
 			foreach (var sity in sities) {
-				if (botSities.Contains(sity)) {
-					if (sity.playerId != this.playerId) {
-						botSities.Remove(sity);
-						goto REPEAT_FILL_CITY;
-					}
-				}
-				else if (sity.playerId == this.playerId) {
+				if (sity.playerId == playerId)
 					botSities.Add(sity);
-					goto REPEAT_FILL_CITY;
-				}
 			}
 		}
 
@@ -150,7 +142,7 @@ namespace TownsAndWarriors.game.bot {
 					botSitiesUnderAttackUnits.Add(new List<BasicUnit>());
 					botSitiesUnderAttack.Add(bs);
 					foreach (var unit in units) {
-						if (unit.playerId != this.playerId && unit.destination == bs) {
+						if (unit.destination == bs) {
 							botSitiesUnderAttackUnits[botSitiesUnderAttackUnits.Count - 1].Add(unit);
 						}
 					}
@@ -239,12 +231,30 @@ namespace TownsAndWarriors.game.bot {
 					map.SendWarriors(sity, rushSity);
 		}
 
-		void DropOvercapacityUnits() {
+		void ProtectSities() {
+			//for (int i = 0; i < botSitiesUnderAttack.Count; ++i) {
+			//	var sity = botSitiesUnderAttack[i];
+			//	var units = botSitiesUnderAttackUnits[i];
 
+			//	uint attackersCnt = 0;
+			//	foreach (var unit in units) {
+			//		if (unit.playerId != this.playerId)
+			//			attackersCnt += unit.warriorsCnt;
+			//		else
+			//			attackersCnt -= unit.warriorsCnt;
+			//	}
+
+			//	if (attackersCnt >= settings.values.bot_rushBot_Protect_MinimumUnitsLeft) {
+
+			//	}
+
+			//}
 		}
 
-		void ProtectSities() {
-
+		void DropOvercapacityUnits() {
+			foreach (var i in overcapedBotSities) {
+				i.SendUnit(this.sities[values.rnd.Next(0, sities.Count)]);
+			}
 		}
 
 		void MoveUnitsToWeakSity() {
