@@ -4,7 +4,8 @@
 
 	<Style TargetType="Grid" x:Key="BasicCityStyle">
 		<!--<Style.Resources>
-			--><!--<Style TargetType="Label">
+			-->
+		<!--<Style TargetType="Label">
 				<Style.Resources>
 					<Style TargetType="Ellipse">
 						<Style.Triggers>
@@ -21,7 +22,8 @@
 						</Style.Triggers>
 					</Style>
 				</Style.Resources>
-			</Style>--><!--
+			</Style>-->
+		<!--
 			<Style TargetType="Grid">
 				<Style.Triggers>
 				</Style.Triggers>
