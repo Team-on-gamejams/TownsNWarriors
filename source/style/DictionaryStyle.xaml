@@ -1,0 +1,66 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TownsAndWarriors.style">
+
+	<Style TargetType="Grid" x:Key="BasicCityStyle">
+		<!--<Style.Resources>
+			-->
+		<!--<Style TargetType="Label">
+				<Style.Resources>
+					<Style TargetType="Ellipse">
+						<Style.Triggers>
+							<EventTrigger RoutedEvent="Grid.MouseEnter">
+								<EventTrigger.Actions>
+									<BeginStoryboard>
+										<Storyboard>
+											<DoubleAnimation Storyboard.TargetProperty="Width" Duration="0:0:0.5" To="40" AutoReverse="True" RepeatBehavior="1x"/>
+											<DoubleAnimation Storyboard.TargetProperty="Height" Duration="0:0:0.5" To="40" AutoReverse="True" RepeatBehavior="1x"/>
+										</Storyboard>
+									</BeginStoryboard>
+								</EventTrigger.Actions>
+							</EventTrigger>
+						</Style.Triggers>
+					</Style>
+				</Style.Resources>
+			</Style>-->
+		<!--
+			<Style TargetType="Grid">
+				<Style.Triggers>
+				</Style.Triggers>
+			</Style>
+		</Style.Resources>-->
+	</Style>
+
+	<Style TargetType="Label" x:Key="HorseCityStyle">
+		<!--<Style.Resources>-->
+		<!--<Style TargetType="Label">-->
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+
+						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0"
+														Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}">
+						</Rectangle>
+
+						<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<!--</Style>-->
+		<!--</Style.Resources>-->
+	</Style>
+
+</ResourceDictionary>
