@@ -43,11 +43,12 @@ namespace TownsAndWarriors.window {
 		private void Button_Click_Random_Map(object sender, RoutedEventArgs e) {
 			GameWindow gameWindow = new GameWindow();
 			gameWindow.Show();
-			this.Close();
 			MainWindow.ReopenWindow(this, gameWindow);
 
 			game.Game game = new game.Game(gameWindow, TownsAndWarriors.game.settings.values.fieldSizeX, TownsAndWarriors.game.settings.values.fieldSizeY);
 			game.Play();
+
+			Button_Click_Exit(this, null);
 		}
 
 		private void Button_Click_Back(object sender, RoutedEventArgs e) {
