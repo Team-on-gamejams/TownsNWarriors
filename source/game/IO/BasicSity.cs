@@ -58,6 +58,7 @@ namespace TownsAndWarriors.game.sity
 			settings.size.SizeChanged += () => {
 				shape.Children.Clear();
 				FillShape();
+
 			};
 
 			shape.MouseEnter += (a, b) => {
@@ -119,7 +120,7 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
-							//x.selection.Opacity = 1;
+							x.selection.Opacity = 0;
 							switch (settings.values.style_Num)
 							{
 								case 0:
