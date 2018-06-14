@@ -62,6 +62,12 @@ namespace TownsAndWarriors.game.sity
 			};
 
 			shape.MouseEnter += (a, b) => {
+				if(this.playerId == 1)
+					selection.Background = new ImageBrush(new BitmapImage(new Uri(@"..\..\img\war\our_selector.png", UriKind.Relative)));
+				else
+					selection.Background = new ImageBrush(new BitmapImage(new Uri(@"..\..\img\war\enemy_selector.png", UriKind.Relative)));
+
+
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
 
 				var anim = new System.Windows.Media.Animation.DoubleAnimation {
@@ -71,6 +77,7 @@ namespace TownsAndWarriors.game.sity
 				};
 				label.BeginAnimation(Label.WidthProperty, anim);
 				label.BeginAnimation(Label.HeightProperty, anim);
+				selection.Opacity = 1;
 			};
 			shape.MouseLeave += (a, b) => {
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
@@ -82,6 +89,7 @@ namespace TownsAndWarriors.game.sity
 				};
 				label.BeginAnimation(Label.WidthProperty, anim);
 				label.BeginAnimation(Label.HeightProperty, anim);
+				selection.Opacity = 0;
 			};
 
 			grid.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
