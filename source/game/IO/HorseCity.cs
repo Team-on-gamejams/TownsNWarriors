@@ -44,8 +44,8 @@ namespace TownsAndWarriors.game.sity
 					To = min,
 					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
 				};
-				label.BeginAnimation(Ellipse.WidthProperty, anim);
-				label.BeginAnimation(Ellipse.HeightProperty, anim);
+				label.BeginAnimation(Label.WidthProperty, anim);
+				label.BeginAnimation(Label.HeightProperty, anim);
 			};
 			shape.MouseLeave += (a, b) => {
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
@@ -56,8 +56,8 @@ namespace TownsAndWarriors.game.sity
 					From = min,
 					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 100)),
 				};
-				label.BeginAnimation(Ellipse.WidthProperty, anim);
-				label.BeginAnimation(Ellipse.HeightProperty, anim);
+				label.BeginAnimation(Label.WidthProperty, anim);
+				label.BeginAnimation(Label.HeightProperty, anim);
 			};
 
 			shape.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
@@ -172,6 +172,14 @@ namespace TownsAndWarriors.game.sity
 			else if (playerId == 2)
 			{
 				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\stable_p2_s4_l5.png", UriKind.Relative)) };
+			}
+			else if (playerId == 4)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\stable_p3_s4_l5.png", UriKind.Relative)) };
+			}
+			else if (playerId == 3)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\stable_p4_s4_l5.png", UriKind.Relative)) };
 			}
 		}
 	}
