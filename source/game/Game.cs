@@ -26,18 +26,47 @@ namespace TownsAndWarriors.game {
 		Canvas mainCanvas;
 		GameWindow IOWindow;
 
-		bool isPlay;
+		bool isPlay, isNeedToExit;
+		int x, y;
+
+		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow, int x, int y) {
+		public Game(GameWindow IOWindow, int X, int Y) {
 			this.IOWindow = IOWindow;
 			isPlay = true;
+			isNeedToExit = false;
 			mainGrid = IOWindow.mainGameGrid;
 
-			for(int i = 0; i < x; ++i)
+			x = X;
+			y = Y;
+
+			FillIOWindow();
+
+			loopTimer.Interval = settings.values.milisecondsPerTick;
+			loopTimer.Tick += (a, b) => {
+				if (isPlay) {
+					Loop();
+				}
+			};
+		}
+
+		//---------------------------------------------- Methods ----------------------------------------------
+		public void Play() {
+			isPlay = true;
+			game.globalGameInfo.tick = 1;
+
+			CreateGameMap();
+			InitGameMap();
+
+			loopTimer.Start();
+		}
+
+		void FillIOWindow() {
+			for (int i = 0; i < x; ++i)
 				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
 			for (int i = 0; i < y; ++i)
 				mainGrid.RowDefinitions.Add(new RowDefinition());
@@ -45,16 +74,18 @@ namespace TownsAndWarriors.game {
 			mainCanvas = new Canvas();
 			Grid.SetZIndex(mainCanvas, 2);
 			mainGrid.Children.Add(mainCanvas);
+		}
 
+		void CreateGameMap() {
 			settings.size.OneCellSizeX = 0;
 			settings.size.OneCellSizeY = 0;
 
 			settings.values.seed = (int)
 				DateTime.Now.Ticks;
-				//1340092764;
+			//1340092764;
 
 			gameMap = GameMap.GenerateRandomMap(
-				x, y, 
+				x, y,
 				new game.map.mapGenerators.TunnelMapGenerator(),
 				new game.map.mapGenerators.SityPlacer14(),
 				new game.map.mapGenerators.CityIdDiffCorners()
@@ -64,21 +95,7 @@ namespace TownsAndWarriors.game {
 				gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
 		}
 
-		//---------------------------------------------- Methods ----------------------------------------------
-		public void Play() {
-			Init();
-
-			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-			timer.Interval = settings.values.milisecondsPerTick;
-			timer.Tick += (a, b) => {
-				if (isPlay) {
-					Loop();
-				}
-			};
-			timer.Start();
-		}
-
-		void Init() {
+		void InitGameMap() {
 			gameMap.SetCanvas(mainCanvas);
 			gameMap.DrawStatic(mainGrid);
 			SetGrowTimer();
@@ -90,6 +107,44 @@ namespace TownsAndWarriors.game {
 			gameMap.UpdateMap();
 			gameMap.Tick();
 
+			WinProcess();
+		}
+
+		void WinProcess() {
+			int id = 0;
+			if (IsWin()) {
+				isPlay = false;
+				loopTimer.Stop();
+
+				string winner = "";
+				if (id == 1)
+					winner = "You win!";
+				else
+					winner = "Bot win! Seems like you looser";
+
+
+				if (MessageBox.Show("Do you want to play again?", winner, MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+					this.Play();
+				}
+				else {
+					IOWindow.Close();
+				}
+			}
+
+			bool IsWin() {
+				foreach (var sity in gameMap.Sities) {
+					if (sity.playerId != 0) {
+						id = sity.playerId;
+						break;
+					}
+				}
+
+				foreach (var sity in gameMap.Sities)
+					if (sity.playerId != 0 && sity.playerId != id)
+						return false;
+
+				return true;
+			}
 		}
 
 		void SetGrowTimer() {
