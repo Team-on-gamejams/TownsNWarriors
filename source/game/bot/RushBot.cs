@@ -124,7 +124,7 @@ namespace TownsAndWarriors.game.bot {
 		void RecalcOvercapedBotSities() {
 			overcapedBotSities.Clear();
 			foreach (var bs in botSities) {
-				int currUnits = bs.currWarriors + values.bot_rushBot_ValueNearMaxMeansOvercapacityToo;
+				int currUnits = bs.currWarriors + values.bot_rushBot_Overcapacity_NearValue;
 				foreach (var unit in units) {
 					if (unit.playerId == this.playerId && unit.destination == bs && unit.TicksLeftToDestination() <= this.tickReact)
 						currUnits += unit.warriorsCnt;
@@ -164,7 +164,7 @@ namespace TownsAndWarriors.game.bot {
 
 		void CalculateWhoNeedToBeRushed() {
 			List<List<BasicSity>> potentialRushes = new List<List<BasicSity>>();
-			for (byte i = 1; i <= settings.values.bot_rushBot_RushCnt; ++i) {
+			for (byte i = 1; i <= settings.values.bot_rushBot_Rush_Cnt; ++i) {
 				potentialRushes.Add(new List<BasicSity>());
 
 				foreach (var sity in canAttackDirectly) {
@@ -192,7 +192,7 @@ namespace TownsAndWarriors.game.bot {
 			int tmp = 0;
 			while (tmp != potentialRushes.Count) {
 				if (potentialRushes[tmp].Count != 0)
-					rushChance.Add(new KeyValuePair<byte, byte>(values.bot_rushBot_RushWavesChance[tmp].Key, values.bot_rushBot_RushWavesChance[tmp].Value));
+					rushChance.Add(new KeyValuePair<byte, byte>(values.bot_rushBot_RushWaves_Chance[tmp].Key, values.bot_rushBot_RushWaves_Chance[tmp].Value));
 				++tmp;
 			}
 
@@ -280,10 +280,10 @@ namespace TownsAndWarriors.game.bot {
 		double GetEnemyArmy(BasicSity sityTo) {
 			if (sityTo.playerId == 0)
 				return sityTo.currWarriors +
-					values.bot_rushBot_MinimumMore;
+					values.bot_rushBot_Rush_MinimumMore;
 			else
 				return sityTo.currWarriors +
-					values.bot_rushBot_MinimumMore +
+					values.bot_rushBot_Rush_MinimumMore +
 					((values.basicUnit_ticks_MoveWarrior * GetAvgDistance(sityTo)) / sityTo.ticksPerIncome);
 		}
 	}
