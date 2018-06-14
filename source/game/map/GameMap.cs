@@ -82,6 +82,9 @@ namespace TownsAndWarriors.game.map {
 
 			var unit = from.SendUnit(to);
 
+			if (unit== null)
+				return;
+
 			unit.SetCanvas(canvas);
 
 			cellSizeX = (int)canvas.RenderSize.Width;
