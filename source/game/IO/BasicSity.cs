@@ -77,7 +77,7 @@ namespace TownsAndWarriors.game.sity
 				};
 				label.BeginAnimation(Label.WidthProperty, anim);
 				label.BeginAnimation(Label.HeightProperty, anim);
-				selection.Opacity = 1;
+					selection.Opacity = 1;
 			};
 			shape.MouseLeave += (a, b) => {
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
@@ -89,7 +89,8 @@ namespace TownsAndWarriors.game.sity
 				};
 				label.BeginAnimation(Label.WidthProperty, anim);
 				label.BeginAnimation(Label.HeightProperty, anim);
-				selection.Opacity = 0;
+				if(!selected.Contains(this))
+					selection.Opacity = 0;
 			};
 
 			grid.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
