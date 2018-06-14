@@ -56,10 +56,9 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 			sitiesCnt = rnd.Next(values.generator_SityPlacer14_Quad_Sities_Min * gameQuads,
 				values.generator_SityPlacer14_Quad_Sities_Max * gameQuads);
 
-			Random rand = new Random();
 			for (int i = 0; i < sitiesCnt; ++i)
 			{
-				int tmp = rand.Next(0, 3);
+				int tmp = settings.values.rnd.Next(0, 3);
 				if (tmp == 0)
 				{
 					sities.Add(new BasicSity());
