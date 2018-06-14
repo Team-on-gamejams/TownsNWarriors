@@ -1,0 +1,121 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TownsAndWarriors.style">
+
+	<Style TargetType="Grid" x:Key="BasicCityStyle">
+		<!--<Style.Resources>
+			-->
+		<!--<Style TargetType="Label">
+				<Style.Resources>
+					<Style TargetType="Ellipse">
+						<Style.Triggers>
+							<EventTrigger RoutedEvent="Grid.MouseEnter">
+								<EventTrigger.Actions>
+									<BeginStoryboard>
+										<Storyboard>
+											<DoubleAnimation Storyboard.TargetProperty="Width" Duration="0:0:0.5" To="40" AutoReverse="True" RepeatBehavior="1x"/>
+											<DoubleAnimation Storyboard.TargetProperty="Height" Duration="0:0:0.5" To="40" AutoReverse="True" RepeatBehavior="1x"/>
+										</Storyboard>
+									</BeginStoryboard>
+								</EventTrigger.Actions>
+							</EventTrigger>
+						</Style.Triggers>
+					</Style>
+				</Style.Resources>
+			</Style>-->
+		<!--
+			<Style TargetType="Grid">
+				<Style.Triggers>
+				</Style.Triggers>
+			</Style>
+		</Style.Resources>-->
+	</Style>
+
+	<Style TargetType="Label" x:Key="InterfaceBaseCityStyle">
+		<Setter Property="VerticalAlignment"  Value="Center"/>
+		<Setter Property="HorizontalAlignment"  Value="Center"/>
+	</Style>
+
+	<Style TargetType="Label" x:Key="BaseCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Ellipse Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
+						</Ellipse>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="HorseCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+
+						<Rectangle  Fill="{TemplateBinding Background}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
+						</Rectangle>
+						<Rectangle Grid.Column="1" Grid.Row="1" Fill="Black"></Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="CastleCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+
+						<Rectangle  Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
+						</Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="ColorCityStyle1">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition Height="0.2*"/>
+						</Grid.RowDefinitions>
+
+						<Label Background="{TemplateBinding Background}" Grid.Row="0"></Label>
+						<!--<Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Background="Black" Grid.Row="1" Content="{TemplateBinding Content}" Foreground="White" FontSize="18"></Label>-->
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+</ResourceDictionary>
