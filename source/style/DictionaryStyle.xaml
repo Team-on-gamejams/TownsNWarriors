@@ -100,7 +100,7 @@
 		</Setter>
 	</Style>
 
-	<Style TargetType="Label" x:Key="ColorCityStyle1" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+	<Style TargetType="Label" x:Key="ColorCityStyle1">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">

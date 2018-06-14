@@ -167,7 +167,7 @@ namespace TownsAndWarriors.game.sity
 				case 1:
 					label.Style = (Style)label.FindResource("ColorCityStyle1");
 					label.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri(@"..\..\img\cities\city_p0_s4_l5.png", UriKind.Relative)) };
-					SetImgColor(label, playerId);
+					SetImgColor(this.label, this.playerId);
 					break;
 			}
 
