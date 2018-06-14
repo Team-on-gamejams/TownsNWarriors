@@ -97,6 +97,7 @@
     <Compile Include="game\IO\CastleCity.cs" />
     <Compile Include="game\IO\GameCell.cs" />
     <Compile Include="game\IO\GameMap.cs" />
+    <Compile Include="game\IO\HorseCity.cs" />
     <Compile Include="game\map\mapGenerators\cityId\BasicCityId.cs" />
     <Compile Include="game\map\mapGenerators\cityId\CityIdDiffCorners.cs" />
     <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="game\settings\size.cs" />
     <Compile Include="game\sity\BasicSity.cs" />
     <Compile Include="game\sity\CastleCity.cs" />
+    <Compile Include="game\sity\HorseCity.cs" />
     <Compile Include="game\unit\BasicUnit.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\map\GameCell.cs" />
