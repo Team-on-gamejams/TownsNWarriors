@@ -204,5 +204,13 @@ namespace TownsAndWarriors.game.sity
 
 				label.BorderThickness = new Thickness(settings.colors.cityPassiveStrokeThickness);
 		}
+
+		static public void SetImgColor(Label label, byte playerId)
+		{
+			if (playerId == 1)
+			{
+				label.Background = new ImageBrush() { ImageSource = new BitmapImage() { UriSource = new Uri(@"..\..\img\cities\stable_p1_s4_l5.png", UriKind.Relative) } };
+			}
+		}
 	}
 }
