@@ -2,12 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TownsAndWarriors"
-             StartupUri="window\MainWindow.xaml">
+             StartupUri="window\MainMenu\MainWindow.xaml">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="style\CityStyles.xaml"/>
-				<ResourceDictionary Source="style\WindowStyles.xaml"/>
+				<ResourceDictionary Source="style\OrangeButton.xaml"/>
+				<ResourceDictionary Source="style\MainWindowStyles.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>
