@@ -160,6 +160,7 @@ namespace TownsAndWarriors.game.sity
 		public override void UpdateValue()
 		{
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
+			label.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
 		protected virtual void FillShape() {
@@ -192,7 +193,8 @@ namespace TownsAndWarriors.game.sity
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
 			};
-			shape.Children.Add(text);
+			label.Content = text.Content;
+			//shape.Children.Add(text);
 		}
 
 		static public void SetElipseColor(Shape elipse, byte playerId) {
