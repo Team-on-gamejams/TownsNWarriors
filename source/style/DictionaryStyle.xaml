@@ -104,11 +104,14 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">
-					<Grid Background="{TemplateBinding Background}">
+					<Grid>
 						<Grid.RowDefinitions>
 							<RowDefinition/>
-							<RowDefinition Height="0.5*"/>
+							<RowDefinition Height="0.2*"/>
 						</Grid.RowDefinitions>
+
+						<Grid Background="{TemplateBinding Background}" Grid.Row="0"></Grid>
+						<Label Background="Red" Grid.Row="1">154</Label>
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
