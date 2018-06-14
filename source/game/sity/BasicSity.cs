@@ -8,30 +8,27 @@ using System.Reflection;
 using TownsAndWarriors.game.IO;
 using TownsAndWarriors.game.basicInterfaces;
 using TownsAndWarriors.game.unit;
+using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.sity {
-	public partial class BasicSity : GameCellDrawableObj, tickable, withPlayerId {
+	public partial class BasicSity : GameCellDrawableObj, tickable, withPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		public static TownsAndWarriors.game.map.GameMap gameMap;
-
-		public ushort currWarriors, maxWarriors;
-		public double sendPersent, defPersent;
-
-		public ushort ticksPerIncome;
 		protected Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
+
+		public static TownsAndWarriors.game.map.GameMap gameMap;
+		public ushort currWarriors, maxWarriors;
+		public double sendPersent, atkPersent, defPersent;
+		public ushort ticksPerIncome;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }
 
+
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicSity() {
-			maxWarriors = settings.values.basicSity_MaxWarriors;
-			currWarriors = settings.values.basicSity_StartWarriors;
-			sendPersent = settings.values.basicSity_sendWarriorsPersent;
-			defPersent = settings.values.basicSity_defendWarriorsPersent;
-			ticksPerIncome = settings.values.basicSity_ticks_NewWarrior;
 			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
         }
+
 
         //---------------------------------------------- Methods ----------------------------------------------
         public bool TickReact() {
@@ -47,31 +44,74 @@ namespace TownsAndWarriors.game.sity {
 		}
 
 		public ushort GetAtkWarriors() {
-			return (ushort)(currWarriors * sendPersent);
+			return (ushort)Math.Round(currWarriors * sendPersent * atkPersent);
 		}
 
 		public ushort GetDefWarriors() {
-			return (ushort)(currWarriors * defPersent);
+			return (ushort)Math.Round(currWarriors * defPersent);
 		}
 
 		public BasicUnit SendUnit(BasicSity to) {
 			ushort sendWarriors = GetAtkWarriors();
-			if(sendWarriors == 0) {
-
+			if(sendWarriors == 0) 
 				return null;
-			}
+			
 			currWarriors -= sendWarriors;
 			if (currWarriors < 0)
 				currWarriors = 0;
 
 			bool b;
 			GetShortestPath(to, out b);
-			//System.Windows.MessageBox.Show("ISDIR" + b.ToString());
 
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
+			unit.GetSettings(new settings.unit.BasicUnitSettings());
 
-            return unit;
+			return unit;
 		}
+
+		public void GetUnits(BasicUnit unit) {
+			if (playerId == unit.playerId) {
+				this.currWarriors += unit.warriorsCnt;
+				if (!settings.values.gameplay_SaveWarriorsOverCap && currWarriors > maxWarriors)
+					currWarriors = maxWarriors;
+			}
+			else {
+				ushort defWarriors = currWarriors;
+				unit.warriorsCnt = (ushort)Math.Round((2 - this.defPersent) * unit.warriorsCnt);
+
+				if (defWarriors > unit.warriorsCnt) {
+					defWarriors -= unit.warriorsCnt;
+					if (currWarriors > defWarriors)
+						currWarriors = defWarriors;
+				}
+				else if (!settings.values.gameplay_EqualsMeansCapture && defWarriors == unit.warriorsCnt) {
+					currWarriors = 0;
+				}
+				else {
+					currWarriors = (ushort)(unit.warriorsCnt - defWarriors);
+					playerId = unit.playerId;
+					this.shape.Children.Clear();
+					this.FillShape();
+				}
+
+			}
+
+			gameMap.Units.Remove(unit);
+		}
+
+		public void GetSettings(SettinsSetter settinsSetter) {
+			settinsSetter.SetSettings(this);
+		}
+
+		public int GetShortestPath(BasicSity to, out bool isDirectly) {
+			pathToSities.Remove(to);
+			isDirectly = BuildPathWithoutEnemySitiesPath(to);
+			return pathToSities[to].Count - 1;
+		}
+
+		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
+            return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
+        }
 
 		bool BuildPathWithoutEnemySitiesPath(BasicSity to) {
 			bool rez;
@@ -95,7 +135,7 @@ namespace TownsAndWarriors.game.sity {
 				Rec(recList[0]);
 				recList.RemoveAt(0);
 			}
-					
+
 			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
 			UnRec(toX, toY, finder[toY, toX].num);
 			reversedPath.Reverse();
@@ -214,49 +254,7 @@ namespace TownsAndWarriors.game.sity {
 			}
 		}
 
-		public int GetShortestPath(BasicSity to, out bool isDirectly) {
-			pathToSities.Remove(to);
-			isDirectly = BuildPathWithoutEnemySitiesPath(to);
-			return pathToSities[to].Count - 1;
-		}
-
-		public int TickToGoTo(BasicSity to, out bool isDirectly) {
-			return GetShortestPath(to, out isDirectly) * this.ticksPerIncome;
-		}
-
-		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
-            return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
-        }
-
-		public void GetUnits(BasicUnit unit) {
-			if(playerId == unit.playerId) {
-				this.currWarriors += unit.warriorsCnt;
-				if (!settings.values.gameplay_SaveWarriorsOverCap && currWarriors > maxWarriors)
-					currWarriors = maxWarriors;
-			}
-			else {
-				ushort defWarriors = currWarriors;
-				unit.warriorsCnt = (ushort)Math.Round((2 - this.defPersent) * unit.warriorsCnt);
-
-				if (defWarriors > unit.warriorsCnt) {
-					defWarriors -= unit.warriorsCnt;
-					if(currWarriors > defWarriors)
-						currWarriors = defWarriors;
-				}
-				else if (!settings.values.gameplay_EqualsMeansCapture && defWarriors == unit.warriorsCnt) {
-					currWarriors = 0;
-				}
-				else {
-					currWarriors = (ushort)(unit.warriorsCnt - defWarriors);
-					playerId = unit.playerId;
-					this.shape.Children.Clear();
-					this.FillShape();
-				}
-
-			}
-
-			gameMap.Units.Remove(unit);
-		}
+		//////////////////////////////////////////////////////////////////////////
 
 		class PathFinderCell {
 			public bool IsOpenBottom = false, IsOpenLeft = false, IsOpenRight = false, IsOpenTop = false;
@@ -273,6 +271,5 @@ namespace TownsAndWarriors.game.sity {
 		class RecInfo {
 			public int x, y, value;
 		}
-
 	}
 }
