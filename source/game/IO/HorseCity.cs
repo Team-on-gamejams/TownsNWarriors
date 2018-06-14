@@ -25,6 +25,8 @@ namespace TownsAndWarriors.game.sity
 	
 		protected override void FillShape()
 		{
+			if (!shape.Children.Contains(units))
+				shape.Children.Add(units);
 			//Shape
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
 			label = new Label();

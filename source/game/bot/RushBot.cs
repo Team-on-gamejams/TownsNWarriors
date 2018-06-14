@@ -253,7 +253,7 @@ namespace TownsAndWarriors.game.bot {
 
 		void DropOvercapacityUnits() {
 			foreach (var i in overcapedBotSities) {
-				i.SendUnit(this.sities[values.rnd.Next(0, sities.Count)]);
+				map.SendWarriors(i, this.sities[values.rnd.Next(0, sities.Count)]);
 			}
 		}
 
