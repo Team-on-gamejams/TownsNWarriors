@@ -56,22 +56,9 @@ namespace TownsAndWarriors.game.map.mapGenerators {
 			sitiesCnt = rnd.Next(values.generator_SityPlacer14_Quad_Sities_Min * gameQuads,
 				values.generator_SityPlacer14_Quad_Sities_Max * gameQuads);
 
-			for (int i = 0; i < sitiesCnt; ++i)
-			{
-				int tmp = settings.values.rnd.Next(0, 3);
-				if (tmp == 0)
-				{
-					sities.Add(new BasicSity());
-				}
-				else if (tmp == 1)
-				{
-					sities.Add(new HorseCity());
-				}
-				else
-				{
-					sities.Add(new CastleCity());
-				}
-			}			
+			for (int i = 0; i < sitiesCnt; ++i){
+				sities.Add(new BasicSity());
+			}
 		}
 
 		void FormBestPosition(GameMap m, Random rnd) {

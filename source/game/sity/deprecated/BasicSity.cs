@@ -8,9 +8,10 @@ using System.Reflection;
 using TownsAndWarriors.game.IO;
 using TownsAndWarriors.game.basicInterfaces;
 using TownsAndWarriors.game.unit;
+using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.sity {
-	public partial class BasicSity : GameCellDrawableObj, tickable, withPlayerId {
+	public partial class BasicSity : GameCellDrawableObj, tickable, withPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static TownsAndWarriors.game.map.GameMap gameMap;
 
@@ -256,6 +257,10 @@ namespace TownsAndWarriors.game.sity {
 			}
 
 			gameMap.Units.Remove(unit);
+		}
+
+		public void GetSettings(SettinsSetter settinsSetter) {
+			throw new NotImplementedException();
 		}
 
 		class PathFinderCell {

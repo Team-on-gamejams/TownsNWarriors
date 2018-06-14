@@ -70,6 +70,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="game\basicInterfaces\Settingable.cs" />
+    <Compile Include="game\settings\city\BasicCitySettings.cs" />
+    <Compile Include="game\settings\unit\BasicUnitSettings.cs" />
+    <Compile Include="game\settings\city\CitySettings.cs" />
+    <Compile Include="game\settings\SettinsSetter.cs" />
+    <Compile Include="game\settings\unit\UnitSettings.cs" />
     <Compile Include="window\MainMenu\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -126,32 +132,26 @@
     <Compile Include="game\bot\RushBot.cs" />
     <Compile Include="game\bot\SimpleBot.cs" />
     <Compile Include="game\globalGameInfo.cs" />
-    <Compile Include="game\IO\BasicSity.cs" />
-    <Compile Include="game\IO\BasicUnit.cs" />
-    <Compile Include="game\IO\CastleCity.cs" />
-    <Compile Include="game\IO\GameCell.cs" />
-    <Compile Include="game\IO\GameMap.cs" />
-    <Compile Include="game\IO\HorseCity.cs" />
-    <Compile Include="game\IO\HorseUnit.cs" />
+    <Compile Include="game\IO\deprecated\BasicSity.cs" />
+    <Compile Include="game\IO\deprecated\BasicUnit.cs" />
+    <Compile Include="game\IO\deprecated\GameCell.cs" />
+    <Compile Include="game\IO\deprecated\GameMap.cs" />
     <Compile Include="game\map\mapGenerators\cityId\BasicCityId.cs" />
     <Compile Include="game\map\mapGenerators\cityId\CityIdDiffCorners.cs" />
     <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
     <Compile Include="game\map\mapGenerators\road\BasicMapGenerator.cs" />
     <Compile Include="game\map\mapGenerators\city\SityPlacer14.cs" />
     <Compile Include="game\map\mapGenerators\road\TunnelMapGenerator.cs" />
-    <Compile Include="game\settings\colors.cs" />
-    <Compile Include="game\settings\size.cs" />
-    <Compile Include="game\sity\BasicSity.cs" />
-    <Compile Include="game\sity\CastleCity.cs" />
-    <Compile Include="game\sity\HorseCity.cs" />
-    <Compile Include="game\unit\BasicUnit.cs" />
+    <Compile Include="game\settings\deprecated\colors.cs" />
+    <Compile Include="game\settings\deprecated\size.cs" />
+    <Compile Include="game\sity\deprecated\BasicSity.cs" />
+    <Compile Include="game\unit\deprecated\BasicUnit.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\map\GameCell.cs" />
-    <Compile Include="game\IO\GameCellDrawableObj.cs" />
+    <Compile Include="game\IO\deprecated\GameCellDrawableObj.cs" />
     <Compile Include="game\map\GameMap.cs" />
-    <Compile Include="game\settings\values.cs" />
+    <Compile Include="game\settings\deprecated\values.cs" />
     <Compile Include="game\basicInterfaces\tickable.cs" />
-    <Compile Include="game\unit\HorseUnit.cs" />
     <Compile Include="window\MainMenu\CreditsWindow.xaml.cs">
       <DependentUpon>CreditsWindow.xaml</DependentUpon>
     </Compile>

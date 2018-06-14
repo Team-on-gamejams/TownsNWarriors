@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.settings.city {
-	class BasicCitySettings : CitySettings {
+	public class BasicCitySettings : CitySettings {
 		public override void SetSettings(object obj) {
 			throw new NotImplementedException();
 		}
