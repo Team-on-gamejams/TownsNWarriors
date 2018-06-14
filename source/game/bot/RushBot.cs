@@ -79,18 +79,10 @@ namespace TownsAndWarriors.game.bot {
 		//---------------------------------------------- Methods - fillData ----------------------------------------------
 
 		void RecalcBotSities() {
-			REPEAT_FILL_CITY:
+			botSities.Clear();
 			foreach (var sity in sities) {
-				if (botSities.Contains(sity)) {
-					if (sity.playerId != this.playerId) {
-						botSities.Remove(sity);
-						goto REPEAT_FILL_CITY;
-					}
-				}
-				else if (sity.playerId == this.playerId) {
+				if (sity.playerId == playerId)
 					botSities.Add(sity);
-					goto REPEAT_FILL_CITY;
-				}
 			}
 		}
 
