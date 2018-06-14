@@ -113,6 +113,7 @@ namespace TownsAndWarriors.game {
 		void WinProcess() {
 			int id = 0;
 			if (IsWin()) {
+				mainCanvas.Children.Clear();
 				isPlay = false;
 				loopTimer.Stop();
 

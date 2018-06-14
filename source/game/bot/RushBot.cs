@@ -232,23 +232,23 @@ namespace TownsAndWarriors.game.bot {
 		}
 
 		void ProtectSities() {
-			for (int i = 0; i < botSitiesUnderAttack.Count; ++i) {
-				var sity = botSitiesUnderAttack[i];
-				var units = botSitiesUnderAttackUnits[i];
+			//for (int i = 0; i < botSitiesUnderAttack.Count; ++i) {
+			//	var sity = botSitiesUnderAttack[i];
+			//	var units = botSitiesUnderAttackUnits[i];
 
-				uint attackersCnt = 0;
-				foreach (var unit in units) {
-					if (unit.playerId != this.playerId)
-						attackersCnt += unit.warriorsCnt;
-					else
-						attackersCnt -= unit.warriorsCnt;
-				}
+			//	uint attackersCnt = 0;
+			//	foreach (var unit in units) {
+			//		if (unit.playerId != this.playerId)
+			//			attackersCnt += unit.warriorsCnt;
+			//		else
+			//			attackersCnt -= unit.warriorsCnt;
+			//	}
 
-				if (attackersCnt >= settings.values.bot_rushBot_Protect_MinimumUnitsLeft) {
+			//	if (attackersCnt >= settings.values.bot_rushBot_Protect_MinimumUnitsLeft) {
 
-				}
+			//	}
 
-			}
+			//}
 		}
 
 		void DropOvercapacityUnits() {
