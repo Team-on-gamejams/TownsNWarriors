@@ -220,6 +220,10 @@ namespace TownsAndWarriors.game.sity {
 			return pathToSities[to].Count - 1;
 		}
 
+		public int TickToGoTo(BasicSity to, out bool isDirectly) {
+			return GetShortestPath(to, out isDirectly);
+		}
+
 		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
             return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
         }
