@@ -221,7 +221,7 @@ namespace TownsAndWarriors.game.sity {
 		}
 
 		public int TickToGoTo(BasicSity to, out bool isDirectly) {
-			return GetShortestPath(to, out isDirectly);
+			return GetShortestPath(to, out isDirectly) * this.ticksPerIncome;
 		}
 
 		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
