@@ -207,7 +207,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="img\unit sprite\" />
+    <Folder Include="img\units\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -226,6 +226,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="audio\sounds\gg.mp3" />
+    <Resource Include="img\war\enemy_selector.png" />
+    <Resource Include="img\war\our_selector.png" />
     <Resource Include="img\cities\castle_p0_s4_l5.png" />
     <Resource Include="img\cities\castle_p1_s4_l5.png" />
     <Resource Include="img\cities\castle_p2_s4_l5.png" />
