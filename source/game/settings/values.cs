@@ -43,7 +43,7 @@ namespace TownsAndWarriors.game.settings {
 		public static byte generator_SityPlacer14_Chance_PosWith4Road = 100;
 		public static byte generator_SityPlacer14_Code_MaxSityPlaceRepeats = 3;
 
-		public static byte generator_CityId_Bots = 1;
+		public static byte generator_CityId_Bots = 8;
 		public static byte generator_CityId_TownsPerPlayer = 1;
 		public static byte generator_CityId_TownsPerBot = 1;
 
@@ -56,7 +56,7 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort castleCity_MaxWarriors = 30;
 		public static ushort castleCity_StartWarriors = 15;
 		public static float castleCity_sendWarriorsPersent = 0.50f;
-		public static float castleCity_defendWarriorsPersent = 1.5f;
+		public static float castleCity_defendWarriorsPersent = 1.45f;
 
 		public static ushort horceCity_MaxWarriors = 20;
 		public static ushort horceCity_StartWarriors = 10;

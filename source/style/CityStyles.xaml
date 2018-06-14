@@ -6,8 +6,15 @@
 	
 	</Style>
 
-	<Style TargetType="Grid" x:Key="BasicCityMouseMove">
-
+	<Style TargetType="Label" x:Key="HorseCityStyle1">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid Background="{TemplateBinding Background}">
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 </ResourceDictionary>
