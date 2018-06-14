@@ -58,6 +58,7 @@ namespace TownsAndWarriors.game.sity
 			settings.size.SizeChanged += () => {
 				shape.Children.Clear();
 				FillShape();
+
 			};
 
 			shape.MouseEnter += (a, b) => {
