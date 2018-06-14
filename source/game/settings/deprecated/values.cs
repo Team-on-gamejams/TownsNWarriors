@@ -47,24 +47,9 @@ namespace TownsAndWarriors.game.settings {
 		public static byte generator_CityId_TownsPerPlayer = 1;
 		public static byte generator_CityId_TownsPerBot = 1;
 
-		public static ushort basicSity_MaxWarriors = 20;
-		public static ushort basicSity_StartWarriors = 10;
-		public static ushort basicSity_ticks_NewWarrior = 50;
-		public static float basicSity_sendWarriorsPersent = 0.50f;
-		public static float basicSity_defendWarriorsPersent = 1.0f;
 
-		public static ushort castleCity_MaxWarriors = 30;
-		public static ushort castleCity_StartWarriors = 15;
-		public static float castleCity_sendWarriorsPersent = 0.50f;
-		public static float castleCity_defendWarriorsPersent = 1.45f;
-
-		public static ushort horceCity_MaxWarriors = 20;
-		public static ushort horceCity_StartWarriors = 10;
-		public static float horceCity_sendWarriorsPersent = 0.50f;
-		public static float horceCity_defendWarriorsPersent = 1.0f;
-
+		//Воно ще нада, але в значенні середньої кількості тіків, яка треба на рух
 		public static ushort basicUnit_ticks_MoveWarrior = 10;
-		public static ushort horseUnit_ticks_MoveWarrior = 7;
 
 		public static ushort style_Num = 1;
 

@@ -76,6 +76,7 @@
     <Compile Include="game\settings\city\CitySettings.cs" />
     <Compile Include="game\settings\SettinsSetter.cs" />
     <Compile Include="game\settings\unit\UnitSettings.cs" />
+    <Compile Include="game\unit\BasicUnit.cs" />
     <Compile Include="window\MainMenu\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -144,8 +145,7 @@
     <Compile Include="game\map\mapGenerators\road\TunnelMapGenerator.cs" />
     <Compile Include="game\settings\deprecated\colors.cs" />
     <Compile Include="game\settings\deprecated\size.cs" />
-    <Compile Include="game\sity\deprecated\BasicSity.cs" />
-    <Compile Include="game\unit\deprecated\BasicUnit.cs" />
+    <Compile Include="game\sity\BasicSity.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\map\GameCell.cs" />
     <Compile Include="game\IO\deprecated\GameCellDrawableObj.cs" />
