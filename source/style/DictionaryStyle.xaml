@@ -31,10 +31,25 @@
 		</Style.Resources>-->
 	</Style>
 
-	<Style TargetType="Label" x:Key="HorseCityStyle">
+	<Style TargetType="Label" x:Key="InterfaceBaseCityStyle">
 		<Setter Property="VerticalAlignment"  Value="Center"/>
 		<Setter Property="HorizontalAlignment"  Value="Center"/>
-		<Setter Property="VerticalAlignment"  Value="Center"/>
+	</Style>
+
+	<Style TargetType="Label" x:Key="BaseCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Ellipse Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
+						</Ellipse>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="HorseCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">
@@ -59,7 +74,33 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<Style TargetType="Label" x:Key="HorseCityStyle1">
+
+	<Style TargetType="Label" x:Key="CastleCityStyle" BasedOn="{StaticResource InterfaceBaseCityStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Label">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+
+						<Rectangle  Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}">
+						</Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label" x:Key="ColorCityStyle1" BasedOn="{StaticResource InterfaceBaseCityStyle}">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">
