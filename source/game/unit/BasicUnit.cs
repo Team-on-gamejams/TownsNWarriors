@@ -59,5 +59,8 @@ namespace TownsAndWarriors.game.unit {
 			return false;
 		}
 
+		public ushort TicksLeftToDestination() {
+			return (ushort)((path.Count - 1 - currPathIndex) * tickPerTurn - currTickOnCell);
+		}
 	}
 }

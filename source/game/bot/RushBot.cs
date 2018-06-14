@@ -11,13 +11,22 @@ using TownsAndWarriors.game.unit;
 namespace TownsAndWarriors.game.bot {
 	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
+		//with bot cities
 		List<sity.BasicSity> botSities = new List<sity.BasicSity>();
+		List<BasicSity> overcapedBotSities = new List<BasicSity>();
+
+		List<BasicSity> botSitiesUnderAttack = new List<BasicSity>();
+		List<List<BasicUnit>> botSitiesUnderAttackUnits = new List<List<BasicUnit>>();
+
+		//With enemy cities
 		List<sity.BasicSity> rushingSities = new List<sity.BasicSity>();
 		List<sity.BasicSity> canAttackDirectly = new List<sity.BasicSity>();
+
 
 		bool isRushing = false;
 		byte rushWaveRemains;
 		BasicSity rushSity;
+		byte tickReact;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
@@ -32,21 +41,25 @@ namespace TownsAndWarriors.game.bot {
 			sities = Sities;
 			units = Units;
 			playerId = botId;
+			tickReact = values.bot_rushBot_Tick_React;
 		}
 
 		//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
 			if (globalGameInfo.tick > settings.values.bot_rushBot_Tick_IgnoreFirstN &&
-				globalGameInfo.tick % values.bot_rushBot_Tick_React == 0) {
+				globalGameInfo.tick % tickReact == 0) {
 
-				RecalcRushingSities();
 				RecalcBotSities();
+				RecalcRushingSities();
 				RecalcCanAttackDirectly();
 
 				if (!isRushing)
 					CalculateWhoNeedToBeRushed();
 				if (isRushing)
 					RushFromAllSities();
+
+				RecalcOvercapedBotSities();
+				RecalcBotSitiesUnderAttack();
 
 				if (values.bot_rushBot_IsProtectSities)
 					ProtectSities();
@@ -105,6 +118,44 @@ namespace TownsAndWarriors.game.bot {
 					if (directly) 
 						canAttackDirectly.Add(sity);
 				}
+			}
+		}
+
+		void RecalcOvercapedBotSities() {
+			overcapedBotSities.Clear();
+			foreach (var bs in botSities) {
+				int currUnits = bs.currWarriors + values.bot_rushBot_ValueNearMaxMeansOvercapacityToo;
+				foreach (var unit in units) {
+					if (unit.playerId == this.playerId && unit.destination == bs && unit.TicksLeftToDestination() <= this.tickReact)
+						currUnits += unit.warriorsCnt;
+				}
+				if (currUnits >= bs.maxWarriors)
+					overcapedBotSities.Add(bs);
+			}
+		}
+
+		void RecalcBotSitiesUnderAttack() {
+			botSitiesUnderAttack.Clear();
+			botSitiesUnderAttackUnits.Clear();
+			foreach (var bs in botSities) {
+				bool isUnderAttack = false;
+				foreach (var unit in units) {
+					if (unit.playerId != this.playerId && unit.destination == bs) {
+						isUnderAttack = true;
+						break;
+					}
+				}
+
+				if (isUnderAttack) {
+					botSitiesUnderAttackUnits.Add(new List<BasicUnit>());
+					botSitiesUnderAttack.Add(bs);
+					foreach (var unit in units) {
+						if (unit.playerId != this.playerId && unit.destination == bs) {
+							botSitiesUnderAttackUnits[botSitiesUnderAttackUnits.Count - 1].Add(unit);
+						}
+					}
+				}
+
 			}
 		}
 
@@ -235,7 +286,6 @@ namespace TownsAndWarriors.game.bot {
 					values.bot_rushBot_MinimumMore +
 					((values.basicUnit_ticks_MoveWarrior * GetAvgDistance(sityTo)) / sityTo.ticksPerIncome);
 		}
-
 	}
 
 }

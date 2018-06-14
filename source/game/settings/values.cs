@@ -68,10 +68,9 @@ namespace TownsAndWarriors.game.settings {
 
 		public static byte bot_rushBot_Tick_IgnoreFirstN = 0;
 		public static byte bot_rushBot_Tick_React = (byte)(basicUnit_ticks_MoveWarrior / 2);
-		public static byte bot_rushBot_MinimumMore = 1;
-		public static bool bot_rushBot_IsDropOvercapacityUnits = true;
-		public static bool bot_rushBot_NearMaxMeansOvercapacityToo = true;
 		public static bool bot_rushBot_IsProtectSities = true;
+		public static bool bot_rushBot_IsDropOvercapacityUnits = true;
+		public static byte bot_rushBot_ValueNearMaxMeansOvercapacityToo = 1;
 		public static bool bot_rushBot_IsMoveUnitsToWeakSities = true;
 		public static byte bot_rushBot_RushCnt = 3;
 		public static List<KeyValuePair<byte, byte>> bot_rushBot_RushWavesChance = new List<KeyValuePair<byte, byte>>() {
@@ -79,5 +78,6 @@ namespace TownsAndWarriors.game.settings {
 			new KeyValuePair<byte, byte>(2, 35),
 			new KeyValuePair<byte, byte>(3, 15),
 		};
+		public static byte bot_rushBot_MinimumMore = 1;
 	}
 }
