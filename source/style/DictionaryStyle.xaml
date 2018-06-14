@@ -105,6 +105,10 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="Label">
 					<Grid Background="{TemplateBinding Background}">
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition Height="0.5*"/>
+						</Grid.RowDefinitions>
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>

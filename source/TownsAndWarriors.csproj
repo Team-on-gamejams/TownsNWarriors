@@ -206,7 +206,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="img\units\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>
@@ -224,6 +226,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="audio\sounds\gg.mp3" />
+    <Resource Include="img\war\enemy_selector.png" />
+    <Resource Include="img\war\our_selector.png" />
     <Resource Include="img\cities\castle_p0_s4_l5.png" />
     <Resource Include="img\cities\castle_p1_s4_l5.png" />
     <Resource Include="img\cities\castle_p2_s4_l5.png" />
@@ -255,8 +259,6 @@
     <Resource Include="img\window\mainWindow\backgroundUser3.jpg" />
     <Resource Include="img\window\mainWindow\background.jpg" />
     <Resource Include="img\window\lobby\background.jpg" />
-    <Resource Include="img\unit sprite\black warrior.jpg" />
-    <Resource Include="img\unit sprite\warrior.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
