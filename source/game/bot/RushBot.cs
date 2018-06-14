@@ -8,12 +8,12 @@ using TownsAndWarriors.game.settings;
 using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.unit;
 
-
 namespace TownsAndWarriors.game.bot {
 	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		List<sity.BasicSity> botSities = new List<sity.BasicSity>();
 		List<sity.BasicSity> rushingSities = new List<sity.BasicSity>();
+		List<sity.BasicSity> canAttackDirectly = new List<sity.BasicSity>();
 
 		bool isRushing = false;
 		byte rushWaveRemains;
@@ -41,17 +41,18 @@ namespace TownsAndWarriors.game.bot {
 
 				RecalcRushingSities();
 				RecalcBotSities();
+				RecalcCanAttackDirectly();
 
 				if (!isRushing) 
 					CalculateWhoNeedToBeRushed();
 				if(isRushing)
 					RushFromAllSities();
 
-				if (values.bot_rushBot_IsDropOvercapacityUnits)
-					DropOvercapacityUnits();
-
 				if (values.bot_rushBot_IsProtectSities)
 					ProtectSities();
+
+				if (values.bot_rushBot_IsDropOvercapacityUnits)
+					DropOvercapacityUnits();
 
 				if (values.bot_rushBot_IsMoveUnitsToWeakSities)
 					MoveUnitsToWeakSity();
@@ -88,6 +89,26 @@ namespace TownsAndWarriors.game.bot {
 			}
 		}
 
+		void RecalcCanAttackDirectly() {
+			canAttackDirectly.Clear();
+			foreach (var sity in sities) {
+				if (sity.playerId != playerId) {
+					bool directly = false;
+					foreach (var bs in botSities) {
+						bool tmp;
+						sity.GetShortestPath(sity, out tmp);
+						if (tmp) {
+							directly = true;
+						}
+					}
+					if (directly) {
+						canAttackDirectly.Add(sity);
+					}
+				}
+			}
+		}
+
+
 		//---------------------------------------------- Methods - behavior ----------------------------------------------
 
 		void CalculateWhoNeedToBeRushed() {
@@ -96,7 +117,7 @@ namespace TownsAndWarriors.game.bot {
 				potentialRushes.Add(new List<BasicSity>());
 				uint potentialArmy = CalcPotentialArmy(i);
 
-				foreach (var sity in sities) {
+				foreach (var sity in canAttackDirectly) {
 					if (sity.playerId != playerId &&
 						!rushingSities.Contains(sity) &&
 						GetEnemyArmy(sity) < potentialArmy * (2 - sity.defPersent)
@@ -115,12 +136,51 @@ namespace TownsAndWarriors.game.bot {
 
 			}
 
-			int potentialRushPos = values.rnd.Next(0, potentialRushes.Count - 1);
-			var potentialRush = potentialRushes[potentialRushPos];
-			if (potentialRush.Count != 0) {
-				rushSity = potentialRush[settings.values.rnd.Next(0, potentialRush.Count)];
-				isRushing = true;
-				rushWaveRemains = (byte)(potentialRushPos + 1);
+			if (potentialRushes.Count != 0) {
+				bool canRush = false;
+				int potentialRushPos = 0;
+
+				if (potentialRushes.Count == 1)
+					potentialRushPos = 0;
+				else {
+					int tmp = 0;
+					List<KeyValuePair<byte, byte>> rushChance = new List<KeyValuePair<byte, byte>>(potentialRushes.Count);
+					while (tmp != potentialRushes.Count) {
+						if(potentialRushes[tmp].Count != 0) 
+						rushChance.Add(new KeyValuePair<byte, byte>(values.bot_rushBot_RushWavesChance[tmp].Key, values.bot_rushBot_RushWavesChance[tmp].Value));
+						++tmp;
+					}
+
+					if (rushChance.Count != 0) {
+						canRush = true;
+
+						byte sumPersent = 0;
+						foreach (var i in rushChance)
+							sumPersent += i.Value;
+						if (sumPersent != 100) {
+							for (int i = 0; i < rushChance.Count; ++i)
+								rushChance[i] = new KeyValuePair<byte, byte>(rushChance[i].Key,
+									(byte)Math.Round((double)(rushChance[i].Value) / sumPersent * 100));
+						}
+
+						byte randPersent = (byte)values.rnd.Next(0, 100);
+						for (int i = 0; i < rushChance.Count; ++i) {
+							if (randPersent <= rushChance[i].Value) {
+								potentialRushPos = rushChance[i].Key - 1;
+								break;
+							}
+						}
+					}
+					else
+						canRush = false;
+				}
+
+				if (canRush) {
+					var potentialRush = potentialRushes[potentialRushPos];
+					rushSity = potentialRush[settings.values.rnd.Next(0, potentialRush.Count)];
+					isRushing = true;
+					rushWaveRemains = (byte)(potentialRushPos + 1);
+				}
 			}
 		}
 
@@ -162,10 +222,11 @@ namespace TownsAndWarriors.game.bot {
 		}
 
 		int GetAvgDistance(BasicSity sity) {
+			bool b;
 			double avg = 0;
 
 			foreach (var bs in botSities) {
-				avg += bs.GetShortestPath(sity);
+				avg += bs.GetShortestPath(sity, out b);
 			}
 			avg /= botSities.Count();
 
@@ -182,6 +243,6 @@ namespace TownsAndWarriors.game.bot {
 					((values.basicUnit_ticks_MoveWarrior * GetAvgDistance(sityTo)) / sityTo.ticksPerIncome);
 		}
 
-		
 	}
+
 }

@@ -60,14 +60,17 @@ namespace TownsAndWarriors.game.sity {
 			if (currWarriors < 0)
 				currWarriors = 0;
 
-			GetShortestPath(to);
+			bool b;
+			GetShortestPath(to, out b);
+			//System.Windows.MessageBox.Show("ISDIR" + b.ToString());
 
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
 
             return unit;
 		}
 
-		void BuildPathWithoutEnemySitiesPath(BasicSity to) {
+		bool BuildPathWithoutEnemySitiesPath(BasicSity to) {
+			bool rez;
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
 			int fromX = 0, fromY = 0, toX = 0, toY = 0;
 
@@ -89,17 +92,13 @@ namespace TownsAndWarriors.game.sity {
 			UnRec(toX, toY, finder[toY, toX].num);
 			reversedPath.Reverse();
 
-			var str = "";
-			for (int i = 0; i < reversedPath.Count; ++i)
-				str += reversedPath[i].ToString() + " | \n";
-
-			//System.Windows.MessageBox.Show(str);
-
 			if (reversedPath.Count != 0) {
 				pathToSities.Add(to, reversedPath);
+				rez = true;
 			}
 			else {
 				BuildPath(to);
+				rez = false;
 			}
 
 			void Rec(int x, int y, int value) {
@@ -137,6 +136,8 @@ namespace TownsAndWarriors.game.sity {
 				}
 				return false;
 			}
+
+			return rez;
 		}
 
 		void BuildPath(BasicSity to) {
@@ -216,9 +217,9 @@ namespace TownsAndWarriors.game.sity {
 			}
 		}
 
-		public int GetShortestPath(BasicSity to) {
+		public int GetShortestPath(BasicSity to, out bool isDirectly) {
 			pathToSities.Remove(to);
-			BuildPathWithoutEnemySitiesPath(to);
+			isDirectly = BuildPathWithoutEnemySitiesPath(to);
 			return pathToSities[to].Count - 1;
 		}
 
