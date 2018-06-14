@@ -58,10 +58,16 @@ namespace TownsAndWarriors.game.sity
 			settings.size.SizeChanged += () => {
 				shape.Children.Clear();
 				FillShape();
-
+				shape.Children.Add(selection);
 			};
 
 			shape.MouseEnter += (a, b) => {
+				if(this.playerId == 1)
+					selection.Background = new ImageBrush(new BitmapImage(new Uri(@"..\..\img\war\our_selector.png", UriKind.Relative)));
+				else
+					selection.Background = new ImageBrush(new BitmapImage(new Uri(@"..\..\img\war\enemy_selector.png", UriKind.Relative)));
+
+
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
 
 				var anim = new System.Windows.Media.Animation.DoubleAnimation {
@@ -71,6 +77,7 @@ namespace TownsAndWarriors.game.sity
 				};
 				label.BeginAnimation(Label.WidthProperty, anim);
 				label.BeginAnimation(Label.HeightProperty, anim);
+					selection.Opacity = 1;
 			};
 			shape.MouseLeave += (a, b) => {
 				double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
@@ -82,6 +89,8 @@ namespace TownsAndWarriors.game.sity
 				};
 				label.BeginAnimation(Label.WidthProperty, anim);
 				label.BeginAnimation(Label.HeightProperty, anim);
+				if(!selected.Contains(this))
+					selection.Opacity = 0;
 			};
 
 			grid.MouseRightButtonDown += delegate (object sender, MouseButtonEventArgs e)
@@ -102,6 +111,9 @@ namespace TownsAndWarriors.game.sity
 			};
 
 			shape.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e) {
+				if(!shape.Children.Contains(selection))
+					shape.Children.Add(selection);
+
 				if (e.ClickCount == 1)
 				{
 					if (playerId == 1)
@@ -141,6 +153,7 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
+							x.selection.Opacity = 0;
 							switch (settings.values.style_Num)
 							{
 								case 0:
@@ -160,6 +173,7 @@ namespace TownsAndWarriors.game.sity
 		public override void UpdateValue()
 		{
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
+			label.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
 		protected virtual void FillShape() {
@@ -192,7 +206,8 @@ namespace TownsAndWarriors.game.sity
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
 			};
-			shape.Children.Add(text);
+			label.Content = text.Content;
+			//shape.Children.Add(text);
 		}
 
 		static public void SetElipseColor(Shape elipse, byte playerId) {

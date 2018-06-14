@@ -111,7 +111,7 @@
 						</Grid.RowDefinitions>
 
 						<Grid Background="{TemplateBinding Background}" Grid.Row="0"></Grid>
-						<Label Background="Black" Grid.Row="1">154</Label>
+						<Label Background="Black" Grid.Row="1" Content="{TemplateBinding Content}" Foreground="Red"></Label>
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>

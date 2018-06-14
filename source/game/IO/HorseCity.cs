@@ -54,7 +54,7 @@ namespace TownsAndWarriors.game.sity
 				Width = min * settings.size.sitySizeMult,
 				Height = min * settings.size.sitySizeMult,
 			};
-			shape.Children.Add(text);
+			label.Content = text.Content;
 		}
 
 		public override void SetImgColor(Label label, byte playerId)
