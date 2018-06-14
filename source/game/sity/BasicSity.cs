@@ -60,12 +60,83 @@ namespace TownsAndWarriors.game.sity {
 			if (currWarriors < 0)
 				currWarriors = 0;
 
-			if (!pathToSities.ContainsKey(to)) 
-				BuildPath(to);
+			GetShortestPath(to);
 
-            BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
+			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
 
             return unit;
+		}
+
+		void BuildPathWithoutEnemySitiesPath(BasicSity to) {
+			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
+			int fromX = 0, fromY = 0, toX = 0, toY = 0;
+
+			for (int i = 0; i < finder.GetLength(0); ++i) {
+				for (int j = 0; j < finder.GetLength(1); ++j) {
+					finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
+					if (gameMap.Map[i][j].Sity == this) {
+						fromX = j; fromY = i;
+					}
+					else if (gameMap.Map[i][j].Sity == to) {
+						toX = j; toY = i;
+					}
+				}
+			}
+
+			Rec(fromX, fromY, 0);
+
+			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
+			UnRec(toX, toY, finder[toY, toX].num);
+			reversedPath.Reverse();
+
+			var str = "";
+			for (int i = 0; i < reversedPath.Count; ++i)
+				str += reversedPath[i].ToString() + " | \n";
+
+			//System.Windows.MessageBox.Show(str);
+
+			if (reversedPath.Count != 0) {
+				pathToSities.Add(to, reversedPath);
+			}
+			else {
+				BuildPath(to);
+			}
+
+			void Rec(int x, int y, int value) {
+				if (finder[y, x].num != -1 && finder[y, x].num < value)
+					return;
+
+				finder[y, x].num = value++;
+
+				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId)
+					return;
+
+				if (finder[y, x].IsOpenBottom)
+					Rec(x, y + 1, value);
+				if (finder[y, x].IsOpenRight)
+					Rec(x + 1, y, value);
+				if (finder[y, x].IsOpenTop)
+					Rec(x, y - 1, value);
+				if (finder[y, x].IsOpenLeft)
+					Rec(x - 1, y, value);
+			}
+
+			bool UnRec(int x, int y, int prevValue) {
+				if (prevValue == finder[y, x].num && finder[y, x].num != -1) {
+					bool prev = false;
+					reversedPath.Add(new KeyValuePair<int, int>(x, y));
+					if (finder[y, x].IsOpenBottom)
+						prev = UnRec(x, y + 1, prevValue - 1);
+					if (finder[y, x].IsOpenTop && !prev)
+						prev = UnRec(x, y - 1, prevValue - 1);
+					if (finder[y, x].IsOpenLeft && !prev)
+						prev = UnRec(x - 1, y, prevValue - 1);
+					if (finder[y, x].IsOpenRight && !prev)
+						prev = UnRec(x + 1, y, prevValue - 1);
+					return true;
+				}
+				return false;
+			}
 		}
 
 		void BuildPath(BasicSity to) {
@@ -111,10 +182,12 @@ namespace TownsAndWarriors.game.sity {
 				//if (x == toX && y == toY)
 				//	findSity = true;
 
+
 				if (finder[y, x].num != -1 && finder[y, x].num < value)
 					return;
 
 				finder[y, x].num = value++;
+
 				if (finder[y, x].IsOpenBottom)
 					Rec(x, y + 1, value);
 				if (finder[y, x].IsOpenRight)
@@ -144,11 +217,10 @@ namespace TownsAndWarriors.game.sity {
 		}
 
 		public int GetShortestPath(BasicSity to) {
-			if (!pathToSities.ContainsKey(to))
-				BuildPath(to);
+			pathToSities.Remove(to);
+			BuildPathWithoutEnemySitiesPath(to);
 			return pathToSities[to].Count - 1;
 		}
-
 
 		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
             return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);

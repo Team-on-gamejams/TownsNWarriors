@@ -99,7 +99,7 @@ namespace TownsAndWarriors.game.bot {
 				foreach (var sity in sities) {
 					if (sity.playerId != playerId &&
 						!rushingSities.Contains(sity) &&
-						GetEnemyArmy(sity) < potentialArmy
+						GetEnemyArmy(sity) < potentialArmy * (2 - sity.defPersent)
 					) {
 						bool isInPrev = false;
 						foreach (var rush in potentialRushes) {
@@ -174,10 +174,10 @@ namespace TownsAndWarriors.game.bot {
 
 		double GetEnemyArmy(BasicSity sityTo) {
 			if (sityTo.playerId == 0)
-				return sityTo.GetDefWarriors() +
+				return sityTo.currWarriors +
 					values.bot_rushBot_MinimumMore;
 			else
-				return sityTo.GetDefWarriors() +
+				return sityTo.currWarriors +
 					values.bot_rushBot_MinimumMore +
 					((values.basicUnit_ticks_MoveWarrior * GetAvgDistance(sityTo)) / sityTo.ticksPerIncome);
 		}
