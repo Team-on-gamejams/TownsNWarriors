@@ -23,7 +23,7 @@ namespace TownsAndWarriors.game.sity
 
 		protected override BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to)
 		{
-			return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
+			return new HorseUnit(sendWarriors, this.playerId, pathToSities[to], to);
 		}
 	}
 }

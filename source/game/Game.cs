@@ -105,11 +105,11 @@ namespace TownsAndWarriors.game {
 				if ((int)settings.size.OneCellSizeX >= (int)(mainGrid.RenderSize.Width / gameMap.SizeX) &&
 					(int)settings.size.OneCellSizeY >= (int)(mainGrid.RenderSize.Height / gameMap.SizeY)) {
 					timer.Stop();
-
 					mainGrid.SizeChanged += (c, d) => {
 						settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
 						settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
 					};
+					IOWindow.Width++;
 				}
 			};
 

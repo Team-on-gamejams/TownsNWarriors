@@ -70,15 +70,49 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="window\MainMenu\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\MainMenu\SingleplayerWindow.xaml.cs">
+      <DependentUpon>SingleplayerWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="style\CityStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="style\DictionaryStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="window\GameWindow.xaml">
+    <Page Include="style\MainWindowStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="window\MainWindow.xaml">
+    <Page Include="style\OrangeButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\MainMenu\CreditsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\game\GameLobbyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\game\GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\MainMenu\HightScoresWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\game\InGameMenuEsc.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\MainMenu\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -98,6 +132,7 @@
     <Compile Include="game\IO\GameCell.cs" />
     <Compile Include="game\IO\GameMap.cs" />
     <Compile Include="game\IO\HorseCity.cs" />
+    <Compile Include="game\IO\HorseUnit.cs" />
     <Compile Include="game\map\mapGenerators\cityId\BasicCityId.cs" />
     <Compile Include="game\map\mapGenerators\cityId\CityIdDiffCorners.cs" />
     <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
@@ -116,13 +151,34 @@
     <Compile Include="game\map\GameMap.cs" />
     <Compile Include="game\settings\values.cs" />
     <Compile Include="game\basicInterfaces\tickable.cs" />
-    <Compile Include="window\GameWindow.xaml.cs">
+    <Compile Include="game\unit\HorseUnit.cs" />
+    <Compile Include="window\MainMenu\CreditsWindow.xaml.cs">
+      <DependentUpon>CreditsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\game\GameLobbyWindow.xaml.cs">
+      <DependentUpon>GameLobbyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\game\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="window\MainWindow.xaml.cs">
+    <Compile Include="window\MainMenu\HightScoresWindow.xaml.cs">
+      <DependentUpon>HightScoresWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\game\InGameMenuEsc.xaml.cs">
+      <DependentUpon>InGameMenuEsc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\MainMenu\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="window\MainMenu\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="window\MainMenu\SingleplayerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -168,6 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="audio\sounds\gg.mp3" />
+    <Resource Include="codeTemplates\Window template.txt" />
+    <Resource Include="img\window\mainWindow\backgroundUser1.jpg" />
+    <Resource Include="img\window\mainWindow\backgroundUser2.jpg" />
+    <Resource Include="img\window\mainWindow\backgroundUser3.jpg" />
+    <Resource Include="img\window\mainWindow\background.jpg" />
+    <Resource Include="img\window\lobby\background.jpg" />
     <Resource Include="img\unit sprite\black warrior.jpg" />
     <Resource Include="img\unit sprite\warrior.jpg" />
   </ItemGroup>

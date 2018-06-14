@@ -18,8 +18,8 @@ using TownsAndWarriors.game.basicInterfaces;
 
 namespace TownsAndWarriors.game.unit {
 	public partial class BasicUnit {
-		Label text;
-		Rectangle rectangle;
+		protected Label text;
+		protected Ellipse rectangle;
 		Canvas canvas;
 		double pixelPerTurnX, pixelPerTurnY;
 		double shiftX, shiftY;
@@ -61,10 +61,10 @@ namespace TownsAndWarriors.game.unit {
 				Canvas.SetTop(shape, path[currPathIndex].Value * settings.size.OneCellSizeY + shiftY);
 		}
 
-		void FillShape() {
+		protected virtual void FillShape() {
 			RecalcGeometrySize();
 
-			rectangle = new Rectangle() {
+			rectangle = new Ellipse() {
 				Fill = settings.colors.neutralTownFill,
 				Stroke = settings.colors.neutralTownStroke,
 				Width = shape.Width,
@@ -84,7 +84,7 @@ namespace TownsAndWarriors.game.unit {
 			UpdateValue();
 		}
 
-		void RecalcGeometrySize() {
+		protected void RecalcGeometrySize() {
 			shape.Width = settings.size.OneCellSizeX * settings.size.unitSizeMult;
 			shape.Height = settings.size.OneCellSizeY * settings.size.unitSizeMult;
 
