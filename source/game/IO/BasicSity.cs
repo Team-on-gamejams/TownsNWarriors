@@ -33,6 +33,8 @@ namespace TownsAndWarriors.game.sity
 		protected Label text;
 		protected Shape cityModel;
 
+		protected Label selection;
+
 		public Shape CityModel
 		{
 			get { return cityModel; }
@@ -45,6 +47,12 @@ namespace TownsAndWarriors.game.sity
 			shape = new Grid();
 			shape.Style = (Style)shape.FindResource("BasicCityStyle");
 			FillShape();
+
+			selection = new Label();
+			selection.Background = new ImageBrush(new BitmapImage(new Uri(@"..\..\img\war\our_selector.png", UriKind.Relative)));
+			selection.Opacity = 0;
+			Grid.SetZIndex(selection, 10);
+			shape.Children.Add(selection);
 
 			//Delegates
 			settings.size.SizeChanged += () => {
@@ -100,8 +108,10 @@ namespace TownsAndWarriors.game.sity
 						if (selected.Contains(this) == false)
 						{
 							selected.Add(this);
+							selection.Opacity = 1;
 							label.BorderBrush = settings.colors.citySelectedStroke;
 							label.BorderThickness = new Thickness(settings.colors.citySelectedStrokeThickness);
+
 						}
 					}
 					else if (playerId != 1)
@@ -109,6 +119,7 @@ namespace TownsAndWarriors.game.sity
 						gameMap.SendWarriors(selected, this);
 						foreach (var x in selected)
 						{
+							//x.selection.Opacity = 1;
 							switch (settings.values.style_Num)
 							{
 								case 0:
