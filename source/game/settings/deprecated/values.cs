@@ -43,43 +43,29 @@ namespace TownsAndWarriors.game.settings {
 		public static byte generator_SityPlacer14_Chance_PosWith4Road = 100;
 		public static byte generator_SityPlacer14_Code_MaxSityPlaceRepeats = 3;
 
-		public static byte generator_CityId_Bots = 1;
+		public static byte generator_CityId_Bots = 3;
 		public static byte generator_CityId_TownsPerPlayer = 1;
 		public static byte generator_CityId_TownsPerBot = 1;
 
-		public static ushort basicSity_MaxWarriors = 20;
-		public static ushort basicSity_StartWarriors = 10;
-		public static ushort basicSity_ticks_NewWarrior = 50;
-		public static float basicSity_sendWarriorsPersent = 0.50f;
-		public static float basicSity_defendWarriorsPersent = 1.0f;
 
-		public static ushort castleCity_MaxWarriors = 30;
-		public static ushort castleCity_StartWarriors = 15;
-		public static float castleCity_sendWarriorsPersent = 0.50f;
-		public static float castleCity_defendWarriorsPersent = 1.45f;
-
-		public static ushort horceCity_MaxWarriors = 20;
-		public static ushort horceCity_StartWarriors = 10;
-		public static float horceCity_sendWarriorsPersent = 0.50f;
-		public static float horceCity_defendWarriorsPersent = 1.0f;
-
+		//Воно ще нада, але в значенні середньої кількості тіків, яка треба на рух
 		public static ushort basicUnit_ticks_MoveWarrior = 10;
-		public static ushort horseUnit_ticks_MoveWarrior = 7;
 
 		public static ushort style_Num = 1;
 
-		public static byte bot_rushBot_Tick_IgnoreFirstN = 0;
+		public static byte bot_rushBot_Tick_IgnoreFirstN = 200;
 		public static byte bot_rushBot_Tick_React = (byte)(basicUnit_ticks_MoveWarrior / 2);
 		public static bool bot_rushBot_IsProtectSities = true;
 		public static byte bot_rushBot_Protect_MinimumUnitsLeft = 2;
 		public static bool bot_rushBot_IsDropOvercapacityUnits = true;
 		public static byte bot_rushBot_Overcapacity_NearValue = 1;
 		public static bool bot_rushBot_IsMoveUnitsToWeakSities = true;
-		public static byte bot_rushBot_Rush_Cnt = 3;
+		public static byte bot_rushBot_Rush_Cnt = 4;
 		public static List<KeyValuePair<byte, byte>> bot_rushBot_RushWaves_Chance = new List<KeyValuePair<byte, byte>>() {
-			new KeyValuePair<byte, byte>(1, 50),
-			new KeyValuePair<byte, byte>(2, 35),
-			new KeyValuePair<byte, byte>(3, 15),
+			new KeyValuePair<byte, byte>(1, 25),
+			new KeyValuePair<byte, byte>(2, 25),
+			new KeyValuePair<byte, byte>(3, 25),
+			new KeyValuePair<byte, byte>(4, 25),
 		};
 		public static byte bot_rushBot_Rush_MinimumMore = 1;
 	}

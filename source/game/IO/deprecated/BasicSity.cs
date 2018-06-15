@@ -22,6 +22,7 @@ namespace TownsAndWarriors.game.sity
 {
 	public partial class BasicSity
 	{
+		protected Label units;
 		protected Label label;
 		public Label Label
 		{
@@ -46,6 +47,7 @@ namespace TownsAndWarriors.game.sity
 		{
 			shape = new Grid();
 			shape.Style = (Style)shape.FindResource("BasicCityStyle");
+			units = new Label();
 			FillShape();
 
 			selection = new Label();
@@ -172,11 +174,16 @@ namespace TownsAndWarriors.game.sity
 
 		public override void UpdateValue()
 		{
+			units.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
+
 			text.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 			label.Content = this.currWarriors.ToString() + '/' + maxWarriors.ToString();
 		}
 
 		protected virtual void FillShape() {
+			if (!shape.Children.Contains(units))
+				shape.Children.Add(units);
+
 			//Elipse
 			double min = settings.size.OneCellSizeX < settings.size.OneCellSizeY ? settings.size.OneCellSizeX : settings.size.OneCellSizeY;
 

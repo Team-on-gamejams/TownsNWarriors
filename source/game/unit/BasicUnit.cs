@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 using TownsAndWarriors.game.IO;
 using TownsAndWarriors.game.basicInterfaces;
 using TownsAndWarriors.game.sity;
-
+using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.unit {
-	public partial class BasicUnit : GameCellDrawableObj, tickable, withPlayerId {
+	public partial class BasicUnit : GameCellDrawableObj, tickable, withPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		public ushort warriorsCnt;
-
 		protected List<KeyValuePair<int, int>> path;
 		protected int currPathIndex;
-		protected ushort currTickOnCell, tickPerTurn;
+		protected ushort currTickOnCell;
 
+		public ushort warriorsCnt;
+		public ushort tickPerTurn;
 		public BasicSity destination;
 
 		//---------------------------------------------- Properties ----------------------------------------------
@@ -26,14 +26,13 @@ namespace TownsAndWarriors.game.unit {
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicSity destination) {
 			this.warriorsCnt = warriorsCnt;
-			path = Path;
-			currTickOnCell = 1;
-			tickPerTurn = TownsAndWarriors.game.settings.values.basicUnit_ticks_MoveWarrior;
-
 			playerId = PlayerId;
+			path = Path;
 			this.destination = destination;
 
+			currTickOnCell = 1;
 			currPathIndex = 0;
+
 			BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 		}
 
@@ -61,6 +60,10 @@ namespace TownsAndWarriors.game.unit {
 
 		public ushort TicksLeftToDestination() {
 			return (ushort)((path.Count - 1 - currPathIndex) * tickPerTurn - currTickOnCell);
+		}
+
+		public void GetSettings(SettinsSetter settinsSetter) {
+			settinsSetter.SetSettings(this);
 		}
 	}
 }

@@ -111,7 +111,7 @@
 						</Grid.RowDefinitions>
 
 						<Label Background="{TemplateBinding Background}" Grid.Row="0"></Label>
-						<!--<Label Background="Black" Grid.Row="1" Content="{TemplateBinding Content}" Foreground="Red" FontSize="2"></Label>-->
+						<!--<Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Background="Black" Grid.Row="1" Content="{TemplateBinding Content}" Foreground="White" FontSize="18"></Label>-->
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
