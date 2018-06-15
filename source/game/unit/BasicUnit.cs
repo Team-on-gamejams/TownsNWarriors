@@ -37,7 +37,7 @@ namespace TownsAndWarriors.game.unit {
 
 			BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
-			this.GetSettings(this.CreateLinkedUnitSettings());
+			this.GetSettings(this.CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
