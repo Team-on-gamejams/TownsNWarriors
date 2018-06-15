@@ -15,7 +15,7 @@ namespace TownsAndWarriors.game.settings.bot {
 			if (bot == null)
 				throw new ApplicationException("Wrong generator in BasicIdSetterSettings.SetSettings");
 
-			bot.ignoreFirstNTicks = 200;
+			bot.ignoreFirstNTicks = 50;
 			bot.tickReact = 50;
 	}
 

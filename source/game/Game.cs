@@ -95,8 +95,8 @@ namespace TownsAndWarriors.game {
 			idGen.SetId();
 
 			gameMap.SetBotsSize(idGen.bots);
-			//for (int i = 0; i < idGen.bots; ++i)
-				//gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
+			for (int i = 0; i < idGen.bots; ++i)
+				gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
 		}
 
 		void InitGameMap() {

@@ -102,6 +102,11 @@ namespace TownsAndWarriors.game.sity {
 		//1) Шлях в обхід всіх ворожих міст
 		//2) Шлях напролом. Створюється якщо не існує шляху1.
 		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicSity to, out bool isDirectly) {
+			if (to == null) {
+				isDirectly = false;
+				return null;
+			}
+
 			int minFindValue = int.MaxValue;
 			bool rez = true;
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
@@ -247,7 +252,7 @@ namespace TownsAndWarriors.game.sity {
 		}
 
 		//Створює юнита, якого посилатиме це місто
-		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to) {
+		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to) {
 			bool b;
 			return new BasicUnit(sendWarriors, this.playerId, BuildOptimalPath(to, out b), to);
 		}

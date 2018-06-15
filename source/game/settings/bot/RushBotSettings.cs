@@ -27,9 +27,8 @@ namespace TownsAndWarriors.game.settings.bot {
 			bot.rushWithMinimumMoreUnits = 1;
 			bot.rushChances = new List<KeyValuePair<byte, byte>>() {
 				new KeyValuePair<byte, byte>(1, 25),
-				new KeyValuePair<byte, byte>(2, 25),
+				new KeyValuePair<byte, byte>(2, 50),
 				new KeyValuePair<byte, byte>(3, 25),
-				new KeyValuePair<byte, byte>(4, 25),
 			};
 
 		}

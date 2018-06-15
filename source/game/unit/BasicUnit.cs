@@ -35,7 +35,8 @@ namespace TownsAndWarriors.game.unit {
 			currTickOnCell = 0;
 			currPathIndex = 0;
 
-			BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
+			if(path != null)
+				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
 			this.GetSettings(this.CreateLinkedSetting());
 		}
