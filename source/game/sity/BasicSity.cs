@@ -155,10 +155,10 @@ namespace TownsAndWarriors.game.sity {
 				if (x == toX && y == toY && finder[y, x].num < minFindValue)
 					minFindValue = finder[y, x].num;
 
-				finder[y, x].num = info.value++;
-
-				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId)
+				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId && x != toX && y != toY)
 					return;
+
+				finder[y, x].num = info.value++;
 
 				AddNearbyToRecList(x, y, info.value);
 			}

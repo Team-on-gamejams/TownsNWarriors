@@ -23,26 +23,6 @@ namespace TownsAndWarriors.game.settings {
 		public static ushort fieldSizeY = 10;
 		public static ushort milisecondsPerTick = 20;
 
-		public static byte generator_TunenelMapGenerator_SkipChance = 10;
-		public static byte generator_TunenelMapGenerator_IgnoreSkipChanceForFirstNTitles = 10;
-		public static bool generator_TunenelMapGenerator_CrossOnStart = true;
-
-		public static bool generator_SityPlacer14_QuadIsRoad = false;
-		public static byte generator_SityPlacer14_Quad_Size = 25;
-		public static byte generator_SityPlacer14_Quad_MinimimCnt = 2;
-		public static byte generator_SityPlacer14_Quad_Sities_Min = 2;
-		public static byte generator_SityPlacer14_Quad_Sities_Max = 4;
-		public static bool generator_SityPlacer14_FillAllWith1Road = true;
-		public static byte generator_SityPlacer14_Chance_PosWith1Road = 100;
-		public static byte generator_SityPlacer14_Chance_PosWith2Road = 10;
-		public static byte generator_SityPlacer14_Chance_PosWith3Road = 25;
-		public static byte generator_SityPlacer14_Chance_PosWith4Road = 100;
-		public static byte generator_SityPlacer14_Code_MaxSityPlaceRepeats = 3;
-
-		public static byte generator_CityId_Bots = 3;
-		public static byte generator_CityId_TownsPerPlayer = 1;
-		public static byte generator_CityId_TownsPerBot = 1;
-
 		public static ushort style_Num = 1;
 
 		public static byte bot_rushBot_Tick_IgnoreFirstN = 200;

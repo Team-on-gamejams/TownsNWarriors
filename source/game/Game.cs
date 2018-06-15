@@ -84,12 +84,17 @@ namespace TownsAndWarriors.game {
 				DateTime.Now.Ticks;
 			//1340092764;
 
-			gameMap = GameMap.GenerateRandomMap(
-				x, y,
-				new game.map.mapGenerators.TunnelMapGenerator(),
-				new game.map.mapGenerators.SityPlacer14(),
-				new game.map.mapGenerators.CityIdDiffCorners()
-				);
+			gameMap = new GameMap(x, y);
+
+			var mapGen = new game.map.generators.map.TunnelMapGenerator();
+			mapGen.SetGameMap(gameMap);
+			mapGen.GenerateRandomMap();
+			var cityGen = new game.map.generators.city.SityPlacer14();
+			cityGen.SetGameMap(gameMap);
+			cityGen.PlaceSities();
+			var idGen = new game.map.generators.idSetters.IdSetterDiffCorners();
+			idGen.SetGameMap(gameMap);
+			idGen.SetId();
 
 			//for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
 				//gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));

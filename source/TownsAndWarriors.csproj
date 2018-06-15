@@ -71,7 +71,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="game\basicInterfaces\Settingable.cs" />
+    <Compile Include="game\map\generators\BasicGenerator.cs" />
     <Compile Include="game\settings\city\BasicCitySettings.cs" />
+    <Compile Include="game\settings\generators\BasicIdSetterSettings.cs" />
+    <Compile Include="game\settings\generators\BasicMapGeneratorSettings.cs" />
+    <Compile Include="game\settings\generators\BasicSityPlaceSettings.cs" />
+    <Compile Include="game\settings\generators\IdSetterDiffCornersSettings.cs" />
+    <Compile Include="game\settings\generators\SityPlacer14Settings.cs" />
+    <Compile Include="game\settings\generators\TunnelMapGeneratorSettings.cs" />
     <Compile Include="game\settings\unit\BasicUnitSettings.cs" />
     <Compile Include="game\settings\city\CitySettings.cs" />
     <Compile Include="game\settings\SettinsSetter.cs" />
@@ -137,12 +144,12 @@
     <Compile Include="game\IO\deprecated\BasicUnit.cs" />
     <Compile Include="game\IO\deprecated\GameCell.cs" />
     <Compile Include="game\IO\deprecated\GameMap.cs" />
-    <Compile Include="game\map\mapGenerators\cityId\BasicCityId.cs" />
-    <Compile Include="game\map\mapGenerators\cityId\CityIdDiffCorners.cs" />
-    <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
-    <Compile Include="game\map\mapGenerators\road\BasicMapGenerator.cs" />
-    <Compile Include="game\map\mapGenerators\city\SityPlacer14.cs" />
-    <Compile Include="game\map\mapGenerators\road\TunnelMapGenerator.cs" />
+    <Compile Include="game\map\generators\idSetters\BasicIdSetter.cs" />
+    <Compile Include="game\map\generators\idSetters\IdSetterDiffCorners.cs" />
+    <Compile Include="game\map\generators\city\BasicSityPlacer.cs" />
+    <Compile Include="game\map\generators\map\BasicMapGenerator.cs" />
+    <Compile Include="game\map\generators\city\SityPlacer14.cs" />
+    <Compile Include="game\map\generators\map\TunnelMapGenerator.cs" />
     <Compile Include="game\settings\deprecated\colors.cs" />
     <Compile Include="game\settings\deprecated\size.cs" />
     <Compile Include="game\sity\BasicSity.cs" />
