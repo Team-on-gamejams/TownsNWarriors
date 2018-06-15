@@ -9,7 +9,7 @@ using TownsAndWarriors.game.unit;
 
 namespace TownsAndWarriors.game.settings.unit {
 	public class BasicUnitSettings : UnitSettings {
-		public override void SetSettings(object obj) {
+		public override void SetSettings(game.basicInterfaces.Settingable obj) {
 			BasicUnit unit = obj as BasicUnit;
 			if (unit == null)
 				throw new ApplicationException("Wrong unit in BasicUnitSettings.SetSettings");
@@ -17,10 +17,6 @@ namespace TownsAndWarriors.game.settings.unit {
 			base.SetSettings(obj);
 
 			unit.tickPerTurn = 10;
-		}
-
-		protected override void LoadSettingsFromFile() {
-			throw new NotImplementedException();
 		}
 	}
 }

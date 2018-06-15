@@ -8,7 +8,7 @@ using TownsAndWarriors.game.sity;
 
 namespace TownsAndWarriors.game.settings.city {
 	public class BasicCitySettings : CitySettings {
-		public override void SetSettings(object obj) {
+		public override void SetSettings(game.basicInterfaces.Settingable obj) {
 			BasicSity city = obj as BasicSity;
 			if (city == null)
 				throw new ApplicationException("Wrong city in BasicCitySettings.SetSettings");
@@ -27,10 +27,6 @@ namespace TownsAndWarriors.game.settings.city {
 
 			city.equalsMeanCapturedForNeutral = true;
 			city.equalsMeanCaptured = false;
-		}
-
-		protected override void LoadSettingsFromFile() {
-			throw new NotImplementedException();
 		}
 	}
 }

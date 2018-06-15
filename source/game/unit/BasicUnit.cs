@@ -10,7 +10,7 @@ using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.unit {
-	public partial class BasicUnit : GameCellDrawableObj, tickable, withPlayerId, Settingable {
+	public partial class BasicUnit : GameCellDrawableObj, Tickable, withPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected List<KeyValuePair<int, int>> path;
 		protected int currPathIndex;
@@ -32,7 +32,7 @@ namespace TownsAndWarriors.game.unit {
 			path = Path;
 			this.destination = destination;
 
-			currTickOnCell = 1;
+			currTickOnCell = 0;
 			currPathIndex = 0;
 
 			BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
@@ -44,7 +44,7 @@ namespace TownsAndWarriors.game.unit {
 		public bool TickReact() {
 			++currTickOnCell;
 			if(currTickOnCell >= tickPerTurn) {
-				currTickOnCell = 1;
+				currTickOnCell = 0;
 				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
 				++currPathIndex;
 				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
@@ -61,6 +61,10 @@ namespace TownsAndWarriors.game.unit {
 			return false;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns>Кількість тіків, через яку юнит зайде в місто</returns>
 		public ushort TicksLeftToDestination() {
 			return (ushort)((path.Count - 1 - currPathIndex) * tickPerTurn - currTickOnCell);
 		}

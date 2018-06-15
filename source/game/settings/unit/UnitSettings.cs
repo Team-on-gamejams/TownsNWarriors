@@ -6,7 +6,7 @@ using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.settings.unit {
 	public abstract class UnitSettings : SettinsSetter {
-		public override void SetSettings(object obj) {
+		public override void SetSettings(game.basicInterfaces.Settingable obj) {
 
 		}
 

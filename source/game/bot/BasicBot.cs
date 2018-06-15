@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.bot {
-	public abstract class BasicBot : TownsAndWarriors.game.basicInterfaces.tickable, TownsAndWarriors.game.basicInterfaces.withPlayerId {
+	public abstract class BasicBot : TownsAndWarriors.game.basicInterfaces.Tickable, TownsAndWarriors.game.basicInterfaces.withPlayerId {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected game.map.GameMap map;
 		protected List<game.sity.BasicSity> sities;

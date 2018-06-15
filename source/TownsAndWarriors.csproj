@@ -128,7 +128,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="audio\Audio.cs" />
-    <Compile Include="game\basicInterfaces\withPlayerId.cs" />
+    <Compile Include="game\basicInterfaces\WithPlayerId.cs" />
     <Compile Include="game\bot\BasicBot.cs" />
     <Compile Include="game\bot\RushBot.cs" />
     <Compile Include="game\bot\SimpleBot.cs" />
@@ -151,7 +151,7 @@
     <Compile Include="game\IO\deprecated\GameCellDrawableObj.cs" />
     <Compile Include="game\map\GameMap.cs" />
     <Compile Include="game\settings\deprecated\values.cs" />
-    <Compile Include="game\basicInterfaces\tickable.cs" />
+    <Compile Include="game\basicInterfaces\Tickable.cs" />
     <Compile Include="window\MainMenu\CreditsWindow.xaml.cs">
       <DependentUpon>CreditsWindow.xaml</DependentUpon>
     </Compile>
@@ -259,6 +259,9 @@
     <Resource Include="img\window\mainWindow\backgroundUser3.jpg" />
     <Resource Include="img\window\mainWindow\background.jpg" />
     <Resource Include="img\window\lobby\background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

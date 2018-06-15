@@ -11,7 +11,7 @@ using TownsAndWarriors.game.unit;
 using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.sity {
-	public partial class BasicSity : GameCellDrawableObj, tickable, withPlayerId, Settingable {
+	public partial class BasicSity : GameCellDrawableObj, Tickable, withPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static TownsAndWarriors.game.map.GameMap gameMap;
 
@@ -49,14 +49,17 @@ namespace TownsAndWarriors.game.sity {
 			return false;
 		}
 
+		//Повертає кількість воїнів, які вийдуть при наступній атаці
 		public ushort GetAtkWarriors() {
 			return (ushort)Math.Round(currWarriors * sendPersent * atkPersent);
 		}
 
+		//Повертає кількість воїнів, яких вистачить щоб вбити всіх в цьому місті (до 0)
 		public ushort GetDefWarriors() {
 			return (ushort)Math.Round(currWarriors * defPersent);
 		}
 
+		//Створює юніта і задає йому шлях для руху
 		public BasicUnit SendUnit(BasicSity to) {
 			ushort sendWarriors = GetAtkWarriors();
 			if(sendWarriors == 0) 
@@ -67,10 +70,10 @@ namespace TownsAndWarriors.game.sity {
 				currWarriors = 0;
 
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
-
 			return unit;
 		}
 
+		//Опрацьовує юніта, який зайшов у місто
 		public void GetUnits(BasicUnit unit) {
 			if (playerId == unit.playerId) {
 				this.currWarriors += unit.warriorsCnt;
@@ -95,11 +98,11 @@ namespace TownsAndWarriors.game.sity {
 			gameMap.Units.Remove(unit);
 		}
 
-		public void GetSettings(SettinsSetter settinsSetter) {
-			settinsSetter.SetSettings(this);
-		}
-
+		//Повертає шлях до міста. є 2 типи шляхів
+		//1) Шлях в обхід всіх ворожих міст
+		//2) Шлях напролом. Створюється якщо не існує шляху1.
 		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicSity to, out bool isDirectly) {
+			int minFindValue = int.MaxValue;
 			bool rez = true;
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
 			int fromX = 0, fromY = 0, toX = 0, toY = 0;
@@ -141,11 +144,16 @@ namespace TownsAndWarriors.game.sity {
 			}
 
 			//------------------------------- Inner methods ---------------------------------------
+			//Пошук шляху в обхід ворога
 			void RecAvoidEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
 
-				if (finder[y, x].num != -1 && finder[y, x].num < info.value)
+				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
+					finder[y, x].num > minFindValue)
 					return;
+
+				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+					minFindValue = finder[y, x].num;
 
 				finder[y, x].num = info.value++;
 
@@ -155,20 +163,26 @@ namespace TownsAndWarriors.game.sity {
 				AddNearbyToRecList(x, y, info.value);
 			}
 
+			//Пошук шляху напролом
 			void RecThroughEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
 
-				if (finder[y, x].num != -1 && finder[y, x].num < info.value)
+				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
+					finder[y, x].num > minFindValue)
 					return;
+
+				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+					minFindValue = finder[y, x].num;
 
 				finder[y, x].num = info.value++;
 
 				AddNearbyToRecList(x, y, info.value);
 			}
 
+			//Дадає клетки в ліст для наступного пошуку
 			void AddNearbyToRecList(int x, int y, int val) {
 				if (finder[y, x].IsOpenBottom)
-					recList.Add(new RecInfo() { x = x, y = y + 1, value = val  });
+					recList.Add(new RecInfo() { x = x, y = y + 1, value = val });
 				if (finder[y, x].IsOpenRight)
 					recList.Add(new RecInfo() { x = x + 1, y = y, value = val });
 				if (finder[y, x].IsOpenTop)
@@ -177,18 +191,41 @@ namespace TownsAndWarriors.game.sity {
 					recList.Add(new RecInfo() { x = x - 1, y = y, value = val });
 			}
 
+			//Будує сам шлях від міста до міста
 			bool BuildBackPath(int x, int y, int prevValue) {
 				if (prevValue == finder[y, x].num && finder[y, x].num != -1) {
-					bool prev = false;
 					reversedPath.Add(new KeyValuePair<int, int>(x, y));
+
+					List<KeyValuePair<int, int>> nextPathElement = new List<KeyValuePair<int, int>>(4);
 					if (finder[y, x].IsOpenBottom)
-						prev = BuildBackPath(x, y + 1, prevValue - 1);
-					if (finder[y, x].IsOpenTop && !prev)
-						prev = BuildBackPath(x, y - 1, prevValue - 1);
-					if (finder[y, x].IsOpenLeft && !prev)
-						prev = BuildBackPath(x - 1, y, prevValue - 1);
-					if (finder[y, x].IsOpenRight && !prev)
-						prev = BuildBackPath(x + 1, y, prevValue - 1);
+						nextPathElement.Add(new KeyValuePair<int, int>(x, y + 1));
+					if (finder[y, x].IsOpenTop)
+						nextPathElement.Add(new KeyValuePair<int, int>(x, y - 1));
+					if (finder[y, x].IsOpenLeft)
+						nextPathElement.Add(new KeyValuePair<int, int>(x - 1, y));
+					if (finder[y, x].IsOpenRight)
+						nextPathElement.Add(new KeyValuePair<int, int>(x + 1, y));
+
+					if (nextPathElement.Count > 1) {
+						int timesToChange = values.rnd.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
+						while (timesToChange-- != 0) {
+							int pos1, pos2;
+							do {
+								pos1 = values.rnd.Next(0, nextPathElement.Count);
+								pos2 = values.rnd.Next(0, nextPathElement.Count);
+							} while (pos1 == pos2);
+							KeyValuePair<int, int> tmp = nextPathElement[pos1];
+							nextPathElement[pos1] = nextPathElement[pos2];
+							nextPathElement[pos2] = tmp;
+						};
+					}
+
+					while (nextPathElement.Count != 0) {
+						if (BuildBackPath(nextPathElement[0].Key, nextPathElement[0].Value, prevValue - 1))
+							break;
+						nextPathElement.RemoveAt(0);
+					}
+
 					return true;
 				}
 				return false;
@@ -201,10 +238,15 @@ namespace TownsAndWarriors.game.sity {
 			return null;
 		}
 
+		public void GetSettings(SettinsSetter settinsSetter) {
+			settinsSetter.SetSettings(this);
+		}
+
 		public virtual SettinsSetter CreateLinkedSetting() {
 			return new settings.city.BasicCitySettings();
 		}
 
+		//Створює юнита, якого посилатиме це місто
 		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to) {
 			bool b;
 			return new BasicUnit(sendWarriors, this.playerId, BuildOptimalPath(to, out b), to);
