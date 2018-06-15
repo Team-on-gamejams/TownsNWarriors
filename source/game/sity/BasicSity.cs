@@ -32,7 +32,7 @@ namespace TownsAndWarriors.game.sity {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicSity() {
-			this.GetSettings(this.CreateLinkedCitySettings());
+			this.GetSettings(this.CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -201,7 +201,7 @@ namespace TownsAndWarriors.game.sity {
 			return null;
 		}
 
-		public virtual settings.city.BasicCitySettings CreateLinkedCitySettings() {
+		public virtual SettinsSetter CreateLinkedSetting() {
 			return new settings.city.BasicCitySettings();
 		}
 

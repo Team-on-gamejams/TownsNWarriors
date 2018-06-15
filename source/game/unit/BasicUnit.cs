@@ -69,7 +69,7 @@ namespace TownsAndWarriors.game.unit {
 			settinsSetter.SetSettings(this);
 		}
 
-		public virtual settings.unit.BasicUnitSettings CreateLinkedUnitSettings() {
+		public virtual settings.SettinsSetter CreateLinkedSetting() {
 			return new settings.unit.BasicUnitSettings();
 		}
 	}

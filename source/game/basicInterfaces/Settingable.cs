@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace TownsAndWarriors.game.basicInterfaces {
 	public interface Settingable {
 		void GetSettings(game.settings.SettinsSetter settinsSetter);
+		game.settings.SettinsSetter CreateLinkedSetting();
 	}
 }
