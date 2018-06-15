@@ -35,20 +35,16 @@ namespace TownsAndWarriors.game.map {
 			map = new List<List<GameCell>>(sizeY);
 			for (int i = 0; i < sizeY; ++i) {
 				map.Add(new List<GameCell>(sizeX));
-				for (int j = 0; j < sizeX; ++j) {
+				for (int j = 0; j < sizeX; ++j) 
 					map[i].Add(new GameCell());
-				}
 			}
 
-			sities = new List<BasicSity>(values.locateMemory_SizeForTowns);
-			units = new List<BasicUnit>(values.locateMemory_SizeForUnits);
+			sities = new List<BasicSity>();
+			units = new List<BasicUnit>();
 			bots = new List<BasicBot>();
-			//for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
-			//	bots.Add(null);
 
 			BasicSity.gameMap = this;
 		}
-
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public void Tick() {
@@ -69,10 +65,7 @@ namespace TownsAndWarriors.game.map {
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
             foreach (var i in from)
-			{
-				if (i.currWarriors > 1)
 				SendWarriors(i, to);
-			}
 		}
 
     	public void SendWarriors(BasicSity from, BasicSity to) {
@@ -89,6 +82,11 @@ namespace TownsAndWarriors.game.map {
 			unit.InitializeShape();
 
 			units.Add(unit);
+		}
+
+		public void SetBotsSize(int size) {
+			for (int i = 0; i < size; ++i)
+				bots.Add(null);
 		}
 
 		public void SetBot(int id, BasicBot type) {

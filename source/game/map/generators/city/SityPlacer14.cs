@@ -12,7 +12,7 @@ using static TownsAndWarriors.game.settings.values;
 namespace TownsAndWarriors.game.map.generators.city {
 	class SityPlacer14 : BasicSityPlacer {
 		//---------------------------------------------- Fields ----------------------------------------------
-		List<BasicSity> sities = new List<BasicSity>(settings.values.locateMemory_SizeForTowns);
+		List<BasicSity> sities = new List<BasicSity>();
 		List<KeyValuePair<int, int>> bestSitiesPos = new List<KeyValuePair<int, int>>();
 
 		public bool quadIsRoad;

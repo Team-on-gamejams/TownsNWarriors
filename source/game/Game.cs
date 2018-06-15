@@ -46,7 +46,7 @@ namespace TownsAndWarriors.game {
 
 			FillIOWindow();
 
-			loopTimer.Interval = settings.values.milisecondsPerTick;
+			loopTimer.Interval = globalGameInfo.milisecondsPerTick;
 			loopTimer.Tick += (a, b) => {
 				if (isPlay) {
 					Loop();
@@ -80,9 +80,7 @@ namespace TownsAndWarriors.game {
 			settings.size.OneCellSizeX = 0;
 			settings.size.OneCellSizeY = 0;
 
-			settings.values.seed = (int)
-				DateTime.Now.Ticks;
-			//1340092764;
+			settings.values.seed = (int) DateTime.Now.Ticks;
 
 			gameMap = new GameMap(x, y);
 
@@ -96,85 +94,27 @@ namespace TownsAndWarriors.game {
 			idGen.SetGameMap(gameMap);
 			idGen.SetId();
 
-			//for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
+			gameMap.SetBotsSize(idGen.bots);
+			//for (int i = 0; i < idGen.bots; ++i)
 				//gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
 		}
 
 		void InitGameMap() {
 			gameMap.SetCanvas(mainCanvas);
 			gameMap.DrawStatic(mainGrid);
-			SetGrowTimer();
+
+			settings.size.OneCellSizeX = mainGrid.RenderSize.Width / gameMap.SizeX;
+			settings.size.OneCellSizeY = mainGrid.RenderSize.Height / gameMap.SizeY;
+			mainGrid.SizeChanged += (c, d) => {
+				settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
+				settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
+			};
 		}
 
 		void Loop() {
 			++game.globalGameInfo.tick;
-			//MessageBox.Show("game" + game.globalGameInfo.tick.ToString());
 			gameMap.UpdateMap();
 			gameMap.Tick();
-
-			WinProcess();
-		}
-
-		void WinProcess() {
-			int id = 0;
-			if (IsWin()) {
-				mainCanvas.Children.Clear();
-				isPlay = false;
-				loopTimer.Stop();
-
-				string winner = "";
-				if (id == 1)
-					winner = "You win!";
-				else
-					winner = "Bot win! Seems like you looser";
-
-
-				if (MessageBox.Show("Do you want to play again?", winner, MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
-					this.Play();
-				}
-				else {
-					IOWindow.Close();
-				}
-			}
-
-			bool IsWin() {
-				foreach (var sity in gameMap.Sities) {
-					if (sity.playerId != 0) {
-						id = sity.playerId;
-						break;
-					}
-				}
-
-				foreach (var sity in gameMap.Sities)
-					if (sity.playerId != 0 && sity.playerId != id)
-						return false;
-
-				return true;
-			}
-		}
-
-		void SetGrowTimer() {
-			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-			timer.Interval = 10;
-
-			timer.Tick += (a, b) => {
-				if ((int)settings.size.OneCellSizeX < (int)(mainGrid.RenderSize.Width / gameMap.SizeX))
-					settings.size.OneCellSizeX += settings.size.growIncr;
-				if ((int)settings.size.OneCellSizeY < (int)(mainGrid.RenderSize.Height / gameMap.SizeY))
-					settings.size.OneCellSizeY += settings.size.growIncr;
-
-				if ((int)settings.size.OneCellSizeX >= (int)(mainGrid.RenderSize.Width / gameMap.SizeX) &&
-					(int)settings.size.OneCellSizeY >= (int)(mainGrid.RenderSize.Height / gameMap.SizeY)) {
-					timer.Stop();
-					mainGrid.SizeChanged += (c, d) => {
-						settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
-						settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
-					};
-					IOWindow.Width++;
-				}
-			};
-
-			timer.Start();
 		}
 	}
 }
