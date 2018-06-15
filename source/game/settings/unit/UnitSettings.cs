@@ -6,5 +6,12 @@ using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.settings.unit {
 	public abstract class UnitSettings : SettinsSetter {
+		public override void SetSettings(object obj) {
+
+		}
+
+		protected override void LoadSettingsFromFile() {
+
+		}
 	}
 }

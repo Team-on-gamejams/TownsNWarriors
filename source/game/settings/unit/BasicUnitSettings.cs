@@ -14,6 +14,8 @@ namespace TownsAndWarriors.game.settings.unit {
 			if (unit == null)
 				throw new ApplicationException("Wrong unit in BasicUnitSettings.SetSettings");
 
+			base.SetSettings(obj);
+
 			unit.tickPerTurn = 10;
 		}
 

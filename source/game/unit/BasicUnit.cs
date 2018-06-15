@@ -17,8 +17,10 @@ namespace TownsAndWarriors.game.unit {
 		protected ushort currTickOnCell;
 
 		public ushort warriorsCnt;
-		public ushort tickPerTurn;
 		public BasicSity destination;
+
+		//Load from settings
+		public ushort tickPerTurn;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }
@@ -34,6 +36,8 @@ namespace TownsAndWarriors.game.unit {
 			currPathIndex = 0;
 
 			BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
+
+			this.GetSettings(this.CreateLinkedUnitSettings());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -51,7 +55,6 @@ namespace TownsAndWarriors.game.unit {
 					) {
 					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
 					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.GetUnits(this);
-					canvas.Children.Remove(shape);
 					return true;
 				}
 			}
@@ -64,6 +67,10 @@ namespace TownsAndWarriors.game.unit {
 
 		public void GetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
+		}
+
+		public virtual settings.unit.BasicUnitSettings CreateLinkedUnitSettings() {
+			return new settings.unit.BasicUnitSettings();
 		}
 	}
 }
