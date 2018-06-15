@@ -13,12 +13,18 @@ using TownsAndWarriors.game.settings;
 namespace TownsAndWarriors.game.sity {
 	public partial class BasicSity : GameCellDrawableObj, tickable, withPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		protected Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
-
 		public static TownsAndWarriors.game.map.GameMap gameMap;
+
+		//Load from settings
 		public ushort currWarriors, maxWarriors;
 		public double sendPersent, atkPersent, defPersent;
 		public ushort ticksPerIncome;
+
+		public bool saveOvercapedUnits;
+		public bool removeOvercapedUnits;
+
+		public bool equalsMeanCaptured;
+		public bool equalsMeanCapturedForNeutral; 
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }
@@ -26,20 +32,20 @@ namespace TownsAndWarriors.game.sity {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicSity() {
-			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
-        }
+			this.GetSettings(this.CreateLinkedCitySettings());
+		}
 
+		//---------------------------------------------- Methods ----------------------------------------------
+		public bool TickReact() {
+			if(game.globalGameInfo.tick % ticksPerIncome == 0) {
+				if (playerId != 0 && maxWarriors > currWarriors)
+					++currWarriors;
+				else if (removeOvercapedUnits && maxWarriors < currWarriors)
+					--currWarriors;
 
-        //---------------------------------------------- Methods ----------------------------------------------
-        public bool TickReact() {
-			if (playerId != 0 && maxWarriors > currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0) {
-				++currWarriors;
 				return true;
 			}
-			else if (settings.values.gameplay_RemoveOvercapedUnits && maxWarriors < currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0) {
-				--currWarriors;
-				return true;
-			}
+
 			return false;
 		}
 
@@ -60,11 +66,7 @@ namespace TownsAndWarriors.game.sity {
 			if (currWarriors < 0)
 				currWarriors = 0;
 
-			bool b;
-			GetShortestPath(to, out b);
-
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
-			unit.GetSettings(new settings.unit.BasicUnitSettings());
 
 			return unit;
 		}
@@ -72,28 +74,22 @@ namespace TownsAndWarriors.game.sity {
 		public void GetUnits(BasicUnit unit) {
 			if (playerId == unit.playerId) {
 				this.currWarriors += unit.warriorsCnt;
-				if (!settings.values.gameplay_SaveWarriorsOverCap && currWarriors > maxWarriors)
+				if (!saveOvercapedUnits && currWarriors > maxWarriors)
 					currWarriors = maxWarriors;
 			}
 			else {
-				ushort defWarriors = currWarriors;
 				unit.warriorsCnt = (ushort)Math.Round((2 - this.defPersent) * unit.warriorsCnt);
 
-				if (defWarriors > unit.warriorsCnt) {
-					defWarriors -= unit.warriorsCnt;
-					if (currWarriors > defWarriors)
-						currWarriors = defWarriors;
+				if (currWarriors > unit.warriorsCnt) {
+					currWarriors -= unit.warriorsCnt;
 				}
-				else if (!settings.values.gameplay_EqualsMeansCapture && defWarriors == unit.warriorsCnt) {
-					currWarriors = 0;
-				}
-				else {
-					currWarriors = (ushort)(unit.warriorsCnt - defWarriors);
+				else if (currWarriors < unit.warriorsCnt ||
+						(playerId == 0 && equalsMeanCapturedForNeutral) ||					
+						(equalsMeanCaptured)
+					) {
+					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
 					playerId = unit.playerId;
-					this.shape.Children.Clear();
-					this.FillShape();
 				}
-
 			}
 
 			gameMap.Units.Remove(unit);
@@ -103,18 +99,8 @@ namespace TownsAndWarriors.game.sity {
 			settinsSetter.SetSettings(this);
 		}
 
-		public int GetShortestPath(BasicSity to, out bool isDirectly) {
-			pathToSities.Remove(to);
-			isDirectly = BuildOptimalPath(to);
-			return pathToSities[to].Count - 1;
-		}
-
-		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
-            return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
-        }
-
-		bool BuildOptimalPath(BasicSity to) {
-			bool rez;
+		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicSity to, out bool isDirectly) {
+			bool rez = true;
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
 			int fromX = 0, fromY = 0, toX = 0, toY = 0;
 
@@ -130,9 +116,14 @@ namespace TownsAndWarriors.game.sity {
 				}
 			}
 
+			UNOPTIMAL_PATH_FINDER:
+
 			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
 			while (recList.Count != 0) {
-				RecAvoidEnemyCities(recList[0]);
+				if (rez == true)
+					RecAvoidEnemyCities(recList[0]);
+				else
+					RecThroughEnemyCities(recList[0]);
 				recList.RemoveAt(0);
 			}
 
@@ -140,15 +131,16 @@ namespace TownsAndWarriors.game.sity {
 			BuildBackPath(toX, toY, finder[toY, toX].num);
 			reversedPath.Reverse();
 
-			if (reversedPath.Count != 0) {
-				pathToSities.Add(to, reversedPath);
-				rez = true;
-			}
-			else {
-				BuildPath();
+			if (reversedPath.Count == 0 && rez) {
 				rez = false;
+				recList.Clear();
+				for (int i = 0; i < finder.GetLength(0); ++i)
+					for (int j = 0; j < finder.GetLength(1); ++j)
+						finder[i, j].num = -1;
+				goto UNOPTIMAL_PATH_FINDER;
 			}
 
+			//------------------------------- Inner methods ---------------------------------------
 			void RecAvoidEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
 
@@ -160,14 +152,29 @@ namespace TownsAndWarriors.game.sity {
 				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId)
 					return;
 
+				AddNearbyToRecList(x, y, info.value);
+			}
+
+			void RecThroughEnemyCities(RecInfo info) {
+				int x = info.x, y = info.y;
+
+				if (finder[y, x].num != -1 && finder[y, x].num < info.value)
+					return;
+
+				finder[y, x].num = info.value++;
+
+				AddNearbyToRecList(x, y, info.value);
+			}
+
+			void AddNearbyToRecList(int x, int y, int val) {
 				if (finder[y, x].IsOpenBottom)
-					recList.Add(new RecInfo() { x = x, y = y + 1, value = info.value });
+					recList.Add(new RecInfo() { x = x, y = y + 1, value = val  });
 				if (finder[y, x].IsOpenRight)
-					recList.Add(new RecInfo() { x = x + 1, y = y, value = info.value });
+					recList.Add(new RecInfo() { x = x + 1, y = y, value = val });
 				if (finder[y, x].IsOpenTop)
-					recList.Add(new RecInfo() { x = x, y = y - 1, value = info.value });
+					recList.Add(new RecInfo() { x = x, y = y - 1, value = val });
 				if (finder[y, x].IsOpenLeft)
-					recList.Add(new RecInfo() { x = x - 1, y = y, value = info.value });
+					recList.Add(new RecInfo() { x = x - 1, y = y, value = val });
 			}
 
 			bool BuildBackPath(int x, int y, int prevValue) {
@@ -186,45 +193,21 @@ namespace TownsAndWarriors.game.sity {
 				}
 				return false;
 			}
+			//------------------------------- END of Inner methods ---------------------------------------
 
-			//Просто копія методу BuildOptimalPath, але у змінений RecAvoidEnemyCities
-			void BuildPath() {
-				for (int i = 0; i < finder.GetLength(0); ++i) 
-					for (int j = 0; j < finder.GetLength(1); ++j) 
-						finder[i, j].num = -1;
+			isDirectly = rez;
+			if (reversedPath.Count != 0)
+				return reversedPath;
+			return null;
+		}
 
-				recList.Clear();
-				recList.Add(new RecInfo() { x = fromX, y = fromY, value = 0 });
-				while (recList.Count != 0) {
-					Rec(recList[0]);
-					recList.RemoveAt(0);
-				}
+		public virtual settings.city.BasicCitySettings CreateLinkedCitySettings() {
+			return new settings.city.BasicCitySettings();
+		}
 
-				reversedPath.Clear();
-				BuildBackPath(toX, toY, finder[toY, toX].num);
-				reversedPath.Reverse();
-				pathToSities.Add(to, reversedPath);
-
-				void Rec(RecInfo info) {
-					int x = info.x, y = info.y;
-
-					if (finder[y, x].num != -1 && finder[y, x].num < info.value)
-						return;
-
-					finder[y, x].num = info.value++;
-
-					if (finder[y, x].IsOpenBottom)
-						recList.Add(new RecInfo() { x = x, y = y + 1, value = info.value });
-					if (finder[y, x].IsOpenRight)
-						recList.Add(new RecInfo() { x = x + 1, y = y, value = info.value });
-					if (finder[y, x].IsOpenTop)
-						recList.Add(new RecInfo() { x = x, y = y - 1, value = info.value });
-					if (finder[y, x].IsOpenLeft)
-						recList.Add(new RecInfo() { x = x - 1, y = y, value = info.value });
-				}
-			}
-
-			return rez;
+		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to) {
+			bool b;
+			return new BasicUnit(sendWarriors, this.playerId, BuildOptimalPath(to, out b), to);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
