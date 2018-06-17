@@ -8,8 +8,8 @@
         Title="Towns and warriors" Height="454.054" Width="609.73">
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="80*"/>
-			<ColumnDefinition Width="20*"/>
+			<ColumnDefinition Width="85*"/>
+			<ColumnDefinition Width="15*"/>
 		</Grid.ColumnDefinitions>
 
 		<Grid Grid.Column="1" ShowGridLines="True">
