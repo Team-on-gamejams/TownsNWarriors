@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.bot;
+using TownsAndWarriors.game.controlable.botControl;
 
-namespace TownsAndWarriors.game.settings.bot {
+namespace TownsAndWarriors.game.settings.controlable.botControl {
 	class RushBotSettings : BasicBotSettings {
 		public override void SetSettings(Settingable obj) {
 			RushBot bot = obj as RushBot;

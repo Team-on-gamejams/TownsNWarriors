@@ -11,7 +11,7 @@ using TownsAndWarriors.game.unit;
 using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.sity {
-	public partial class BasicSity : GameCellDrawableObj, Tickable, withPlayerId, Settingable {
+	public partial class BasicSity : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static TownsAndWarriors.game.map.GameMap gameMap;
 

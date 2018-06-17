@@ -5,19 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.bot;
+using TownsAndWarriors.game.controlable.playerControl;
 
-
-namespace TownsAndWarriors.game.settings.bot {
-	class BasicBotSettings : settings.SettinsSetter {
+namespace TownsAndWarriors.game.settings.controlable.playerControl {
+	class BasicPlayerSettigns : settings.SettinsSetter {
 		public override void SetSettings(Settingable obj) {
-			BasicBot bot = obj as BasicBot;
-			if (bot == null)
+			BasicPlayer player = obj as BasicPlayer;
+			if (player == null)
 				throw new ApplicationException("Wrong generator in BasicIdSetterSettings.SetSettings");
 
-			bot.ignoreFirstNTicks = 50;
-			bot.tickReact = 50;
-	}
+		}
 
 		protected override void LoadSettingsFromFile() {
 			throw new NotImplementedException();

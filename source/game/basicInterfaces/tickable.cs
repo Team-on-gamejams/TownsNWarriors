@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.basicInterfaces {
-	interface Tickable {
+	public interface Tickable {
 		bool TickReact();
 	}
 }

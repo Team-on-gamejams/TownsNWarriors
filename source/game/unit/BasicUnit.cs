@@ -10,7 +10,7 @@ using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.settings;
 
 namespace TownsAndWarriors.game.unit {
-	public partial class BasicUnit : GameCellDrawableObj, Tickable, withPlayerId, Settingable {
+	public partial class BasicUnit : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected List<KeyValuePair<int, int>> path;
 		protected int currPathIndex;
@@ -38,7 +38,7 @@ namespace TownsAndWarriors.game.unit {
 			if(path != null)
 				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
-			this.GetSettings(this.CreateLinkedSetting());
+			GetSettings(CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------

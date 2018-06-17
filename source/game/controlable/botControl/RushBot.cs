@@ -8,7 +8,7 @@ using TownsAndWarriors.game.settings;
 using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.unit;
 
-namespace TownsAndWarriors.game.bot {
+namespace TownsAndWarriors.game.controlable.botControl {
 	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		//with bot cities
@@ -47,7 +47,7 @@ namespace TownsAndWarriors.game.bot {
 			List<game.sity.BasicSity> Sities,
 			List<game.unit.BasicUnit> Units,
 			byte botId
-			) {
+			) : base(Map, Sities, Units, botId) {
 			map = Map;
 			sities = Sities;
 			units = Units;
@@ -318,7 +318,7 @@ namespace TownsAndWarriors.game.bot {
 		}
 
 		public override SettinsSetter CreateLinkedSetting() {
-			return new settings.bot.RushBotSettings();
+			return new settings.controlable.botControl.RushBotSettings();
 		}
 
 	}

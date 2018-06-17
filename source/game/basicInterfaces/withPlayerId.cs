@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TownsAndWarriors.game.basicInterfaces {
-	interface withPlayerId {
+	public interface WithPlayerId {
 		/// <summary>
 		/// 0  - нейтральний
 		/// 1  - игрок

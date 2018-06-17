@@ -9,7 +9,7 @@ using TownsAndWarriors.game.settings;
 
 using TownsAndWarriors.game.sity;
 using TownsAndWarriors.game.unit;
-using TownsAndWarriors.game.bot;
+using TownsAndWarriors.game.controlable.botControl;
 
 namespace TownsAndWarriors.game.map {
 	public partial class GameMap {
@@ -20,7 +20,7 @@ namespace TownsAndWarriors.game.map {
 		List<BasicSity> sities;
 		List<BasicUnit> units;
 
-		List<BasicBot> bots;
+		List<controlable.Controlable> controlsInput;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public List<BasicSity> Sities { get => sities; set => sities = value; }
@@ -41,7 +41,7 @@ namespace TownsAndWarriors.game.map {
 
 			sities = new List<BasicSity>();
 			units = new List<BasicUnit>();
-			bots = new List<BasicBot>();
+			controlsInput = new List<controlable.Controlable>();
 
 			BasicSity.gameMap = this;
 		}
@@ -57,10 +57,9 @@ namespace TownsAndWarriors.game.map {
 					goto REPEAT_UNITS_TURN;
 			}
 
-			foreach (var bot in bots) 
-				if(bot != null)
-					bot.TickReact();
-			//System.Windows.MessageBox.Show("map:" + game.globalGameInfo.tick.ToString());
+			foreach (var control in controlsInput) 
+				if(control != null)
+					control.TickReact();
 		}
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
@@ -84,13 +83,13 @@ namespace TownsAndWarriors.game.map {
 			units.Add(unit);
 		}
 
-		public void SetBotsSize(int size) {
+		public void SetControlSize(int size) {
 			for (int i = 0; i < size; ++i)
-				bots.Add(null);
+				controlsInput.Add(null);
 		}
 
-		public void SetBot(int id, BasicBot type) {
-			bots[id] = type;
+		public void SetControl(int id, controlable.Controlable type) {
+			controlsInput[id] = type;
 		}
 	}
 }
