@@ -49,7 +49,7 @@ namespace taw.window {
 			GameWindow gameWindow = new GameWindow();
 			MainWindow.ReopenWindow(this, gameWindow);
 
-			game.Game game = new game.Game(gameWindow, taw.game.settings.values.fieldSizeX, taw.game.settings.values.fieldSizeY);
+			game.Game game = new game.Game(gameWindow);
 			game.Play();
 
 			this.Close();

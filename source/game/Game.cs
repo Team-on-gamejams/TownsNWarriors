@@ -32,27 +32,27 @@ namespace taw.game {
 		GameWindow IOWindow;
 
 		bool isPlay;
-		int x, y;
 
 		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
 
 		//New
+		private int y;
+		private int x;
+
 		List<controlable.Controlable> controlsInput;
 		BasicOutput output;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-
+		public int X { get => x; set => x = value; }
+		public int Y { get => y; set => y = value; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow, int X, int Y) {
+		public Game(GameWindow IOWindow) {
 			GetSettings(CreateLinkedSetting());
 
 			this.IOWindow = IOWindow;
 			isPlay = true;
 			mainGrid = IOWindow.mainGameGrid;
-
-			x = X;
-			y = Y;
 
 			FillIOWindow();
 
@@ -76,9 +76,9 @@ namespace taw.game {
 		}
 
 		void FillIOWindow() {
-			for (int i = 0; i < x; ++i)
+			for (int i = 0; i < X; ++i)
 				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-			for (int i = 0; i < y; ++i)
+			for (int i = 0; i < Y; ++i)
 				mainGrid.RowDefinitions.Add(new RowDefinition());
 
 			mainCanvas = new Canvas();
@@ -92,7 +92,7 @@ namespace taw.game {
 
 			settings.values.seed = (int) DateTime.Now.Ticks;
 
-			gameMap = new GameMap(x, y);
+			gameMap = new GameMap(X, Y);
 
 			var mapGen = new game.map.generators.map.TunnelMapGenerator();
 			mapGen.SetGameMap(gameMap);
@@ -143,6 +143,5 @@ namespace taw.game {
 		public SettinsSetter CreateLinkedSetting() {
 			return new settings.game.GameSettings();
 		}
-
 	}
 }
