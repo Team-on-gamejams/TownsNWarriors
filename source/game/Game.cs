@@ -125,8 +125,6 @@ namespace taw.game {
 		}
 
 		void Loop() {
-
-			gameMap.UpdateMap();
 			gameMap.Tick();
 
 			foreach (var control in controlsInput)
@@ -134,6 +132,7 @@ namespace taw.game {
 					control.TickReact();
 
 			++game.globalGameInfo.tick;
+			gameMap.UpdateMap();
 		}
 		//---------------------------------------------- Settingable ----------------------------------------------
 		public void GetSettings(SettinsSetter settingsSetter) {

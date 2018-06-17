@@ -11,9 +11,8 @@ namespace taw.game.settings.game {
 			if (!(obj is Game game))
 				throw new ApplicationException("Wrong game in GameSettings.SetSettings");
 
-			game.X = 15;
-			game.Y = 5;
-
+			game.X = 28;
+			game.Y = 18;
 		}
 
 		protected override void LoadSettingsFromFile() {

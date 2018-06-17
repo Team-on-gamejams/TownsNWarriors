@@ -16,9 +16,6 @@ namespace taw.game.settings {
 			}
 		}
 
-		public static ushort fieldSizeX = 10;
-		public static ushort fieldSizeY = 10;
-
 		public static ushort style_Num = 1;
 	}
 }
