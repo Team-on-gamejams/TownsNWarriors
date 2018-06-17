@@ -9,8 +9,7 @@ using taw.game.sity;
 namespace taw.game.settings.city {
 	public class BasicCitySettings : CitySettings {
 		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
-			BasicSity city = obj as BasicSity;
-			if (city == null)
+			if (!(obj is BasicSity city))
 				throw new ApplicationException("Wrong city in BasicCitySettings.SetSettings");
 
 			base.SetSettings(obj);
@@ -27,6 +26,10 @@ namespace taw.game.settings.city {
 
 			city.equalsMeanCapturedForNeutral = true;
 			city.equalsMeanCaptured = false;
+		}
+
+		protected override void LoadSettingsFromFile() {
+			throw new NotImplementedException();
 		}
 	}
 }

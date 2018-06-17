@@ -10,9 +10,8 @@ using taw.game.controlable.botControl;
 namespace taw.game.settings.controlable.botControl {
 	class RushBotSettings : BasicBotSettings {
 		public override void SetSettings(Settingable obj) {
-			RushBot bot = obj as RushBot;
-			if (bot == null)
-				throw new ApplicationException("Wrong generator in BasicIdSetterSettings.SetSettings");
+			if (!(obj is RushBot bot))
+				throw new ApplicationException("Wrong rushBot in RushBotSettings.SetSettings");
 
 			base.SetSettings(obj);
 

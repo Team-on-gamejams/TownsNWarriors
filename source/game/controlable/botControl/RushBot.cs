@@ -110,8 +110,7 @@ namespace taw.game.controlable.botControl {
 				if (!botSities.Contains(sity)) {
 					bool directly = false;
 					foreach (var bs in botSities) {
-						bool tmp;
-						bs.BuildOptimalPath(sity, out tmp);
+						bs.BuildOptimalPath(sity, out bool tmp);
 						if (tmp) {
 							directly = true;
 							break;
@@ -284,11 +283,10 @@ namespace taw.game.controlable.botControl {
 		}
 
 		int GetAvgDistance(BasicSity sity) {
-			bool b;
 			double avg = 0;
 
 			foreach (var bs in botSities) {
-				avg += bs.BuildOptimalPath(sity, out b).Count;
+				avg += bs.BuildOptimalPath(sity, out bool b).Count;
 			}
 			avg /= botSities.Count();
 
@@ -296,7 +294,6 @@ namespace taw.game.controlable.botControl {
 		}
 
 		int GetAvgSpeed() {
-			bool b;
 			double avg = 0;
 
 			foreach (var bs in botSities) {

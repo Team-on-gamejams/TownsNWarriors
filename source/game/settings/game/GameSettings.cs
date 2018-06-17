@@ -8,7 +8,9 @@ using taw.game.basicInterfaces;
 namespace taw.game.settings.game {
 	class GameSettings : taw.game.settings.SettinsSetter {
 		public override void SetSettings(Settingable obj) {
-			throw new NotImplementedException();
+			if (!(obj is Game game))
+				throw new ApplicationException("Wrong game in GameSettings.SetSettings");
+
 		}
 
 		protected override void LoadSettingsFromFile() {

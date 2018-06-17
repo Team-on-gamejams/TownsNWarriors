@@ -20,10 +20,10 @@ using taw.game.map;
 using taw.game.output;
 using taw.game.controlable.botControl;
 using taw.game.controlable.playerControl;
-
+using taw.game.settings;
 
 namespace taw.game {
-	public class Game {
+	public class Game : basicInterfaces.Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		//Deprecated
 		GameMap gameMap;
@@ -45,6 +45,8 @@ namespace taw.game {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public Game(GameWindow IOWindow, int X, int Y) {
+			GetSettings(CreateLinkedSetting());
+
 			this.IOWindow = IOWindow;
 			isPlay = true;
 			mainGrid = IOWindow.mainGameGrid;
@@ -133,5 +135,14 @@ namespace taw.game {
 
 			++game.globalGameInfo.tick;
 		}
+		//---------------------------------------------- Settingable ----------------------------------------------
+		public void GetSettings(SettinsSetter settingsSetter) {
+			settingsSetter.SetSettings(this);
+		}
+
+		public SettinsSetter CreateLinkedSetting() {
+			return new settings.game.GameSettings();
+		}
+
 	}
 }

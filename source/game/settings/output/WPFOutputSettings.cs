@@ -10,12 +10,15 @@ using taw.game.output;
 namespace taw.game.settings.output {
 	class WPFOutputSettings : BasicOutputSettings {
 		public override void SetSettings(Settingable obj) {
-			WPFOutput output = obj as WPFOutput;
-			if (output == null)
+			if (!(obj is WPFOutput output))
 				throw new ApplicationException("Wrong generator in WPFOutputSettings.SetSettings");
 
 			base.SetSettings(obj);
 
+		}
+
+		protected override void LoadSettingsFromFile() {
+			throw new NotImplementedException();
 		}
 	}
 }

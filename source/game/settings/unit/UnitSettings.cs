@@ -9,9 +9,5 @@ namespace taw.game.settings.unit {
 		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
 
 		}
-
-		protected override void LoadSettingsFromFile() {
-
-		}
 	}
 }

@@ -10,12 +10,15 @@ using taw.game.controlable.playerControl;
 namespace taw.game.settings.controlable.playerControl {
 	class WPFLocalPlayerSettings : BasicPlayerSettigns {
 		public override void SetSettings(Settingable obj) {
-			WPFLocalPlayer player = obj as WPFLocalPlayer;
-			if (player == null)
-				throw new ApplicationException("Wrong generator in LocalPlayer1Settings.SetSettings");
+			if (!(obj is WPFLocalPlayer player))
+				throw new ApplicationException("Wrong wpfplayer in LocalPlayer1Settings.SetSettings");
 
 			base.SetSettings(obj);
 
+		}
+
+		protected override void LoadSettingsFromFile() {
+			throw new NotImplementedException();
 		}
 	}
 }

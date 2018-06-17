@@ -10,8 +10,7 @@ using taw.game.output;
 namespace taw.game.settings.output {
 	class BasicOutputSettings : settings.SettinsSetter {
 		public override void SetSettings(Settingable obj) {
-			BasicOutput output = obj as BasicOutput;
-			if (output == null)
+			if (!(obj is BasicOutput output))
 				throw new ApplicationException("Wrong generator in BasicOutputSettings.SetSettings");
 
 		}

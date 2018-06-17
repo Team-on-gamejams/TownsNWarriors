@@ -10,9 +10,8 @@ using taw.game.controlable.playerControl;
 namespace taw.game.settings.controlable.playerControl {
 	class BasicPlayerSettigns : settings.SettinsSetter {
 		public override void SetSettings(Settingable obj) {
-			BasicPlayer player = obj as BasicPlayer;
-			if (player == null)
-				throw new ApplicationException("Wrong generator in BasicIdSetterSettings.SetSettings");
+			if (!(obj is BasicPlayer player))
+				throw new ApplicationException("Wrong BasicPlayer in BasicPlayerSettigns.SetSettings");
 
 		}
 

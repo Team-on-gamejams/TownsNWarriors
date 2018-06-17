@@ -10,8 +10,5 @@ namespace taw.game.settings.city {
 			
 		}
 
-		protected override void LoadSettingsFromFile() {
-
-		}
 	}
 }

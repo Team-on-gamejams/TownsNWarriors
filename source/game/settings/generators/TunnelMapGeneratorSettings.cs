@@ -10,8 +10,7 @@ using taw.game.map.generators.map;
 namespace taw.game.settings.generators {
 	class TunnelMapGeneratorSettings : BasicMapGeneratorSettings {
 		public override void SetSettings(Settingable obj) {
-			TunnelMapGenerator mapGenerator = obj as TunnelMapGenerator;
-			if (mapGenerator == null)
+			if (!(obj is TunnelMapGenerator mapGenerator))
 				throw new ApplicationException("Wrong generator in TunnelMapGeneratorSettings.SetSettings");
 
 			base.SetSettings(obj);

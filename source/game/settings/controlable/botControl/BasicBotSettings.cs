@@ -10,9 +10,8 @@ using taw.game.controlable.botControl;
 namespace taw.game.settings.controlable.botControl {
 	class BasicBotSettings : settings.SettinsSetter {
 		public override void SetSettings(Settingable obj) {
-			BasicBot bot = obj as BasicBot;
-			if (bot == null)
-				throw new ApplicationException("Wrong generator in BasicBotSettings.SetSettings");
+			if (!(obj is BasicBot bot))
+				throw new ApplicationException("Wrong bot in BasicBotSettings.SetSettings");
 
 			bot.ignoreFirstNTicks = 50;
 			bot.tickReact = 50;

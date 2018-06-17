@@ -10,8 +10,7 @@ using taw.game.map.generators.idSetters;
 namespace taw.game.settings.generators {
 	class BasicIdSetterSettings : SettinsSetter {
 		public override void SetSettings(Settingable obj) {
-			BasicIdSetter idSetter = obj as BasicIdSetter;
-			if (idSetter == null)
+			if (!(obj is BasicIdSetter idSetter))
 				throw new ApplicationException("Wrong generator in BasicIdSetterSettings.SetSettings");
 
 			idSetter.bots = 3;
