@@ -14,39 +14,49 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.window;
-using TownsAndWarriors.game.map;
+using taw.window;
+using taw.game.map;
 
+using taw.game.output;
+using taw.game.controlable.botControl;
+using taw.game.controlable.playerControl;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game {
-	public class Game {
+namespace taw.game {
+	public class Game : basicInterfaces.Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
+		//Deprecated
 		GameMap gameMap;
 		Grid mainGrid;
 		Canvas mainCanvas;
 		GameWindow IOWindow;
 
-		bool isPlay, isNeedToExit;
-		int x, y;
+		bool isPlay;
 
 		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
 
-		//---------------------------------------------- Properties ----------------------------------------------
+		//New
+		private int y;
+		private int x;
 
+		List<controlable.Controlable> controlsInput;
+		BasicOutput output;
+
+		//---------------------------------------------- Properties ----------------------------------------------
+		public int X { get => x; set => x = value; }
+		public int Y { get => y; set => y = value; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow, int X, int Y) {
+		public Game(GameWindow IOWindow) {
+			GetSettings(CreateLinkedSetting());
+
 			this.IOWindow = IOWindow;
 			isPlay = true;
-			isNeedToExit = false;
 			mainGrid = IOWindow.mainGameGrid;
-
-			x = X;
-			y = Y;
 
 			FillIOWindow();
 
-			loopTimer.Interval = settings.values.milisecondsPerTick;
+			loopTimer.Interval = globalGameInfo.milisecondsPerTick;
 			loopTimer.Tick += (a, b) => {
 				if (isPlay) {
 					Loop();
@@ -66,9 +76,9 @@ namespace TownsAndWarriors.game {
 		}
 
 		void FillIOWindow() {
-			for (int i = 0; i < x; ++i)
+			for (int i = 0; i < X; ++i)
 				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-			for (int i = 0; i < y; ++i)
+			for (int i = 0; i < Y; ++i)
 				mainGrid.RowDefinitions.Add(new RowDefinition());
 
 			mainCanvas = new Canvas();
@@ -80,96 +90,57 @@ namespace TownsAndWarriors.game {
 			settings.size.OneCellSizeX = 0;
 			settings.size.OneCellSizeY = 0;
 
-			settings.values.seed = (int)
-				DateTime.Now.Ticks;
-			//1340092764;
+			settings.values.seed = (int) DateTime.Now.Ticks;
 
-			gameMap = GameMap.GenerateRandomMap(
-				x, y,
-				new game.map.mapGenerators.TunnelMapGenerator(),
-				new game.map.mapGenerators.SityPlacer14(),
-				new game.map.mapGenerators.CityIdDiffCorners()
-				);
+			gameMap = new GameMap(X, Y);
 
-			for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
-				gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
+			var mapGen = new game.map.generators.map.TunnelMapGenerator();
+			mapGen.SetGameMap(gameMap);
+			mapGen.GenerateRandomMap();
+			var cityGen = new game.map.generators.city.SityPlacer14();
+			cityGen.SetGameMap(gameMap);
+			cityGen.PlaceSities();
+			var idGen = new game.map.generators.idSetters.IdSetterDiffCorners();
+			idGen.SetGameMap(gameMap);
+			idGen.SetId();
+
+			output = new WPFOutput();
+
+			controlsInput = new List<controlable.Controlable>(idGen.bots + 1);
+			controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer(1));
+			for (int i = 0; i < idGen.bots; ++i)
+				controlsInput.Add(new game.controlable.botControl.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
 		}
 
 		void InitGameMap() {
 			gameMap.SetCanvas(mainCanvas);
 			gameMap.DrawStatic(mainGrid);
-			SetGrowTimer();
+
+			settings.size.OneCellSizeX = mainGrid.RenderSize.Width / gameMap.SizeX;
+			settings.size.OneCellSizeY = mainGrid.RenderSize.Height / gameMap.SizeY;
+			mainGrid.SizeChanged += (c, d) => {
+				settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
+				settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
+			};
 		}
 
 		void Loop() {
-			++game.globalGameInfo.tick;
-			//MessageBox.Show("game" + game.globalGameInfo.tick.ToString());
-			gameMap.UpdateMap();
 			gameMap.Tick();
 
-			WinProcess();
+			foreach (var control in controlsInput)
+				if (control != null)
+					control.TickReact();
+
+			++game.globalGameInfo.tick;
+			gameMap.UpdateMap();
+		}
+		//---------------------------------------------- Settingable ----------------------------------------------
+		public void GetSettings(SettinsSetter settingsSetter) {
+			settingsSetter.SetSettings(this);
 		}
 
-		void WinProcess() {
-			int id = 0;
-			if (IsWin()) {
-				mainCanvas.Children.Clear();
-				isPlay = false;
-				loopTimer.Stop();
-
-				string winner = "";
-				if (id == 1)
-					winner = "You win!";
-				else
-					winner = "Bot win! Seems like you looser";
-
-
-				if (MessageBox.Show("Do you want to play again?", winner, MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
-					this.Play();
-				}
-				else {
-					IOWindow.Close();
-				}
-			}
-
-			bool IsWin() {
-				foreach (var sity in gameMap.Sities) {
-					if (sity.playerId != 0) {
-						id = sity.playerId;
-						break;
-					}
-				}
-
-				foreach (var sity in gameMap.Sities)
-					if (sity.playerId != 0 && sity.playerId != id)
-						return false;
-
-				return true;
-			}
-		}
-
-		void SetGrowTimer() {
-			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-			timer.Interval = 10;
-
-			timer.Tick += (a, b) => {
-				if ((int)settings.size.OneCellSizeX < (int)(mainGrid.RenderSize.Width / gameMap.SizeX))
-					settings.size.OneCellSizeX += settings.size.growIncr;
-				if ((int)settings.size.OneCellSizeY < (int)(mainGrid.RenderSize.Height / gameMap.SizeY))
-					settings.size.OneCellSizeY += settings.size.growIncr;
-
-				if ((int)settings.size.OneCellSizeX >= (int)(mainGrid.RenderSize.Width / gameMap.SizeX) &&
-					(int)settings.size.OneCellSizeY >= (int)(mainGrid.RenderSize.Height / gameMap.SizeY)) {
-					timer.Stop();
-					mainGrid.SizeChanged += (c, d) => {
-						settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
-						settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
-					};
-					IOWindow.Width++;
-				}
-			};
-
-			timer.Start();
+		public SettinsSetter CreateLinkedSetting() {
+			return new settings.game.GameSettings();
 		}
 	}
 }

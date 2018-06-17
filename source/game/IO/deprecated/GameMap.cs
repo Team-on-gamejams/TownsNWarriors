@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors.game.map {
+namespace taw.game.map {
 	public partial class GameMap {
 		Canvas canvas;
 

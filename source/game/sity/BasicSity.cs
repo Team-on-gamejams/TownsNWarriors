@@ -5,20 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-using TownsAndWarriors.game.IO;
-using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.unit;
-using TownsAndWarriors.game.settings;
+using taw.game.IO;
+using taw.game.basicInterfaces;
+using taw.game.unit;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.sity {
-	public partial class BasicSity : GameCellDrawableObj, tickable, withPlayerId, Settingable {
+namespace taw.game.sity {
+	public partial class BasicSity : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		protected Dictionary<BasicSity, List<KeyValuePair<int, int>>> pathToSities;
+		public static taw.game.map.GameMap gameMap;
 
-		public static TownsAndWarriors.game.map.GameMap gameMap;
+		//Load from settings
 		public ushort currWarriors, maxWarriors;
 		public double sendPersent, atkPersent, defPersent;
 		public ushort ticksPerIncome;
+
+		public bool saveOvercapedUnits;
+		public bool removeOvercapedUnits;
+
+		public bool equalsMeanCaptured;
+		public bool equalsMeanCapturedForNeutral; 
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }
@@ -26,31 +32,34 @@ namespace TownsAndWarriors.game.sity {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicSity() {
-			pathToSities = new Dictionary<BasicSity, List<KeyValuePair<int, int>>>(1);
-        }
+			this.GetSettings(this.CreateLinkedSetting());
+		}
 
+		//---------------------------------------------- Methods ----------------------------------------------
+		public bool TickReact() {
+			if(game.globalGameInfo.tick % ticksPerIncome == 0) {
+				if (playerId != 0 && maxWarriors > currWarriors)
+					++currWarriors;
+				else if (removeOvercapedUnits && maxWarriors < currWarriors)
+					--currWarriors;
 
-        //---------------------------------------------- Methods ----------------------------------------------
-        public bool TickReact() {
-			if (playerId != 0 && maxWarriors > currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0) {
-				++currWarriors;
 				return true;
 			}
-			else if (settings.values.gameplay_RemoveOvercapedUnits && maxWarriors < currWarriors && game.globalGameInfo.tick % ticksPerIncome == 0) {
-				--currWarriors;
-				return true;
-			}
+
 			return false;
 		}
 
+		//Повертає кількість воїнів, які вийдуть при наступній атаці
 		public ushort GetAtkWarriors() {
 			return (ushort)Math.Round(currWarriors * sendPersent * atkPersent);
 		}
 
+		//Повертає кількість воїнів, яких вистачить щоб вбити всіх в цьому місті (до 0)
 		public ushort GetDefWarriors() {
 			return (ushort)Math.Round(currWarriors * defPersent);
 		}
 
+		//Створює юніта і задає йому шлях для руху
 		public BasicUnit SendUnit(BasicSity to) {
 			ushort sendWarriors = GetAtkWarriors();
 			if(sendWarriors == 0) 
@@ -60,198 +69,192 @@ namespace TownsAndWarriors.game.sity {
 			if (currWarriors < 0)
 				currWarriors = 0;
 
-			bool b;
-			GetShortestPath(to, out b);
-
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
-			unit.GetSettings(new settings.unit.BasicUnitSettings());
-
 			return unit;
 		}
 
+		//Опрацьовує юніта, який зайшов у місто
 		public void GetUnits(BasicUnit unit) {
 			if (playerId == unit.playerId) {
 				this.currWarriors += unit.warriorsCnt;
-				if (!settings.values.gameplay_SaveWarriorsOverCap && currWarriors > maxWarriors)
+				if (!saveOvercapedUnits && currWarriors > maxWarriors)
 					currWarriors = maxWarriors;
 			}
 			else {
-				ushort defWarriors = currWarriors;
 				unit.warriorsCnt = (ushort)Math.Round((2 - this.defPersent) * unit.warriorsCnt);
 
-				if (defWarriors > unit.warriorsCnt) {
-					defWarriors -= unit.warriorsCnt;
-					if (currWarriors > defWarriors)
-						currWarriors = defWarriors;
+				if (currWarriors > unit.warriorsCnt) {
+					currWarriors -= unit.warriorsCnt;
 				}
-				else if (!settings.values.gameplay_EqualsMeansCapture && defWarriors == unit.warriorsCnt) {
-					currWarriors = 0;
-				}
-				else {
-					currWarriors = (ushort)(unit.warriorsCnt - defWarriors);
+				else if (currWarriors < unit.warriorsCnt ||
+						(playerId == 0 && equalsMeanCapturedForNeutral) ||					
+						(equalsMeanCaptured)
+					) {
+					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
 					playerId = unit.playerId;
-					this.shape.Children.Clear();
-					this.FillShape();
 				}
-
 			}
 
 			gameMap.Units.Remove(unit);
+		}
+
+		//Повертає шлях до міста. є 2 типи шляхів
+		//1) Шлях в обхід всіх ворожих міст
+		//2) Шлях напролом. Створюється якщо не існує шляху1.
+		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicSity to, out bool isDirectly) {
+			if (to == null) {
+				isDirectly = false;
+				return null;
+			}
+
+			int minFindValue = int.MaxValue;
+			bool rez = true;
+			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
+			int fromX = 0, fromY = 0, toX = 0, toY = 0;
+
+			for (int i = 0; i < finder.GetLength(0); ++i) {
+				for (int j = 0; j < finder.GetLength(1); ++j) {
+					finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
+					if (gameMap.Map[i][j].Sity == this) {
+						fromX = j; fromY = i;
+					}
+					else if (gameMap.Map[i][j].Sity == to) {
+						toX = j; toY = i;
+					}
+				}
+			}
+
+			UNOPTIMAL_PATH_FINDER:
+
+			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
+			while (recList.Count != 0) {
+				if (rez == true)
+					RecAvoidEnemyCities(recList[0]);
+				else
+					RecThroughEnemyCities(recList[0]);
+				recList.RemoveAt(0);
+			}
+
+			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
+			BuildBackPath(toX, toY, finder[toY, toX].num);
+			reversedPath.Reverse();
+
+			if (reversedPath.Count == 0 && rez) {
+				rez = false;
+				recList.Clear();
+				for (int i = 0; i < finder.GetLength(0); ++i)
+					for (int j = 0; j < finder.GetLength(1); ++j)
+						finder[i, j].num = -1;
+				goto UNOPTIMAL_PATH_FINDER;
+			}
+
+			//------------------------------- Inner methods ---------------------------------------
+			//Пошук шляху в обхід ворога
+			void RecAvoidEnemyCities(RecInfo info) {
+				int x = info.x, y = info.y;
+
+				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
+					finder[y, x].num > minFindValue)
+					return;
+
+				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+					minFindValue = finder[y, x].num;
+
+				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId && x != toX && y != toY)
+					return;
+
+				finder[y, x].num = info.value++;
+
+				AddNearbyToRecList(x, y, info.value);
+			}
+
+			//Пошук шляху напролом
+			void RecThroughEnemyCities(RecInfo info) {
+				int x = info.x, y = info.y;
+
+				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
+					finder[y, x].num > minFindValue)
+					return;
+
+				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+					minFindValue = finder[y, x].num;
+
+				finder[y, x].num = info.value++;
+
+				AddNearbyToRecList(x, y, info.value);
+			}
+
+			//Дадає клетки в ліст для наступного пошуку
+			void AddNearbyToRecList(int x, int y, int val) {
+				if (finder[y, x].IsOpenBottom)
+					recList.Add(new RecInfo() { x = x, y = y + 1, value = val });
+				if (finder[y, x].IsOpenRight)
+					recList.Add(new RecInfo() { x = x + 1, y = y, value = val });
+				if (finder[y, x].IsOpenTop)
+					recList.Add(new RecInfo() { x = x, y = y - 1, value = val });
+				if (finder[y, x].IsOpenLeft)
+					recList.Add(new RecInfo() { x = x - 1, y = y, value = val });
+			}
+
+			//Будує сам шлях від міста до міста
+			bool BuildBackPath(int x, int y, int prevValue) {
+				if (prevValue == finder[y, x].num && finder[y, x].num != -1) {
+					reversedPath.Add(new KeyValuePair<int, int>(x, y));
+
+					List<KeyValuePair<int, int>> nextPathElement = new List<KeyValuePair<int, int>>(4);
+					if (finder[y, x].IsOpenBottom)
+						nextPathElement.Add(new KeyValuePair<int, int>(x, y + 1));
+					if (finder[y, x].IsOpenTop)
+						nextPathElement.Add(new KeyValuePair<int, int>(x, y - 1));
+					if (finder[y, x].IsOpenLeft)
+						nextPathElement.Add(new KeyValuePair<int, int>(x - 1, y));
+					if (finder[y, x].IsOpenRight)
+						nextPathElement.Add(new KeyValuePair<int, int>(x + 1, y));
+
+					if (nextPathElement.Count > 1) {
+						int timesToChange = values.rnd.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
+						while (timesToChange-- != 0) {
+							int pos1, pos2;
+							do {
+								pos1 = values.rnd.Next(0, nextPathElement.Count);
+								pos2 = values.rnd.Next(0, nextPathElement.Count);
+							} while (pos1 == pos2);
+							KeyValuePair<int, int> tmp = nextPathElement[pos1];
+							nextPathElement[pos1] = nextPathElement[pos2];
+							nextPathElement[pos2] = tmp;
+						};
+					}
+
+					while (nextPathElement.Count != 0) {
+						if (BuildBackPath(nextPathElement[0].Key, nextPathElement[0].Value, prevValue - 1))
+							break;
+						nextPathElement.RemoveAt(0);
+					}
+
+					return true;
+				}
+				return false;
+			}
+			//------------------------------- END of Inner methods ---------------------------------------
+
+			isDirectly = rez;
+			if (reversedPath.Count != 0)
+				return reversedPath;
+			return null;
 		}
 
 		public void GetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 
-		public int GetShortestPath(BasicSity to, out bool isDirectly) {
-			pathToSities.Remove(to);
-			isDirectly = BuildPathWithoutEnemySitiesPath(to);
-			return pathToSities[to].Count - 1;
+		public virtual SettinsSetter CreateLinkedSetting() {
+			return new settings.city.BasicCitySettings();
 		}
 
-		protected virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to){
-            return new BasicUnit(sendWarriors, this.playerId, pathToSities[to], to);
-        }
-
-		bool BuildPathWithoutEnemySitiesPath(BasicSity to) {
-			bool rez;
-			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
-			int fromX = 0, fromY = 0, toX = 0, toY = 0;
-
-			for (int i = 0; i < finder.GetLength(0); ++i) {
-				for (int j = 0; j < finder.GetLength(1); ++j) {
-					finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
-					if (gameMap.Map[i][j].Sity == this) {
-						fromX = j; fromY = i;
-					}
-					else if (gameMap.Map[i][j].Sity == to) {
-						toX = j; toY = i;
-					}
-				}
-			}
-
-			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
-			while (recList.Count != 0) {
-				Rec(recList[0]);
-				recList.RemoveAt(0);
-			}
-
-			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
-			UnRec(toX, toY, finder[toY, toX].num);
-			reversedPath.Reverse();
-
-			if (reversedPath.Count != 0) {
-				pathToSities.Add(to, reversedPath);
-				rez = true;
-			}
-			else {
-				BuildPath(to);
-				rez = false;
-			}
-
-			void Rec(RecInfo info) {
-				int x = info.x, y = info.y;
-
-				if (finder[y, x].num != -1 && finder[y, x].num < info.value)
-					return;
-
-				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId)
-					return;
-
-				finder[y, x].num = info.value++;
-
-				if (finder[y, x].IsOpenBottom)
-					recList.Add(new RecInfo() { x = x, y = y + 1, value = info.value });
-				if (finder[y, x].IsOpenRight)
-					recList.Add(new RecInfo() { x = x + 1, y = y, value = info.value });
-				if (finder[y, x].IsOpenTop)
-					recList.Add(new RecInfo() { x = x, y = y - 1, value = info.value });
-				if (finder[y, x].IsOpenLeft)
-					recList.Add(new RecInfo() { x = x - 1, y = y, value = info.value });
-			}
-
-			bool UnRec(int x, int y, int prevValue) {
-				if (prevValue == finder[y, x].num && finder[y, x].num != -1) {
-					bool prev = false;
-					reversedPath.Add(new KeyValuePair<int, int>(x, y));
-					if (finder[y, x].IsOpenBottom)
-						prev = UnRec(x, y + 1, prevValue - 1);
-					if (finder[y, x].IsOpenTop && !prev)
-						prev = UnRec(x, y - 1, prevValue - 1);
-					if (finder[y, x].IsOpenLeft && !prev)
-						prev = UnRec(x - 1, y, prevValue - 1);
-					if (finder[y, x].IsOpenRight && !prev)
-						prev = UnRec(x + 1, y, prevValue - 1);
-					return true;
-				}
-				return false;
-			}
-
-			return rez;
-		}
-
-		void BuildPath(BasicSity to) {
-			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
-			int fromX = 0, fromY = 0, toX = 0, toY = 0;
-
-			for (int i = 0; i < finder.GetLength(0); ++i) {
-				for (int j = 0; j < finder.GetLength(1); ++j) {
-					finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
-					if (gameMap.Map[i][j].Sity == this) {
-						fromX = j; fromY = i;
-					}
-					else if (gameMap.Map[i][j].Sity == to) {
-						toX = j; toY = i;
-					}
-				}
-			}
-
-
-			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
-			while (recList.Count != 0) {
-				Rec(recList[0]);
-				recList.RemoveAt(0);
-			}
-
-			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
-			UnRec(toX, toY, finder[toY, toX].num);
-			reversedPath.Reverse();
-			pathToSities.Add(to, reversedPath);
-
-			void Rec(RecInfo info) {
-				int x = info.x, y = info.y;
-
-				if (finder[y, x].num != -1 && finder[y, x].num < info.value)
-					return;
-
-				finder[y, x].num = info.value++;
-
-				if (finder[y, x].IsOpenBottom)
-					recList.Add(new RecInfo() { x = x, y = y + 1, value = info.value });
-				if (finder[y, x].IsOpenRight)
-					recList.Add(new RecInfo() { x = x + 1, y = y, value = info.value });
-				if (finder[y, x].IsOpenTop)
-					recList.Add(new RecInfo() { x = x, y = y - 1, value = info.value });
-				if (finder[y, x].IsOpenLeft)
-					recList.Add(new RecInfo() { x = x - 1, y = y, value = info.value });
-			}
-
-			bool UnRec(int x, int y, int prevValue) {
-				if (prevValue == finder[y, x].num && finder[y, x].num != -1) {
-					bool prev = false;
-					reversedPath.Add(new KeyValuePair<int, int>(x, y));
-					if (finder[y, x].IsOpenBottom)
-						prev = UnRec(x, y + 1, prevValue - 1);
-					if (finder[y, x].IsOpenTop && !prev)
-						prev = UnRec(x, y - 1, prevValue - 1);
-					if (finder[y, x].IsOpenLeft && !prev)
-						prev = UnRec(x - 1, y, prevValue - 1);
-					if (finder[y, x].IsOpenRight && !prev)
-						prev = UnRec(x + 1, y, prevValue - 1);
-					return true;
-				}
-				return false;
-			}
+		//Створює юнита, якого посилатиме це місто
+		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to) {
+			bool b;
+			return new BasicUnit(sendWarriors, this.playerId, BuildOptimalPath(to, out b), to);
 		}
 
 		//////////////////////////////////////////////////////////////////////////

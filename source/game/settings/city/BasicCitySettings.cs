@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
-using TownsAndWarriors.game.sity;
+using taw.game.settings;
+using taw.game.sity;
 
-namespace TownsAndWarriors.game.settings.city {
+namespace taw.game.settings.city {
 	public class BasicCitySettings : CitySettings {
-		public override void SetSettings(object obj) {
-			BasicSity city = obj as BasicSity;
-			if (city == null)
+		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
+			if (!(obj is BasicSity city))
 				throw new ApplicationException("Wrong city in BasicCitySettings.SetSettings");
+
+			base.SetSettings(obj);
 
 			city.maxWarriors = 20;
 			city.currWarriors = 10;
@@ -19,6 +20,12 @@ namespace TownsAndWarriors.game.settings.city {
 			city.atkPersent = 1.0f;
 			city.defPersent = 1.0f;
 			city.ticksPerIncome = 50;
+
+			city.saveOvercapedUnits = true;
+			city.removeOvercapedUnits = true;
+
+			city.equalsMeanCapturedForNeutral = true;
+			city.equalsMeanCaptured = false;
 		}
 
 		protected override void LoadSettingsFromFile() {

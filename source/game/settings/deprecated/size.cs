@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors.game.settings {
+namespace taw.game.settings {
 	static class size {
 		public delegate void SizeChangedDelegate();
 		static public event SizeChangedDelegate SizeChanged;

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors.game.basicInterfaces {
-	interface tickable {
+namespace taw.game.basicInterfaces {
+	public interface Tickable {
 		bool TickReact();
 	}
 }

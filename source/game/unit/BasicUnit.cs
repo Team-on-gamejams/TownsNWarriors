@@ -4,21 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.IO;
-using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.sity;
-using TownsAndWarriors.game.settings;
+using taw.game.IO;
+using taw.game.basicInterfaces;
+using taw.game.sity;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.unit {
-	public partial class BasicUnit : GameCellDrawableObj, tickable, withPlayerId, Settingable {
+namespace taw.game.unit {
+	public partial class BasicUnit : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected List<KeyValuePair<int, int>> path;
 		protected int currPathIndex;
 		protected ushort currTickOnCell;
 
 		public ushort warriorsCnt;
-		public ushort tickPerTurn;
 		public BasicSity destination;
+
+		//Load from settings
+		public ushort tickPerTurn;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte playerId { get; set; }
@@ -30,17 +32,20 @@ namespace TownsAndWarriors.game.unit {
 			path = Path;
 			this.destination = destination;
 
-			currTickOnCell = 1;
+			currTickOnCell = 0;
 			currPathIndex = 0;
 
-			BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
+			if(path != null)
+				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
+
+			GetSettings(CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public bool TickReact() {
 			++currTickOnCell;
 			if(currTickOnCell >= tickPerTurn) {
-				currTickOnCell = 1;
+				currTickOnCell = 0;
 				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
 				++currPathIndex;
 				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
@@ -51,19 +56,26 @@ namespace TownsAndWarriors.game.unit {
 					) {
 					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
 					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.GetUnits(this);
-					canvas.Children.Remove(shape);
 					return true;
 				}
 			}
 			return false;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns>Кількість тіків, через яку юнит зайде в місто</returns>
 		public ushort TicksLeftToDestination() {
 			return (ushort)((path.Count - 1 - currPathIndex) * tickPerTurn - currTickOnCell);
 		}
 
 		public void GetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
+		}
+
+		public virtual settings.SettinsSetter CreateLinkedSetting() {
+			return new settings.unit.BasicUnitSettings();
 		}
 	}
 }

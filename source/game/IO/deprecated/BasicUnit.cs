@@ -14,9 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.game.basicInterfaces;
+using taw.game.basicInterfaces;
 
-namespace TownsAndWarriors.game.unit {
+namespace taw.game.unit {
 	public partial class BasicUnit {
 		protected Label text;
 		protected Shape rectangle;

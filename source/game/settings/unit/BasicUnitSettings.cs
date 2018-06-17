@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-using TownsAndWarriors.game.unit;
+using taw.game.unit;
 
-namespace TownsAndWarriors.game.settings.unit {
+namespace taw.game.settings.unit {
 	public class BasicUnitSettings : UnitSettings {
-		public override void SetSettings(object obj) {
-			BasicUnit unit = obj as BasicUnit;
-			if (unit == null)
+		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
+			if (!(obj is BasicUnit unit))
 				throw new ApplicationException("Wrong unit in BasicUnitSettings.SetSettings");
+
+			base.SetSettings(obj);
 
 			unit.tickPerTurn = 10;
 		}

@@ -1,7 +1,7 @@
-﻿<Application x:Class="TownsAndWarriors.App"
+﻿<Application x:Class="taw.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TownsAndWarriors"
+             xmlns:local="clr-namespace:taw"
              StartupUri="window\MainMenu\MainWindow.xaml">
 	<Application.Resources>
 		<ResourceDictionary>

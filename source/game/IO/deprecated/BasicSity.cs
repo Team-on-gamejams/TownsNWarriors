@@ -13,12 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using System.Windows.Media.Animation;
 
-using System.Reflection;
-
-namespace TownsAndWarriors.game.sity
+namespace taw.game.sity
 {
 	public partial class BasicSity
 	{

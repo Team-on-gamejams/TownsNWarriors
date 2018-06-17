@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:TownsAndWarriors.style">
+                    xmlns:local="clr-namespace:taw.style">
 
 	<Style TargetType="Grid" x:Key="BasicCityStyle">
 		<!--<Style.Resources>

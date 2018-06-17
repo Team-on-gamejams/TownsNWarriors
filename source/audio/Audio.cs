@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace TownsAndWarriors.audio
+namespace taw.audio
 {
     class Audio
     {
