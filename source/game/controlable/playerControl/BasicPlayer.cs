@@ -11,12 +11,12 @@ namespace taw.game.controlable.playerControl {
 
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public byte playerId { get; set; }
+		public byte PlayerId { get; set; }
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicPlayer(byte PlayerId) {
-			playerId = PlayerId;
+			this.PlayerId = PlayerId;
 			GetSettings(CreateLinkedSetting());
 		}
 

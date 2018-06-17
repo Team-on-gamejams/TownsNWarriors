@@ -5,27 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 using taw.game.settings;
-using taw.game.sity;
+using taw.game.city;
 using taw.game.unit;
 
 namespace taw.game.controlable.botControl {
 	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		//with bot cities
-		List<sity.BasicSity> botSities = new List<sity.BasicSity>();
-		List<BasicSity> overcapedBotSities = new List<BasicSity>();
+		List<city.BasicCity> botSities = new List<city.BasicCity>();
+		List<BasicCity> overcapedBotSities = new List<BasicCity>();
 
-		List<BasicSity> botSitiesUnderAttack = new List<BasicSity>();
+		List<BasicCity> botSitiesUnderAttack = new List<BasicCity>();
 		List<List<BasicUnit>> botSitiesUnderAttackUnits = new List<List<BasicUnit>>();
 
 		//With enemy cities
-		List<sity.BasicSity> rushingSities = new List<sity.BasicSity>();
-		List<sity.BasicSity> canAttackDirectly = new List<sity.BasicSity>();
+		List<city.BasicCity> rushingSities = new List<city.BasicCity>();
+		List<city.BasicCity> canAttackDirectly = new List<city.BasicCity>();
 
 
 		bool isRushing = false;
 		byte rushWaveRemains;
-		BasicSity rushSity;
+		BasicCity rushSity;
 
 		public bool protectCities;
 		public byte protectCities_MinimumUnitsLeft;
@@ -44,20 +44,20 @@ namespace taw.game.controlable.botControl {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public RushBot(game.map.GameMap Map,
-			List<game.sity.BasicSity> Sities,
+			List<game.city.BasicCity> Sities,
 			List<game.unit.BasicUnit> Units,
 			byte botId
 			) : base(Map, Sities, Units, botId) {
 			map = Map;
 			sities = Sities;
 			units = Units;
-			playerId = botId;
+			PlayerId = botId;
 		}
 
 		//	//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
-			if (globalGameInfo.tick > ignoreFirstNTicks &&
-				globalGameInfo.tick % tickReact == 0) {
+			if (GlobalGameInfo.tick > ignoreFirstNTicks &&
+				GlobalGameInfo.tick % tickReact == 0) {
 
 				RecalcBotSities();
 				RecalcRushingSities();
@@ -91,7 +91,7 @@ namespace taw.game.controlable.botControl {
 		void RecalcBotSities() {
 			botSities.Clear();
 			foreach (var sity in sities) {
-				if (sity.playerId == playerId)
+				if (sity.PlayerId == PlayerId)
 					botSities.Add(sity);
 			}
 		}
@@ -99,7 +99,7 @@ namespace taw.game.controlable.botControl {
 		void RecalcRushingSities() {
 			rushingSities.Clear();
 			foreach (var unit in units) {
-				if (unit.playerId == playerId && !rushingSities.Contains(unit.destination))
+				if (unit.PlayerId == PlayerId && !rushingSities.Contains(unit.destination))
 					rushingSities.Add(unit.destination);
 			}
 		}
@@ -127,7 +127,7 @@ namespace taw.game.controlable.botControl {
 			foreach (var bs in botSities) {
 				int currUnits = bs.currWarriors + dropOvercapacityUnit_Nearby;
 				foreach (var unit in units) 
-					if (unit.playerId == this.playerId && unit.destination == bs && unit.TicksLeftToDestination() <= this.tickReact)
+					if (unit.PlayerId == this.PlayerId && unit.destination == bs && unit.TicksLeftToDestination() <= this.tickReact)
 						currUnits += unit.warriorsCnt;
 				if (currUnits >= bs.maxWarriors)
 					overcapedBotSities.Add(bs);
@@ -140,7 +140,7 @@ namespace taw.game.controlable.botControl {
 			foreach (var bs in botSities) {
 				bool isUnderAttack = false;
 				foreach (var unit in units) {
-					if (unit.playerId != this.playerId && unit.destination == bs) {
+					if (unit.PlayerId != this.PlayerId && unit.destination == bs) {
 						isUnderAttack = true;
 						break;
 					}
@@ -163,9 +163,9 @@ namespace taw.game.controlable.botControl {
 		//---------------------------------------------- Methods - behavior ----------------------------------------------
 
 		void CalculateWhoNeedToBeRushed() {
-			List<List<BasicSity>> potentialRushes = new List<List<BasicSity>>();
+			List<List<BasicCity>> potentialRushes = new List<List<BasicCity>>();
 			for (byte i = 1; i <= rushChances.Count; ++i) {
-				potentialRushes.Add(new List<BasicSity>());
+				potentialRushes.Add(new List<BasicCity>());
 
 				foreach (var sity in canAttackDirectly) {
 					uint potentialArmy = CalcPotentialArmy(i, sity.defPersent);
@@ -208,7 +208,7 @@ namespace taw.game.controlable.botControl {
 							(byte)Math.Round((double)(rushChance[i].Value) / sumPersent * 100));
 				}
 
-				byte randPersent = (byte)values.rnd.Next(0, 100);
+				byte randPersent = Rand.NextPersent();
 				for (int i = 0; i < rushChance.Count; ++i) {
 					if (randPersent <= rushChance[i].Value) {
 						potentialRushPos = rushChance[i].Key - 1;
@@ -219,7 +219,7 @@ namespace taw.game.controlable.botControl {
 				}
 
 				var potentialRush = potentialRushes[potentialRushPos];
-				rushSity = potentialRush[settings.values.rnd.Next(0, potentialRush.Count)];
+				rushSity = potentialRush[Rand.Next(0, potentialRush.Count)];
 				isRushing = true;
 				rushWaveRemains = (byte)(potentialRushPos + 1);
 			}
@@ -227,7 +227,7 @@ namespace taw.game.controlable.botControl {
 		}
 
 		void RushFromAllSities() {
-			if (rushSity.playerId == this.playerId)
+			if (rushSity.PlayerId == this.PlayerId)
 				isRushing = false;
 
 			if (rushWaveRemains-- == 0)
@@ -282,7 +282,7 @@ namespace taw.game.controlable.botControl {
 			return potentialArmy;
 		}
 
-		int GetAvgDistance(BasicSity sity) {
+		int GetAvgDistance(BasicCity sity) {
 			double avg = 0;
 
 			foreach (var bs in botSities) {
@@ -304,8 +304,8 @@ namespace taw.game.controlable.botControl {
 			return (int)Math.Round(avg);
 		}
 
-		double GetEnemyArmy(BasicSity sityTo) {
-			if (sityTo.playerId == 0)
+		double GetEnemyArmy(BasicCity sityTo) {
+			if (sityTo.PlayerId == 0)
 				return sityTo.currWarriors +
 					rushWithMinimumMoreUnits;
 			else

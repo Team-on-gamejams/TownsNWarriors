@@ -6,7 +6,7 @@ using taw.game.settings;
 
 namespace taw.game.settings.unit {
 	public abstract class UnitSettings : SettinsSetter {
-		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
+		public override void SetSettings(taw.game.basicInterfaces.ISettingable obj) {
 
 		}
 	}

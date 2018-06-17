@@ -4,31 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using taw.game.IO;
 using taw.game.basicInterfaces;
-using taw.game.sity;
+using taw.game.city;
 using taw.game.settings;
 
 namespace taw.game.unit {
-	public partial class BasicUnit : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
+	public partial class BasicUnit : ITickable, IWithPlayerId, ISettingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected List<KeyValuePair<int, int>> path;
 		protected int currPathIndex;
 		protected ushort currTickOnCell;
 
 		public ushort warriorsCnt;
-		public BasicSity destination;
+		public BasicCity destination;
 
 		//Load from settings
 		public ushort tickPerTurn;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public byte playerId { get; set; }
+		public byte PlayerId { get; set; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicSity destination) {
+		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicCity destination) {
 			this.warriorsCnt = warriorsCnt;
-			playerId = PlayerId;
+			this.PlayerId = PlayerId;
 			path = Path;
 			this.destination = destination;
 
@@ -36,7 +35,7 @@ namespace taw.game.unit {
 			currPathIndex = 0;
 
 			if(path != null)
-				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
+				BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
 			GetSettings(CreateLinkedSetting());
 		}
@@ -46,16 +45,16 @@ namespace taw.game.unit {
 			++currTickOnCell;
 			if(currTickOnCell >= tickPerTurn) {
 				currTickOnCell = 0;
-				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
+				BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
 				++currPathIndex;
-				BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
+				BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
-				if( (BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity != null &&
-					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.playerId != this.playerId) ||
+				if( (BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity != null &&
+					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.PlayerId != this.PlayerId) ||
 					(currPathIndex == path.Count - 1)
 					) {
-					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
-					BasicSity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.GetUnits(this);
+					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
+					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.GetUnits(this);
 					return true;
 				}
 			}

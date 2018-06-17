@@ -9,16 +9,18 @@ using taw.game.output;
 
 
 namespace taw.game.output {
-	abstract class BasicOutput  : basicInterfaces.Tickable,
-		basicInterfaces.Settingable  {
+	public abstract class BasicOutput  : basicInterfaces.ITickable,
+		basicInterfaces.ISettingable  {
 		//---------------------------------------------- Fields ----------------------------------------------
-
+		protected readonly Game game;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicOutput() {
+		public BasicOutput(Game Game) {
+			game = Game;
+
 			GetSettings(CreateLinkedSetting());
 		}
 

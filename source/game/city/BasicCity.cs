@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-using taw.game.IO;
 using taw.game.basicInterfaces;
 using taw.game.unit;
 using taw.game.settings;
 
-namespace taw.game.sity {
-	public partial class BasicSity : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
+namespace taw.game.city {
+	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static taw.game.map.GameMap gameMap;
 
@@ -27,18 +26,36 @@ namespace taw.game.sity {
 		public bool equalsMeanCapturedForNeutral; 
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public byte playerId { get; set; }
+		public byte PlayerId { get; set; }
 
+		//---------------------------------------------- Events ----------------------------------------------
+		//public delegate void CityDelegate(object tag);
+
+		//public event CityDelegate Captured;
+
+		//public event CityDelegate UnitIncome;
+		//public event CityDelegate UnitSend;
+		//public event CityDelegate UnitGet;
+
+		//public event CityDelegate Tick;
+		//public event CityDelegate FirstTick;
+
+
+		//Пример делегата
+		//public delegate void SizeChangedDelegate();
+		//static public event SizeChangedDelegate SizeChanged;
+		//if (SizeChanged != null)
+		//			SizeChanged();
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicSity() {
+		public BasicCity() {
 			this.GetSettings(this.CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public bool TickReact() {
-			if(game.globalGameInfo.tick % ticksPerIncome == 0) {
-				if (playerId != 0 && maxWarriors > currWarriors)
+			if(game.GlobalGameInfo.tick % ticksPerIncome == 0) {
+				if (PlayerId != 0 && maxWarriors > currWarriors)
 					++currWarriors;
 				else if (removeOvercapedUnits && maxWarriors < currWarriors)
 					--currWarriors;
@@ -60,7 +77,7 @@ namespace taw.game.sity {
 		}
 
 		//Створює юніта і задає йому шлях для руху
-		public BasicUnit SendUnit(BasicSity to) {
+		public BasicUnit SendUnit(BasicCity to) {
 			ushort sendWarriors = GetAtkWarriors();
 			if(sendWarriors == 0) 
 				return null;
@@ -75,7 +92,7 @@ namespace taw.game.sity {
 
 		//Опрацьовує юніта, який зайшов у місто
 		public void GetUnits(BasicUnit unit) {
-			if (playerId == unit.playerId) {
+			if (PlayerId == unit.PlayerId) {
 				this.currWarriors += unit.warriorsCnt;
 				if (!saveOvercapedUnits && currWarriors > maxWarriors)
 					currWarriors = maxWarriors;
@@ -87,11 +104,11 @@ namespace taw.game.sity {
 					currWarriors -= unit.warriorsCnt;
 				}
 				else if (currWarriors < unit.warriorsCnt ||
-						(playerId == 0 && equalsMeanCapturedForNeutral) ||					
+						(PlayerId == 0 && equalsMeanCapturedForNeutral) ||					
 						(equalsMeanCaptured)
 					) {
 					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
-					playerId = unit.playerId;
+					PlayerId = unit.PlayerId;
 				}
 			}
 
@@ -101,7 +118,7 @@ namespace taw.game.sity {
 		//Повертає шлях до міста. є 2 типи шляхів
 		//1) Шлях в обхід всіх ворожих міст
 		//2) Шлях напролом. Створюється якщо не існує шляху1.
-		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicSity to, out bool isDirectly) {
+		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicCity to, out bool isDirectly) {
 			if (to == null) {
 				isDirectly = false;
 				return null;
@@ -160,7 +177,7 @@ namespace taw.game.sity {
 				if (x == toX && y == toY && finder[y, x].num < minFindValue)
 					minFindValue = finder[y, x].num;
 
-				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.playerId != this.playerId && x != toX && y != toY)
+				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && x != toX && y != toY)
 					return;
 
 				finder[y, x].num = info.value++;
@@ -212,12 +229,12 @@ namespace taw.game.sity {
 						nextPathElement.Add(new KeyValuePair<int, int>(x + 1, y));
 
 					if (nextPathElement.Count > 1) {
-						int timesToChange = values.rnd.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
+						int timesToChange = Rand.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
 						while (timesToChange-- != 0) {
 							int pos1, pos2;
 							do {
-								pos1 = values.rnd.Next(0, nextPathElement.Count);
-								pos2 = values.rnd.Next(0, nextPathElement.Count);
+								pos1 = Rand.Next(0, nextPathElement.Count);
+								pos2 = Rand.Next(0, nextPathElement.Count);
 							} while (pos1 == pos2);
 							KeyValuePair<int, int> tmp = nextPathElement[pos1];
 							nextPathElement[pos1] = nextPathElement[pos2];
@@ -252,9 +269,8 @@ namespace taw.game.sity {
 		}
 
 		//Створює юнита, якого посилатиме це місто
-		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicSity to) {
-			bool b;
-			return new BasicUnit(sendWarriors, this.playerId, BuildOptimalPath(to, out b), to);
+		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) {
+			return new BasicUnit(sendWarriors, this.PlayerId, BuildOptimalPath(to, out bool b), to);
 		}
 
 		//////////////////////////////////////////////////////////////////////////

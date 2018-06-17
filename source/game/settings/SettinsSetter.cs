@@ -23,7 +23,7 @@ namespace taw.game.settings {
 		/// 
 		/// </example>
 		/// <param name="obj">Відповідний обєкту SettinsSetter, обєкт Settingable </param>
-		abstract public void SetSettings(taw.game.basicInterfaces.Settingable obj);
+		abstract public void SetSettings(taw.game.basicInterfaces.ISettingable obj);
 		abstract protected void LoadSettingsFromFile();
 	}
 }

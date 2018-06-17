@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using taw.game.settings;
 
 namespace taw.game.map.generators.idSetters {
-	abstract class BasicIdSetter : BasicGenerator, basicInterfaces.Settingable {
+	public abstract class BasicIdSetter : BasicGenerator, basicInterfaces.ISettingable {
 		public byte bots;
 		public List<byte> townsPerBot;
 		public byte townsPerPlayer;

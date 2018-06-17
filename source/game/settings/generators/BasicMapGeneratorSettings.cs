@@ -9,7 +9,7 @@ using taw.game.map.generators.map;
 
 namespace taw.game.settings.generators {
 	class BasicMapGeneratorSettings : SettinsSetter {
-		public override void SetSettings(Settingable obj) {
+		public override void SetSettings(ISettingable obj) {
 			if (!(obj is BasicMapGenerator mapGenerator))
 				throw new ApplicationException("Wrong generator in BasicMapGeneratorSettings.SetSettings");
 

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using taw.game.settings;
-using taw.game.sity;
+using taw.game.city;
 
 namespace taw.game.settings.city {
 	public class BasicCitySettings : CitySettings {
-		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
-			if (!(obj is BasicSity city))
+		public override void SetSettings(taw.game.basicInterfaces.ISettingable obj) {
+			if (!(obj is BasicCity city))
 				throw new ApplicationException("Wrong city in BasicCitySettings.SetSettings");
 
 			base.SetSettings(obj);

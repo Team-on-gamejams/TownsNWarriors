@@ -9,7 +9,7 @@ using taw.game.unit;
 
 namespace taw.game.settings.unit {
 	public class BasicUnitSettings : UnitSettings {
-		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
+		public override void SetSettings(taw.game.basicInterfaces.ISettingable obj) {
 			if (!(obj is BasicUnit unit))
 				throw new ApplicationException("Wrong unit in BasicUnitSettings.SetSettings");
 

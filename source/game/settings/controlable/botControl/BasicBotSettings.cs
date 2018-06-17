@@ -9,7 +9,7 @@ using taw.game.controlable.botControl;
 
 namespace taw.game.settings.controlable.botControl {
 	class BasicBotSettings : settings.SettinsSetter {
-		public override void SetSettings(Settingable obj) {
+		public override void SetSettings(ISettingable obj) {
 			if (!(obj is BasicBot bot))
 				throw new ApplicationException("Wrong bot in BasicBotSettings.SetSettings");
 

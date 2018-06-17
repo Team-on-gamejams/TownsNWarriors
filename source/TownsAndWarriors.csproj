@@ -70,13 +70,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="game\basicInterfaces\Settingable.cs" />
+    <Compile Include="game\basicInterfaces\ISettingable.cs" />
     <Compile Include="game\controlable\Controlable.cs" />
     <Compile Include="game\controlable\playerControl\BasicPlayer.cs" />
     <Compile Include="game\controlable\playerControl\WPFLocalPlayer.cs" />
     <Compile Include="game\map\generators\BasicGenerator.cs" />
     <Compile Include="game\output\BasicOutput.cs" />
     <Compile Include="game\output\WPFOutput.cs" />
+    <Compile Include="game\Rand.cs" />
     <Compile Include="game\settings\controlable\botControl\BasicBotSettings.cs" />
     <Compile Include="game\settings\controlable\botControl\RushBotSettings.cs" />
     <Compile Include="game\settings\city\BasicCitySettings.cs" />
@@ -147,29 +148,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="audio\Audio.cs" />
-    <Compile Include="game\basicInterfaces\WithPlayerId.cs" />
+    <Compile Include="game\basicInterfaces\IWithPlayerId.cs" />
     <Compile Include="game\controlable\botControl\BasicBot.cs" />
     <Compile Include="game\controlable\botControl\RushBot.cs" />
     <Compile Include="game\globalGameInfo.cs" />
-    <Compile Include="game\IO\deprecated\BasicSity.cs" />
-    <Compile Include="game\IO\deprecated\BasicUnit.cs" />
-    <Compile Include="game\IO\deprecated\GameCell.cs" />
-    <Compile Include="game\IO\deprecated\GameMap.cs" />
     <Compile Include="game\map\generators\idSetters\BasicIdSetter.cs" />
     <Compile Include="game\map\generators\idSetters\IdSetterDiffCorners.cs" />
     <Compile Include="game\map\generators\city\BasicSityPlacer.cs" />
     <Compile Include="game\map\generators\map\BasicMapGenerator.cs" />
     <Compile Include="game\map\generators\city\SityPlacer14.cs" />
     <Compile Include="game\map\generators\map\TunnelMapGenerator.cs" />
-    <Compile Include="game\settings\deprecated\colors.cs" />
-    <Compile Include="game\settings\deprecated\size.cs" />
     <Compile Include="game\sity\BasicSity.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\map\GameCell.cs" />
-    <Compile Include="game\IO\deprecated\GameCellDrawableObj.cs" />
     <Compile Include="game\map\GameMap.cs" />
-    <Compile Include="game\settings\deprecated\values.cs" />
-    <Compile Include="game\basicInterfaces\Tickable.cs" />
+    <Compile Include="game\basicInterfaces\ITickable.cs" />
     <Compile Include="window\MainMenu\CreditsWindow.xaml.cs">
       <DependentUpon>CreditsWindow.xaml</DependentUpon>
     </Compile>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using taw.game.settings;
 
 namespace taw.game.map.generators.city {
-	abstract class BasicSityPlacer : BasicGenerator, basicInterfaces.Settingable {
+	public abstract class BasicSityPlacer : BasicGenerator, basicInterfaces.ISettingable {
 		public abstract void PlaceSities();
 
 		public BasicSityPlacer() {
