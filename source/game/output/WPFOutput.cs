@@ -13,37 +13,37 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Media.Animation;
 
-namespace taw.game.IO {
-	public abstract class GameCellDrawableObj {
+
+using taw.game.settings;
+
+namespace taw.game.output {
+	class WPFOutput : BasicOutput {
 		//---------------------------------------------- Fields ----------------------------------------------
-		protected System.Windows.Controls.Grid grid;
-		protected System.Windows.Controls.Grid shape;
+
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public GameCellDrawableObj() {
+		public WPFOutput() {
 
 		}
 
-		public abstract void InitializeShape();
+		void CreateWindow() {
 
-		public virtual void SetGrid(System.Windows.Controls.Grid a) => grid = a;
+		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public virtual void DrawOnGameCell(int x, int y) {
-			if (shape == null)
-				InitializeShape();
-			Grid.SetRow(shape, y);
-			Grid.SetColumn(shape, x);
-			grid.Children.Remove(shape);
-			grid.Children.Add(shape);
+		public override bool TickReact() {
+			return false;
 		}
 
-		public virtual void UpdateValue() {
-			throw new NotImplementedException();
+
+		//---------------------------------------------- Settinggable ----------------------------------------------
+		public override SettinsSetter CreateLinkedSetting() {
+			return new taw.game.settings.output.WPFOutputSettings();
 		}
 	}
 }

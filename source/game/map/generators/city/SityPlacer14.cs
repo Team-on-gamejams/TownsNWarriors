@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.sity;
-using TownsAndWarriors.game.settings;
+using taw.game.sity;
+using taw.game.settings;
 
-using static TownsAndWarriors.game.settings.values;
+using static taw.game.settings.values;
 
-namespace TownsAndWarriors.game.map.generators.city {
+namespace taw.game.map.generators.city {
 	class SityPlacer14 : BasicSityPlacer {
 		//---------------------------------------------- Fields ----------------------------------------------
 		List<BasicSity> sities = new List<BasicSity>();
@@ -199,7 +199,7 @@ namespace TownsAndWarriors.game.map.generators.city {
 		}
 
 		public override SettinsSetter CreateLinkedSetting() {
-			return new TownsAndWarriors.game.settings.generators.SityPlacer14Settings();
+			return new taw.game.settings.generators.SityPlacer14Settings();
 		}
 	}
 }

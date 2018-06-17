@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game;
-using TownsAndWarriors.game.settings;
+using taw.game;
+using taw.game.settings;
 
-using TownsAndWarriors.game.sity;
-using TownsAndWarriors.game.unit;
-using TownsAndWarriors.game.controlable.botControl;
+using taw.game.sity;
+using taw.game.unit;
+using taw.game.controlable.botControl;
 
-namespace TownsAndWarriors.game.map {
+namespace taw.game.map {
 	public partial class GameMap {
 		//---------------------------------------------- Fields ----------------------------------------------
 		int sizeX, sizeY;
@@ -19,8 +19,6 @@ namespace TownsAndWarriors.game.map {
 		List<List<GameCell>> map;
 		List<BasicSity> sities;
 		List<BasicUnit> units;
-
-		List<controlable.Controlable> controlsInput;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public List<BasicSity> Sities { get => sities; set => sities = value; }
@@ -41,7 +39,6 @@ namespace TownsAndWarriors.game.map {
 
 			sities = new List<BasicSity>();
 			units = new List<BasicUnit>();
-			controlsInput = new List<controlable.Controlable>();
 
 			BasicSity.gameMap = this;
 		}
@@ -56,10 +53,6 @@ namespace TownsAndWarriors.game.map {
 				if (unit.TickReact())
 					goto REPEAT_UNITS_TURN;
 			}
-
-			foreach (var control in controlsInput) 
-				if(control != null)
-					control.TickReact();
 		}
 
 		public void SendWarriors(List<BasicSity> from, BasicSity to) {
@@ -81,15 +74,6 @@ namespace TownsAndWarriors.game.map {
 			unit.InitializeShape();
 
 			units.Add(unit);
-		}
-
-		public void SetControlSize(int size) {
-			for (int i = 0; i < size; ++i)
-				controlsInput.Add(null);
-		}
-
-		public void SetControl(int id, controlable.Controlable type) {
-			controlsInput[id] = type;
 		}
 	}
 }

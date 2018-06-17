@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors.game.settings {
+namespace taw.game.settings {
 	static class colors {
 		public static Brush roadBackground = Brushes.White;
 		public static Brush roadStroke = Brushes.Black;

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.map.generators.city;
+using taw.game.basicInterfaces;
+using taw.game.map.generators.city;
 
-namespace TownsAndWarriors.game.settings.generators {
+namespace taw.game.settings.generators {
 	class SityPlacer14Settings : BasicSityPlaceSettings {
 		public override void SetSettings(Settingable obj) {
 			SityPlacer14 sityPlacer = obj as SityPlacer14;

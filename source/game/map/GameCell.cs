@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.sity;
-using TownsAndWarriors.game.unit;
-using TownsAndWarriors.game.IO;
+using taw.game.sity;
+using taw.game.unit;
+using taw.game.IO;
 
-namespace TownsAndWarriors.game.map {
+namespace taw.game.map {
 	public partial class GameCell : GameCellDrawableObj {
 		//---------------------------------------------- Fields ----------------------------------------------
 		Lazy<List<BasicUnit>> units;

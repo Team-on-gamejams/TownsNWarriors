@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.map.generators.map {
+namespace taw.game.map.generators.map {
 	abstract class BasicMapGenerator : BasicGenerator, basicInterfaces.Settingable {
 		public abstract void GenerateRandomMap();
 
@@ -14,7 +14,7 @@ namespace TownsAndWarriors.game.map.generators.map {
 		}
 
 		public virtual SettinsSetter CreateLinkedSetting() {
-			return new TownsAndWarriors.game.settings.generators.BasicMapGeneratorSettings();
+			return new taw.game.settings.generators.BasicMapGeneratorSettings();
 		}
 
 		public void GetSettings(SettinsSetter settinsSetter) {

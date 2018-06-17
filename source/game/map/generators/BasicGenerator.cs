@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors.game.map.generators {
+namespace taw.game.map.generators {
 	abstract class BasicGenerator {
 		protected GameMap gameMap;
 

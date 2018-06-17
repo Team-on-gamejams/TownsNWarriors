@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TownsAndWarriors.Properties {
+namespace taw.Properties {
 
 
 	/// <summary>

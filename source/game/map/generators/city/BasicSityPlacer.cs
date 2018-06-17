@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.map.generators.city {
+namespace taw.game.map.generators.city {
 	abstract class BasicSityPlacer : BasicGenerator, basicInterfaces.Settingable {
 		public abstract void PlaceSities();
 
@@ -14,7 +14,7 @@ namespace TownsAndWarriors.game.map.generators.city {
 		}
 
 		public virtual SettinsSetter CreateLinkedSetting() {
-			return new TownsAndWarriors.game.settings.generators.BasicSityPlaceSettings();
+			return new taw.game.settings.generators.BasicSityPlaceSettings();
 		}
 
 		public void GetSettings(SettinsSetter settinsSetter) {

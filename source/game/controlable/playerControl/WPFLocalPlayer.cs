@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.controlable.playerControl {
-	class LocalPlayer1 : BasicPlayer {
+namespace taw.game.controlable.playerControl {
+	class WPFLocalPlayer : BasicPlayer {
 		//---------------------------------------------- Fields ----------------------------------------------
 
 
@@ -14,7 +14,7 @@ namespace TownsAndWarriors.game.controlable.playerControl {
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public LocalPlayer1(byte PlayerId) : base(PlayerId) {
+		public WPFLocalPlayer(byte PlayerId) : base(PlayerId) {
 		}
 
 
@@ -25,7 +25,7 @@ namespace TownsAndWarriors.game.controlable.playerControl {
 
 		//---------------------------------------------- Settinggable ----------------------------------------------
 		public override SettinsSetter CreateLinkedSetting() {
-			return new settings.controlable.playerControl.LocalPlayer1Settings();
+			return new settings.controlable.playerControl.WPFLocalPlayerSettings();
 		}
 	}
 }

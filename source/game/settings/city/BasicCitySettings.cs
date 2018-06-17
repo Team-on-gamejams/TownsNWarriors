@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
-using TownsAndWarriors.game.sity;
+using taw.game.settings;
+using taw.game.sity;
 
-namespace TownsAndWarriors.game.settings.city {
+namespace taw.game.settings.city {
 	public class BasicCitySettings : CitySettings {
 		public override void SetSettings(game.basicInterfaces.Settingable obj) {
 			BasicSity city = obj as BasicSity;

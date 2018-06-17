@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.controlable.botControl;
+using taw.game.basicInterfaces;
+using taw.game.controlable.botControl;
 
-namespace TownsAndWarriors.game.settings.controlable.botControl {
+namespace taw.game.settings.controlable.botControl {
 	class BasicBotSettings : settings.SettinsSetter {
 		public override void SetSettings(Settingable obj) {
 			BasicBot bot = obj as BasicBot;

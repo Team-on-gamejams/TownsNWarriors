@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-using TownsAndWarriors.game.unit;
+using taw.game.unit;
 
-namespace TownsAndWarriors.game.settings.unit {
+namespace taw.game.settings.unit {
 	public class BasicUnitSettings : UnitSettings {
 		public override void SetSettings(game.basicInterfaces.Settingable obj) {
 			BasicUnit unit = obj as BasicUnit;

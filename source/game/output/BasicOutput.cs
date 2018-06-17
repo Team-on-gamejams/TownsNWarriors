@@ -4,31 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using taw.game.settings;
+using taw.game.basicInterfaces;
+using taw.game.output;
 
-namespace taw.game.controlable.playerControl {
- 	abstract class BasicPlayer : Controlable {
+
+namespace taw.game.output {
+	abstract class BasicOutput  : basicInterfaces.Tickable,
+		basicInterfaces.Settingable  {
 		//---------------------------------------------- Fields ----------------------------------------------
 
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public byte playerId { get; set; }
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicPlayer(byte PlayerId) {
-			playerId = PlayerId;
+		public BasicOutput() {
 			GetSettings(CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public abstract bool TickReact();
 
-		//---------------------------------------------- Settinggable ----------------------------------------------
 
+		//---------------------------------------------- Settinggable ----------------------------------------------
 		public abstract SettinsSetter CreateLinkedSetting();
 
 		public void GetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
+
 	}
 }

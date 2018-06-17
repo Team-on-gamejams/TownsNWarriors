@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors.game.basicInterfaces {
+namespace taw.game.basicInterfaces {
 	/// <summary>
 	/// Якщо клас помічений як Settingable, то для нього має бути створений відповідний класс SettinsSetter.
 	/// Або, якщо клас унаслідуваний від Settingable-класу, то можна використовувати його SettinsSetter.

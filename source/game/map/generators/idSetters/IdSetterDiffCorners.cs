@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.map.generators.idSetters {
+namespace taw.game.map.generators.idSetters {
 	class IdSetterDiffCorners : BasicIdSetter {
 		//---------------------------------------------- Fields ----------------------------------------------
 
@@ -52,7 +52,7 @@ namespace TownsAndWarriors.game.map.generators.idSetters {
 		}
 
 		public override SettinsSetter CreateLinkedSetting() {
-			return new TownsAndWarriors.game.settings.generators.BasicIdSetterSettings();
+			return new taw.game.settings.generators.BasicIdSetterSettings();
 		}
 
 		//------------------------------------------ Support methods ------------------------------------------

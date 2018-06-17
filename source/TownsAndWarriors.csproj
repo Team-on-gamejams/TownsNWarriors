@@ -73,19 +73,23 @@
     <Compile Include="game\basicInterfaces\Settingable.cs" />
     <Compile Include="game\controlable\Controlable.cs" />
     <Compile Include="game\controlable\playerControl\BasicPlayer.cs" />
-    <Compile Include="game\controlable\playerControl\LocalPlayer1.cs" />
+    <Compile Include="game\controlable\playerControl\WPFLocalPlayer.cs" />
     <Compile Include="game\map\generators\BasicGenerator.cs" />
+    <Compile Include="game\output\BasicOutput.cs" />
+    <Compile Include="game\output\WPFOutput.cs" />
     <Compile Include="game\settings\controlable\botControl\BasicBotSettings.cs" />
     <Compile Include="game\settings\controlable\botControl\RushBotSettings.cs" />
     <Compile Include="game\settings\city\BasicCitySettings.cs" />
     <Compile Include="game\settings\controlable\playerControl\BasicPlayerSettigns.cs" />
-    <Compile Include="game\settings\controlable\playerControl\LocalPlayer1Settings.cs" />
+    <Compile Include="game\settings\controlable\playerControl\WPFLocalPlayerSettings.cs" />
     <Compile Include="game\settings\generators\BasicIdSetterSettings.cs" />
     <Compile Include="game\settings\generators\BasicMapGeneratorSettings.cs" />
     <Compile Include="game\settings\generators\BasicSityPlaceSettings.cs" />
     <Compile Include="game\settings\generators\IdSetterDiffCornersSettings.cs" />
     <Compile Include="game\settings\generators\SityPlacer14Settings.cs" />
     <Compile Include="game\settings\generators\TunnelMapGeneratorSettings.cs" />
+    <Compile Include="game\settings\output\BasicOutputSettings.cs" />
+    <Compile Include="game\settings\output\WPFOutputSettings.cs" />
     <Compile Include="game\settings\unit\BasicUnitSettings.cs" />
     <Compile Include="game\settings\city\CitySettings.cs" />
     <Compile Include="game\settings\SettinsSetter.cs" />
@@ -220,7 +224,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="game\output\" />
     <Folder Include="img\units\" />
   </ItemGroup>
   <ItemGroup>

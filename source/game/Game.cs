@@ -14,22 +14,31 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.window;
-using TownsAndWarriors.game.map;
+using taw.window;
+using taw.game.map;
+
+using taw.game.output;
+using taw.game.controlable.botControl;
+using taw.game.controlable.playerControl;
 
 
-namespace TownsAndWarriors.game {
+namespace taw.game {
 	public class Game {
 		//---------------------------------------------- Fields ----------------------------------------------
+		//Deprecated
 		GameMap gameMap;
 		Grid mainGrid;
 		Canvas mainCanvas;
 		GameWindow IOWindow;
 
-		bool isPlay, isNeedToExit;
+		bool isPlay;
 		int x, y;
 
-		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
+		System.Windows.Forms.Timer loopTimer;
+
+		//New
+		List<controlable.Controlable> controlsInput;
+		BasicOutput output;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
@@ -38,7 +47,6 @@ namespace TownsAndWarriors.game {
 		public Game(GameWindow IOWindow, int X, int Y) {
 			this.IOWindow = IOWindow;
 			isPlay = true;
-			isNeedToExit = false;
 			mainGrid = IOWindow.mainGameGrid;
 
 			x = X;
@@ -46,7 +54,9 @@ namespace TownsAndWarriors.game {
 
 			FillIOWindow();
 
-			loopTimer.Interval = globalGameInfo.milisecondsPerTick;
+			loopTimer = new System.Windows.Forms.Timer {
+				Interval = globalGameInfo.milisecondsPerTick
+			};
 			loopTimer.Tick += (a, b) => {
 				if (isPlay) {
 					Loop();
@@ -94,10 +104,12 @@ namespace TownsAndWarriors.game {
 			idGen.SetGameMap(gameMap);
 			idGen.SetId();
 
-			gameMap.SetControlSize(idGen.bots + 1);
-			gameMap.SetControl(0, new game.controlable.playerControl.LocalPlayer1(1));
-			for (int i = 1; i <= idGen.bots; ++i)
-				gameMap.SetControl(i, new game.controlable.botControl.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 1)));
+			output = new WPFOutput();
+
+			controlsInput = new List<controlable.Controlable>(idGen.bots + 1);
+			controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer(1));
+			for (int i = 0; i < idGen.bots; ++i)
+				controlsInput.Add(new game.controlable.botControl.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
 		}
 
 		void InitGameMap() {
@@ -113,9 +125,15 @@ namespace TownsAndWarriors.game {
 		}
 
 		void Loop() {
-			++game.globalGameInfo.tick;
+
 			gameMap.UpdateMap();
 			gameMap.Tick();
+
+			foreach (var control in controlsInput)
+				if (control != null)
+					control.TickReact();
+
+			++game.globalGameInfo.tick;
 		}
 	}
 }

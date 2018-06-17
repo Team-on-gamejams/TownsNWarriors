@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.settings;
-using TownsAndWarriors.game.sity;
-using TownsAndWarriors.game.unit;
+using taw.game.settings;
+using taw.game.sity;
+using taw.game.unit;
 
-namespace TownsAndWarriors.game.controlable.botControl {
+namespace taw.game.controlable.botControl {
 	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		//with bot cities

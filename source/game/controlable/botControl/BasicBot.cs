@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.controlable.botControl {
-	public abstract class BasicBot : TownsAndWarriors.game.controlable.Controlable {
+namespace taw.game.controlable.botControl {
+	public abstract class BasicBot : taw.game.controlable.Controlable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		//Map
 		protected game.map.GameMap map;

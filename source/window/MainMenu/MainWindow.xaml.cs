@@ -13,10 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.game;
+using taw.game;
 
 
-namespace TownsAndWarriors.window {
+namespace taw.window {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
@@ -49,7 +49,7 @@ namespace TownsAndWarriors.window {
 			GameWindow gameWindow = new GameWindow();
 			MainWindow.ReopenWindow(this, gameWindow);
 
-			game.Game game = new game.Game(gameWindow, TownsAndWarriors.game.settings.values.fieldSizeX, TownsAndWarriors.game.settings.values.fieldSizeY);
+			game.Game game = new game.Game(gameWindow, taw.game.settings.values.fieldSizeX, taw.game.settings.values.fieldSizeY);
 			game.Play();
 
 			this.Close();

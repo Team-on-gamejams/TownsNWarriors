@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.IO;
-using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.sity;
-using TownsAndWarriors.game.settings;
+using taw.game.IO;
+using taw.game.basicInterfaces;
+using taw.game.sity;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.unit {
+namespace taw.game.unit {
 	public partial class BasicUnit : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected List<KeyValuePair<int, int>> path;

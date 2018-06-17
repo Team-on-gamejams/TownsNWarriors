@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.map.generators.idSetters;
+using taw.game.basicInterfaces;
+using taw.game.map.generators.idSetters;
 
-namespace TownsAndWarriors.game.settings.generators {
+namespace taw.game.settings.generators {
 	class IdSetterDiffCornersSettings : BasicIdSetterSettings {
 		public override void SetSettings(Settingable obj) {
 			IdSetterDiffCorners idSetter = obj as IdSetterDiffCorners;

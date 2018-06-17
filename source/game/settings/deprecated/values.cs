@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors.game.settings {
+namespace taw.game.settings {
 	public static class values {
 		public static Random rnd { get; private set; }
 		public static int seedField;

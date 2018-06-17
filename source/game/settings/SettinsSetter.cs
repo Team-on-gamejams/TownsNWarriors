@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors.game.settings {
+namespace taw.game.settings {
 	public abstract class SettinsSetter {
 		/// <summary>
 		/// Заповнює всі поля обєкту вказаними значеннями.

@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-using TownsAndWarriors.game.IO;
-using TownsAndWarriors.game.basicInterfaces;
-using TownsAndWarriors.game.unit;
-using TownsAndWarriors.game.settings;
+using taw.game.IO;
+using taw.game.basicInterfaces;
+using taw.game.unit;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.sity {
+namespace taw.game.sity {
 	public partial class BasicSity : GameCellDrawableObj, Tickable, WithPlayerId, Settingable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		public static TownsAndWarriors.game.map.GameMap gameMap;
+		public static taw.game.map.GameMap gameMap;
 
 		//Load from settings
 		public ushort currWarriors, maxWarriors;

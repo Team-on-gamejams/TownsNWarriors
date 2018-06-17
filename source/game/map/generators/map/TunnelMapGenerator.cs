@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TownsAndWarriors.game;
-using TownsAndWarriors.game.map;
-using TownsAndWarriors.game.settings;
+using taw.game;
+using taw.game.map;
+using taw.game.settings;
 
-using TownsAndWarriors.game.sity;
-using TownsAndWarriors.game.unit;
+using taw.game.sity;
+using taw.game.unit;
 
-using static TownsAndWarriors.game.settings.values;
+using static taw.game.settings.values;
 
-namespace TownsAndWarriors.game.map.generators.map {
+namespace taw.game.map.generators.map {
 	class TunnelMapGenerator : BasicMapGenerator {
 		//------------------------------------------ Fields ------------------------------------------
 		public byte skipChance;
@@ -88,7 +88,7 @@ namespace TownsAndWarriors.game.map.generators.map {
 		}
 
 		public override SettinsSetter CreateLinkedSetting() {
-			return new TownsAndWarriors.game.settings.generators.TunnelMapGeneratorSettings();
+			return new taw.game.settings.generators.TunnelMapGeneratorSettings();
 		}
 
 		//------------------------------------------ Support methods ------------------------------------------

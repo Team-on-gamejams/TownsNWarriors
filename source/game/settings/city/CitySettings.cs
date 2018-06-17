@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TownsAndWarriors.game.settings;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game.settings.city {
+namespace taw.game.settings.city {
 	public abstract class CitySettings : SettinsSetter {
 		public override void SetSettings(game.basicInterfaces.Settingable obj) {
 			
