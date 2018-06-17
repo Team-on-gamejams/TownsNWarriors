@@ -34,7 +34,7 @@ namespace taw.game {
 		bool isPlay;
 		int x, y;
 
-		System.Windows.Forms.Timer loopTimer;
+		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
 
 		//New
 		List<controlable.Controlable> controlsInput;
@@ -54,9 +54,7 @@ namespace taw.game {
 
 			FillIOWindow();
 
-			loopTimer = new System.Windows.Forms.Timer {
-				Interval = globalGameInfo.milisecondsPerTick
-			};
+			loopTimer.Interval = globalGameInfo.milisecondsPerTick;
 			loopTimer.Tick += (a, b) => {
 				if (isPlay) {
 					Loop();

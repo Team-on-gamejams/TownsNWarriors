@@ -19,6 +19,11 @@ using System.Windows.Media.Animation;
 using taw.game.settings;
 
 namespace taw.game.output {
+	/*
+
+
+
+	*/
 	class WPFOutput : BasicOutput {
 		//---------------------------------------------- Fields ----------------------------------------------
 
@@ -31,7 +36,7 @@ namespace taw.game.output {
 
 		}
 
-		void CreateWindow() {
+		void InitWindow() {
 
 		}
 

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EFF05EB0-09EC-432C-9B95-55A5766DD752}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TownsAndWarriors</RootNamespace>
+    <RootNamespace>taw</RootNamespace>
     <AssemblyName>TownsAndWarriors</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -82,6 +82,7 @@
     <Compile Include="game\settings\city\BasicCitySettings.cs" />
     <Compile Include="game\settings\controlable\playerControl\BasicPlayerSettigns.cs" />
     <Compile Include="game\settings\controlable\playerControl\WPFLocalPlayerSettings.cs" />
+    <Compile Include="game\settings\game\GameSettings.cs" />
     <Compile Include="game\settings\generators\BasicIdSetterSettings.cs" />
     <Compile Include="game\settings\generators\BasicMapGeneratorSettings.cs" />
     <Compile Include="game\settings\generators\BasicSityPlaceSettings.cs" />

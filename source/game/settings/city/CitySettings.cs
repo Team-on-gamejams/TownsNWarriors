@@ -6,7 +6,7 @@ using taw.game.settings;
 
 namespace taw.game.settings.city {
 	public abstract class CitySettings : SettinsSetter {
-		public override void SetSettings(game.basicInterfaces.Settingable obj) {
+		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
 			
 		}
 

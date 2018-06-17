@@ -19,7 +19,7 @@ namespace taw.game.basicInterfaces {
 		/// }
 		/// </example>
 		/// <param name="settinsSetter">Відповідний цьому класу клас налаштувань, або клас налаштувань для батькіського класу</param>
-		void GetSettings(game.settings.SettinsSetter settinsSetter);
+		void GetSettings(taw.game.settings.SettinsSetter settinsSetter);
 
 		/// <summary>
 		/// Має бути virtual.

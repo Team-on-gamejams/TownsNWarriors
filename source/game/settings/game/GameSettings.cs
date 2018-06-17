@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using taw.game.basicInterfaces;
 
-namespace TownsAndWarriors.game.settings.game {
+namespace taw.game.settings.game {
 	class GameSettings : taw.game.settings.SettinsSetter {
 		public override void SetSettings(Settingable obj) {
 			throw new NotImplementedException();

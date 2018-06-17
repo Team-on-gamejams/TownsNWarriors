@@ -8,7 +8,7 @@ using taw.game.sity;
 
 namespace taw.game.settings.city {
 	public class BasicCitySettings : CitySettings {
-		public override void SetSettings(game.basicInterfaces.Settingable obj) {
+		public override void SetSettings(taw.game.basicInterfaces.Settingable obj) {
 			BasicSity city = obj as BasicSity;
 			if (city == null)
 				throw new ApplicationException("Wrong city in BasicCitySettings.SetSettings");
