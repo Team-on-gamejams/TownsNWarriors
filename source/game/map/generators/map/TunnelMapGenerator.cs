@@ -22,7 +22,7 @@ namespace taw.game.map.generators.map {
 
 		//------------------------------------------ Ctor ------------------------------------------
 		public TunnelMapGenerator() {
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//------------------------------------------ Inharitated methods ------------------------------------------

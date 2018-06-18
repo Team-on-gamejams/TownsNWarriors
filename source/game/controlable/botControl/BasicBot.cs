@@ -35,12 +35,12 @@ namespace taw.game.controlable.botControl {
 			units = Units;
 			PlayerId = botId;
 
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Settingable ----------------------------------------------
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 

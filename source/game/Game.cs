@@ -44,7 +44,7 @@ namespace taw.game {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public Game() {
-			GetSettings(CreateLinkedSetting());
+			SetSettings(CreateLinkedSetting());
 
 			isPlay = true;
 
@@ -69,7 +69,7 @@ namespace taw.game {
 		}
 
 		public void CreateGameMap(game.map.generators.map.BasicMapGenerator mapGenerator,
-			game.map.generators.city.BasicSityPlacer sityPlacer,
+			game.map.generators.city.BasicCityPlacer sityPlacer,
 			game.map.generators.idSetters.BasicIdSetter idSetter
 			) {
 			GameMap = new GameMap(X, Y);
@@ -95,7 +95,7 @@ namespace taw.game {
 			output.TickReact();
 		}
 		//---------------------------------------------- Settingable ----------------------------------------------
-		public void GetSettings(SettinsSetter settingsSetter) {
+		public void SetSettings(SettinsSetter settingsSetter) {
 			settingsSetter.SetSettings(this);
 		}
 

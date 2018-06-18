@@ -15,6 +15,7 @@ namespace taw.game.city {
 	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static taw.game.map.GameMap gameMap;
+		private int x, y;
 
 		//Load from settings
 		public ushort currWarriors, maxWarriors;
@@ -29,6 +30,8 @@ namespace taw.game.city {
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
+		public int X { get => x; set => x = value; }
+		public int Y { get => y; set => y = value; }
 
 		//---------------------------------------------- Events ----------------------------------------------
 		public delegate void CityBasicDelegate(BasicCityEvent cityEvent);
@@ -50,7 +53,7 @@ namespace taw.game.city {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicCity() {
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 
 			basicCityEvent = new BasicCityEvent(this);
 		}
@@ -278,7 +281,7 @@ namespace taw.game.city {
 			return null;
 		}
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 

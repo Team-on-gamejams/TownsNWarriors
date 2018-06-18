@@ -51,9 +51,8 @@ namespace taw.window {
 
 			game.Game game = new game.Game();
 
-
 			var mapGen = new game.map.generators.map.TunnelMapGenerator();
-			var cityGen = new game.map.generators.city.SityPlacer14();
+			var cityGen = new game.map.generators.city.CityPlacer14();
 			var idGen = new game.map.generators.idSetters.IdSetterDiffCorners();
 			game.CreateGameMap(mapGen, cityGen, idGen);
 

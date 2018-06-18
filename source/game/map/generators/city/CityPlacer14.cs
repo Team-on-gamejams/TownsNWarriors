@@ -8,7 +8,7 @@ using taw.game.city;
 using taw.game.settings;
 
 namespace taw.game.map.generators.city {
-	class SityPlacer14 : BasicSityPlacer {
+	class CityPlacer14 : BasicCityPlacer {
 		//---------------------------------------------- Fields ----------------------------------------------
 		List<BasicCity> sities = new List<BasicCity>();
 		List<KeyValuePair<int, int>> bestSitiesPos = new List<KeyValuePair<int, int>>();
@@ -29,8 +29,8 @@ namespace taw.game.map.generators.city {
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public SityPlacer14() {
-			this.GetSettings(this.CreateLinkedSetting());
+		public CityPlacer14() {
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods - main ----------------------------------------------
@@ -136,7 +136,7 @@ namespace taw.game.map.generators.city {
 						int s = (gameMap.Map[i][j].IsOpenBottom ? 1 : 0) + (gameMap.Map[i][j].IsOpenTop ? 1 : 0) +
 								(gameMap.Map[i][j].IsOpenLeft ? 1 : 0) + (gameMap.Map[i][j].IsOpenRight ? 1 : 0);
 						if (s == 1) {
-							gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].Sity = sities[0];
+							InsertCity(k, 0);
 							bestSitiesPos.RemoveAt(k);
 							sities.RemoveAt(0);
 							--k;
@@ -149,13 +149,19 @@ namespace taw.game.map.generators.city {
 		void InsertIntoMap() {
 			while (sities.Count != 0 && bestSitiesPos.Count != 0) {
 				if (IsFreeAround(0)) {
-					gameMap.Map[bestSitiesPos[0].Key][bestSitiesPos[0].Value].Sity = sities[0];
+					InsertCity(0, 0);
 					bestSitiesPos.RemoveAt(0);
 					sities.RemoveAt(0);
 				}
 				else
 					bestSitiesPos.RemoveAt(0);
 			}
+		}
+
+		void InsertCity(int idPos, int idCity) {
+			gameMap.Map[bestSitiesPos[idPos].Key][bestSitiesPos[idPos].Value].Sity = sities[idCity];
+			sities[idCity].X = bestSitiesPos[idPos].Value;
+			sities[idCity].Y = bestSitiesPos[idPos].Key;
 		}
 
 		//-------------------------------------- Methods - Support --------------------------------------------

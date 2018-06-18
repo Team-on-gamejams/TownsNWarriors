@@ -12,7 +12,7 @@ namespace taw.game.map.generators.idSetters {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public IdSetterDiffCorners() {
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//------------------------------------------ Inharitated methods ------------------------------------------

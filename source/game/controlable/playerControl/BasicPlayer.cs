@@ -17,7 +17,7 @@ namespace taw.game.controlable.playerControl {
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicPlayer(byte PlayerId) {
 			this.PlayerId = PlayerId;
-			GetSettings(CreateLinkedSetting());
+			SetSettings(CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -27,7 +27,7 @@ namespace taw.game.controlable.playerControl {
 
 		public abstract SettinsSetter CreateLinkedSetting();
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 	}

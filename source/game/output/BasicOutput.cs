@@ -21,19 +21,17 @@ namespace taw.game.output {
 		public BasicOutput(Game Game) {
 			game = Game;
 
-			GetSettings(CreateLinkedSetting());
+			SetSettings(CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public abstract bool TickReact();
 
-
 		//---------------------------------------------- Settinggable ----------------------------------------------
 		public abstract SettinsSetter CreateLinkedSetting();
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
-
 	}
 }

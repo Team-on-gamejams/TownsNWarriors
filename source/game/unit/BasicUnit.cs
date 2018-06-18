@@ -54,7 +54,7 @@ namespace taw.game.unit {
 			if(path != null)
 				BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
-			GetSettings(CreateLinkedSetting());
+			SetSettings(CreateLinkedSetting());
 
 			basicUnitEvent = new BasicUnitEvent(this);
 		}
@@ -99,7 +99,7 @@ namespace taw.game.unit {
 			return (ushort)((path.Count - 1 - currPathIndex) * tickPerTurn - currTickOnCell);
 		}
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 
