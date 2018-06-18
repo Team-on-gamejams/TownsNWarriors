@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using taw.game.basicInterfaces;
 using taw.game.city;
 using taw.game.settings;
+using taw.game.unit.events;
 
 namespace taw.game.unit {
 	public partial class BasicUnit : ITickable, IWithPlayerId, ISettingable {
@@ -24,6 +25,22 @@ namespace taw.game.unit {
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
 
+
+		//---------------------------------------------- Events ----------------------------------------------
+		public delegate void UnitBasicDelegate(BasicUnitEvent cityEvent);
+		public delegate void UnitMoveDelegate(UnitMoveEvent cityEvent);
+		public delegate void UnitReachDestinationDelegate(UnitReachDestinationEvent cityEvent);
+
+		BasicUnitEvent basicUnitEvent;
+
+		public event UnitReachDestinationDelegate ReachDestination;
+
+		public event UnitMoveDelegate Move;
+
+		public event UnitBasicDelegate Tick;
+		public event UnitBasicDelegate FirstTick;
+
+
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicCity destination) {
 			this.warriorsCnt = warriorsCnt;
@@ -38,10 +55,17 @@ namespace taw.game.unit {
 				BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
 			GetSettings(CreateLinkedSetting());
+
+			basicUnitEvent = new BasicUnitEvent(this);
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public bool TickReact() {
+			if (GlobalGameInfo.tick == 1 && FirstTick != null)
+				FirstTick(basicUnitEvent);
+
+			Tick?.Invoke(basicUnitEvent);
+
 			++currTickOnCell;
 			if(currTickOnCell >= tickPerTurn) {
 				currTickOnCell = 0;
@@ -49,15 +73,21 @@ namespace taw.game.unit {
 				++currPathIndex;
 				BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
-				if( (BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity != null &&
+				Move?.Invoke(new UnitMoveEvent(basicUnitEvent, path[currPathIndex].Key, path[currPathIndex].Value,
+					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key]
+					));
+
+				if ( (BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity != null &&
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.PlayerId != this.PlayerId) ||
 					(currPathIndex == path.Count - 1)
 					) {
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
+					ReachDestination?.Invoke(new UnitReachDestinationEvent(basicUnitEvent, BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity));
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.GetUnits(this);
 					return true;
 				}
 			}
+
 			return false;
 		}
 

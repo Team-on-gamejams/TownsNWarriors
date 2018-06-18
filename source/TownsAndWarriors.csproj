@@ -70,7 +70,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="game\basicInterfaces\GameEvent.cs" />
     <Compile Include="game\basicInterfaces\ISettingable.cs" />
+    <Compile Include="game\city\events\BasicCityEvent.cs" />
+    <Compile Include="game\city\events\CaptureCityEvent.cs" />
+    <Compile Include="game\city\events\CityIncomeEvent.cs" />
+    <Compile Include="game\city\events\CityUnitsEvent.cs" />
     <Compile Include="game\controlable\Controlable.cs" />
     <Compile Include="game\controlable\playerControl\BasicPlayer.cs" />
     <Compile Include="game\controlable\playerControl\WPFLocalPlayer.cs" />
@@ -97,6 +102,9 @@
     <Compile Include="game\settings\SettinsSetter.cs" />
     <Compile Include="game\settings\unit\UnitSettings.cs" />
     <Compile Include="game\unit\BasicUnit.cs" />
+    <Compile Include="game\unit\events\BasicUnitEvent.cs" />
+    <Compile Include="game\unit\events\UnitMoveEvent.cs" />
+    <Compile Include="game\unit\events\UnitReachDestinationEvent.cs" />
     <Compile Include="window\MainMenu\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -158,7 +166,7 @@
     <Compile Include="game\map\generators\map\BasicMapGenerator.cs" />
     <Compile Include="game\map\generators\city\SityPlacer14.cs" />
     <Compile Include="game\map\generators\map\TunnelMapGenerator.cs" />
-    <Compile Include="game\sity\BasicSity.cs" />
+    <Compile Include="game\city\BasicCity.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\map\GameCell.cs" />
     <Compile Include="game\map\GameMap.cs" />

@@ -8,6 +8,8 @@ using System.Reflection;
 using taw.game.basicInterfaces;
 using taw.game.unit;
 using taw.game.settings;
+using taw.game.city.events;
+
 
 namespace taw.game.city {
 	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable {
@@ -29,36 +31,47 @@ namespace taw.game.city {
 		public byte PlayerId { get; set; }
 
 		//---------------------------------------------- Events ----------------------------------------------
-		//public delegate void CityDelegate(object tag);
+		public delegate void CityBasicDelegate(BasicCityEvent cityEvent);
+		public delegate void CityUnitsDelegate(CityUnitsEvent cityEvent);
+		public delegate void CityIncomeDelegate(CityIncomeEvent cityEvent);
+		public delegate void CityCaptureDelegate(CityCaptureEvent cityEvent);
 
-		//public event CityDelegate Captured;
+		BasicCityEvent basicCityEvent;
 
-		//public event CityDelegate UnitIncome;
-		//public event CityDelegate UnitSend;
-		//public event CityDelegate UnitGet;
+		public event CityCaptureDelegate Captured;
 
-		//public event CityDelegate Tick;
-		//public event CityDelegate FirstTick;
+		public event CityIncomeDelegate UnitIncome;
 
+		public event CityUnitsDelegate UnitSend;
+		public event CityUnitsDelegate UnitGet;
 
-		//Пример делегата
-		//public delegate void SizeChangedDelegate();
-		//static public event SizeChangedDelegate SizeChanged;
-		//if (SizeChanged != null)
-		//			SizeChanged();
+		public event CityBasicDelegate Tick;
+		public event CityBasicDelegate FirstTick;
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicCity() {
 			this.GetSettings(this.CreateLinkedSetting());
+
+			basicCityEvent = new BasicCityEvent(this);
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public bool TickReact() {
-			if(game.GlobalGameInfo.tick % ticksPerIncome == 0) {
-				if (PlayerId != 0 && maxWarriors > currWarriors)
+			if(GlobalGameInfo.tick == 1 && FirstTick != null) 
+				FirstTick(basicCityEvent);
+
+			Tick?.Invoke(basicCityEvent);
+
+			if (game.GlobalGameInfo.tick % ticksPerIncome == 0) {
+				if (PlayerId != 0 && maxWarriors > currWarriors) {
 					++currWarriors;
-				else if (removeOvercapedUnits && maxWarriors < currWarriors)
+					UnitIncome?.Invoke(new CityIncomeEvent(basicCityEvent, true));
+				}
+				else if (removeOvercapedUnits && maxWarriors < currWarriors) {
 					--currWarriors;
+					UnitIncome?.Invoke(new CityIncomeEvent(basicCityEvent, false));
+				}
+
 
 				return true;
 			}
@@ -87,11 +100,14 @@ namespace taw.game.city {
 				currWarriors = 0;
 
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
+			UnitSend?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
 			return unit;
 		}
 
 		//Опрацьовує юніта, який зайшов у місто
 		public void GetUnits(BasicUnit unit) {
+			UnitGet?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
+
 			if (PlayerId == unit.PlayerId) {
 				this.currWarriors += unit.warriorsCnt;
 				if (!saveOvercapedUnits && currWarriors > maxWarriors)
@@ -107,8 +123,10 @@ namespace taw.game.city {
 						(PlayerId == 0 && equalsMeanCapturedForNeutral) ||					
 						(equalsMeanCaptured)
 					) {
+					CityCaptureEvent captureCityEvent = new CityCaptureEvent(basicCityEvent, PlayerId, unit.PlayerId);
 					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
 					PlayerId = unit.PlayerId;
+					Captured?.Invoke(captureCityEvent);
 				}
 			}
 
