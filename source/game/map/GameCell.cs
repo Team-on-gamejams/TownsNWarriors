@@ -8,7 +8,7 @@ using taw.game.city;
 using taw.game.unit;
 
 namespace taw.game.map {
-	public partial class GameCell {
+	public partial class GameCell : basicInterfaces.IOutputable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		Lazy<List<BasicUnit>> units;
 
@@ -20,6 +20,8 @@ namespace taw.game.map {
 
 		public BasicCity Sity { get; set; }
 		public List<BasicUnit> Units => units.Value;
+
+		public object OutputInfo { get; set; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public GameCell() {

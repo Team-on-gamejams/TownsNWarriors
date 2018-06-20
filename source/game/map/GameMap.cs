@@ -17,11 +17,11 @@ namespace taw.game.map {
 		int sizeX, sizeY;
 
 		List<List<GameCell>> map;
-		List<BasicCity> sities;
+		List<BasicCity> cities;
 		List<BasicUnit> units;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public List<BasicCity> Sities { get => sities; set => sities = value; }
+		public List<BasicCity> Cities { get => cities; set => cities = value; }
 		public List<BasicUnit> Units => units;
 		public List<List<GameCell>> Map => map;
 		public int SizeX => sizeX;
@@ -37,7 +37,7 @@ namespace taw.game.map {
 					map[i].Add(new GameCell());
 			}
 
-			sities = new List<BasicCity>();
+			cities = new List<BasicCity>();
 			units = new List<BasicUnit>();
 
 			BasicCity.gameMap = this;
@@ -45,7 +45,7 @@ namespace taw.game.map {
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public void Tick() {
-			foreach (var sity in sities)
+			foreach (var sity in cities)
 				sity.TickReact();
 
 			REPEAT_UNITS_TURN:

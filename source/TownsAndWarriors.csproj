@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="game\basicInterfaces\GameEvent.cs" />
+    <Compile Include="game\basicInterfaces\IOutputable.cs" />
     <Compile Include="game\basicInterfaces\ISettingable.cs" />
     <Compile Include="game\city\events\BasicCityEvent.cs" />
     <Compile Include="game\city\events\CaptureCityEvent.cs" />

@@ -15,6 +15,8 @@ namespace taw.game.settings.output {
 
 			base.SetSettings(obj);
 
+			output.cityIsSquere = true;
+			output.citySizeMod = 0.50;
 		}
 
 		protected override void LoadSettingsFromFile() {

@@ -26,7 +26,8 @@ using taw.game.output.wpf;
 namespace taw.game.output {
 	/*Z-Levels:
 		Canvas: 100
-
+		Warriors: 3
+		City: 50
 	*/
 	class WPFOutput : BasicOutput {
 		//---------------------------------------------- Fields ----------------------------------------------
@@ -34,6 +35,9 @@ namespace taw.game.output {
 		Canvas mainCanvas;
 		window.GameWindow window;
 
+		public bool cityIsSquere;
+		public double citySizeMod;
+		
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
@@ -55,53 +59,77 @@ namespace taw.game.output {
 			mainGrid.ShowGridLines = true;
 
 			mainCanvas = new Canvas();
+			Grid.SetColumnSpan(mainCanvas, mainGrid.ColumnDefinitions.Count);
+			Grid.SetRowSpan(mainCanvas, mainGrid.RowDefinitions.Count);
 			Grid.SetZIndex(mainCanvas, 100);
 			mainGrid.Children.Add(mainCanvas);
 		}
 
-		protected virtual void InitCityEvents() {
-			foreach (var city in game.GameMap.Sities) {
+		void InitCityEvents() {
+			foreach (var city in game.GameMap.Cities) {
+				city.OutputInfo = new CityOutputInfo();
+				city.FirstTick += City_InitGrid;
 				city.FirstTick += City_InitShape;
 				city.FirstTick += City_InitWarriorsCnt;
 				city.UnitIncome += City_UnitIncome;
-			} 
+			}
 		}
 
 		//---------------------------------------------- Events - city ----------------------------------------------
-		protected virtual void City_InitShape(city.events.BasicCityEvent basicCityEvent) {
+		void City_InitGrid(city.events.BasicCityEvent basicCityEvent) {
 			Grid cityGrid = new Grid();
+			Grid.SetColumn(cityGrid, basicCityEvent.city.Y);
+			Grid.SetRow(cityGrid, basicCityEvent.city.X);
+			mainGrid.Children.Add(cityGrid);
+
+			(basicCityEvent.city.OutputInfo as CityOutputInfo).cityGrid = cityGrid;
+		}
+
+		void City_InitShape(city.events.BasicCityEvent basicCityEvent) {
+			var cityOut = (basicCityEvent.city.OutputInfo as CityOutputInfo);
 
 			Shape shape = new Ellipse() {
 				Fill = Brushes.Red,
 				Stroke = Brushes.Black,
 				StrokeThickness = 2,
-				Width = mainGrid.GetOneCellSize().X * 0.75,
-				Height = mainGrid.GetOneCellSize().Y * 0.75,
-			};
-			cityGrid.Children.Add(shape);
-			cityGrid.SizeChanged += (b, c) => {
-				shape.Width = mainGrid.GetOneCellSize().X * 0.75;
-				shape.Height = mainGrid.GetOneCellSize().Y * 0.75;
 			};
 
-			Grid.SetColumn(cityGrid, basicCityEvent.city.Y);
-			Grid.SetRow(cityGrid, basicCityEvent.city.X);
-			mainGrid.Children.Add(cityGrid);
+			ResizeShape();
+			cityOut.cityGrid.SizeChanged += (b, c) => ResizeShape();
+
+			Grid.SetZIndex(shape, 50);
+			cityOut.cityGrid.Children.Add(shape);
+
+			cityOut.cityShape = shape;
+
+			void ResizeShape() {
+				var size = GetCitySizeWithMod(this.citySizeMod);
+				shape.Width = size.Item1;
+				shape.Height = size.Item1;
+			}
 		}
 
-		protected virtual void City_InitWarriorsCnt(city.events.BasicCityEvent basicCityEvent) {
-			//cityGrid.Children.Add(new Label() { Content = basicCityEvent.city.PlayerId.ToString(), HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center });
-
-			//Grid.SetColumn(cityGrid, basicCityEvent.city.Y);
-			//Grid.SetRow(cityGrid, basicCityEvent.city.X);
-			//mainGrid.Children.Add(cityGrid);
+		void City_InitWarriorsCnt(city.events.BasicCityEvent basicCityEvent) {
+			
 		}
 
-		private void City_UnitIncome(city.events.CityIncomeEvent cityEvent) {
-			//throw new NotImplementedException();
-			//	cityGrid.Children.Add(new Label() { Content = basicCityEvent.city.PlayerId.ToString(), HorizontalAlignment=HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center });
+		void City_UnitIncome(city.events.CityIncomeEvent cityEvent) {
+
 		}
 
+		//---------------------------------------------- Events - Support ----------------------------------------------
+		Tuple<double, double> GetCitySizeWithMod(double mod) {
+			double citySizeX = mainGrid.GetOneCellSize().X * mod,
+			citySizeY = mainGrid.GetOneCellSize().Y * mod;
+			if (cityIsSquere) {
+				if (citySizeX > citySizeY)
+					citySizeX = citySizeY;
+				else if (citySizeY > citySizeX)
+					citySizeY = citySizeX;
+			}
+
+			return new Tuple<double, double>(citySizeX, citySizeY);
+		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public override bool TickReact() {
@@ -112,6 +140,13 @@ namespace taw.game.output {
 		//---------------------------------------------- Settinggable ----------------------------------------------
 		public override SettinsSetter CreateLinkedSetting() {
 			return new taw.game.settings.output.WPFOutputSettings();
+		}
+
+
+		public class CityOutputInfo {
+			public Grid cityGrid;
+			public Shape cityShape;
+			public PathFigure warriorsArc;
 		}
 	}
 }

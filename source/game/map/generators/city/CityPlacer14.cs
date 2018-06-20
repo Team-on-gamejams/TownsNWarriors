@@ -50,7 +50,7 @@ namespace taw.game.map.generators.city {
 				InsertIntoMap();
 			} while (sities.Count != 0);
 
-			gameMap.Sities = GetSitiesOnMap();
+			gameMap.Cities = GetSitiesOnMap();
 		}
 
 		//-------------------------------------------- Methods - parts --------------------------------------------

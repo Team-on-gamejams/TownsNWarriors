@@ -10,7 +10,7 @@ using taw.game.settings;
 using taw.game.unit.events;
 
 namespace taw.game.unit {
-	public partial class BasicUnit : ITickable, IWithPlayerId, ISettingable {
+	public partial class BasicUnit : ITickable, IWithPlayerId, ISettingable, IOutputable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected List<KeyValuePair<int, int>> path;
 		protected int currPathIndex;
@@ -24,7 +24,7 @@ namespace taw.game.unit {
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
-
+		public object OutputInfo { get; set; }
 
 		//---------------------------------------------- Events ----------------------------------------------
 		public delegate void UnitBasicDelegate(BasicUnitEvent cityEvent);
