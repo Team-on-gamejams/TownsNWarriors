@@ -57,15 +57,12 @@ namespace taw.game.controlable.playerControl {
 
 			outInfo.cityGrid.MouseLeftButtonDown += (a, b)=>{
 				if (cityEvent.city.PlayerId == PlayerId) {
-					if (!selectedCity.Contains(cityEvent.city)) {
+					if (!selectedCity.Contains(cityEvent.city)) 
 						selectedCity.Add(cityEvent.city);
-					}
 				}
-				else {
-					if (selectedCity.Count != 0) {
-						game.GameMap.SendWarriors(selectedCity, cityEvent.city);
-						selectedCity.Clear();
-					}
+				else if (selectedCity.Count != 0) {
+					selectedCity.Clear();
+					game.GameMap.SendWarriors(selectedCity, cityEvent.city);
 				}
 			};
 
