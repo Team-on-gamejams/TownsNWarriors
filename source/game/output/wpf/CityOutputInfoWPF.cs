@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 
 namespace taw.game.output.wpf {
-	public class CityOutputInfoWPF {
+	public class OutputInfoWPF {
 		public Grid cityGrid;
 		public Shape cityShape;
 		public PathFigure warriorsArc;

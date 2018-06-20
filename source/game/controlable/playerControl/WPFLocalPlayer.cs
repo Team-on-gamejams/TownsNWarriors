@@ -52,19 +52,17 @@ namespace taw.game.controlable.playerControl {
 
 		//---------------------------------------------- Events - city ----------------------------------------------
 		private void City_InitLMBPress(BasicCityEvent cityEvent) {
-			if (!(cityEvent.city.OutputInfo is CityOutputInfoWPF outInfo))
+			if (!(cityEvent.city.OutputInfo is OutputInfoWPF outInfo))
 				throw new ApplicationException("Wrong OutputInfo in taw.game.controlable.playerControl.WPFLocalPlayer.City_InitLMBPress(BasicCityEvent cityEvent). Must be CityOutputInfoWPF");
 
 			outInfo.cityGrid.MouseLeftButtonDown += (a, b)=>{
 				if (cityEvent.city.PlayerId == PlayerId) {
 					if (!selectedCity.Contains(cityEvent.city)) {
 						selectedCity.Add(cityEvent.city);
-						//MessageBox.Show("Add");
 					}
 				}
 				else {
 					if (selectedCity.Count != 0) {
-						//MessageBox.Show("attack  " + selectedCity.Count.ToString());
 						game.GameMap.SendWarriors(selectedCity, cityEvent.city);
 						selectedCity.Clear();
 					}

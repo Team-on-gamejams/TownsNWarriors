@@ -25,9 +25,14 @@ using taw.game.output.wpf;
 
 namespace taw.game.output {
 	/*Z-Levels:
+	GameGrid:
 		Canvas: 100
-		Warriors: 25
-		City: 50
+
+		GameCellShape 25:
+
+		SityShape 50:
+			WarriorsLabel: 20
+			City: 30
 	*/
 	class WPFOutput : BasicOutput {
 		//---------------------------------------------- Fields ----------------------------------------------
@@ -35,9 +40,18 @@ namespace taw.game.output {
 		Canvas mainCanvas;
 		window.GameWindow window;
 
+		public Brush windowBackgroundColor;
+
+		public Brush gameGridBackgroundColor;
+		public Brush roadColor;
+		public double roadWidthMod, roadHeightMod;
+
 		public bool cityIsSquere;
 		public double citySizeMod;
-		
+		public List<Brush> cityShapesColors;
+		public List<Brush> cityStrokesColors;
+		public double cityStrokeThickness;
+
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
@@ -47,16 +61,17 @@ namespace taw.game.output {
 
 			InitWindow();
 			InitCityEvents();
+			InitGameMapGrids();
 		}
 
 		protected virtual void InitWindow() {
+			window.Background = windowBackgroundColor;
+
 			mainGrid = window.mainGameGrid;
 			for (int i = 0; i < this.game.X; ++i)
 				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
 			for (int i = 0; i < game.Y; ++i)
 				mainGrid.RowDefinitions.Add(new RowDefinition());
-
-			mainGrid.ShowGridLines = true;
 
 			mainCanvas = new Canvas();
 			Grid.SetColumnSpan(mainCanvas, mainGrid.ColumnDefinitions.Count);
@@ -67,7 +82,7 @@ namespace taw.game.output {
 
 		void InitCityEvents() {
 			foreach (var city in game.GameMap.Cities) {
-				city.OutputInfo = new CityOutputInfoWPF();
+				city.OutputInfo = new OutputInfoWPF();
 				city.FirstTick += City_InitGrid;
 				city.FirstTick += City_InitShape;
 				city.FirstTick += City_InitWarriorsCnt;
@@ -75,49 +90,104 @@ namespace taw.game.output {
 			}
 		}
 
-		//---------------------------------------------- Events - city ----------------------------------------------
-		void City_InitGrid(city.events.BasicCityEvent basicCityEvent) {
-			Grid cityGrid = new Grid();
-			Grid.SetColumn(cityGrid, basicCityEvent.city.Y);
-			Grid.SetRow(cityGrid, basicCityEvent.city.X);
-			mainGrid.Children.Add(cityGrid);
+		void InitGameMapGrids() {
+			for(int i = 0; i < game.GameMap.Map.Count; ++i) {
+				for (int j = 0; j < game.GameMap.Map[i].Count; ++j) {
+					Grid mapCellGrid = new Grid {
+						Background = gameGridBackgroundColor,
+					};
+					Grid.SetColumn(mapCellGrid, j);
+					Grid.SetRow(mapCellGrid, i);
+					Grid.SetZIndex(mapCellGrid, 25);
+					mainGrid.Children.Add(mapCellGrid);
 
-			(basicCityEvent.city.OutputInfo as CityOutputInfoWPF).cityGrid = cityGrid;
-		}
+					var gameCell = game.GameMap.Map[i][j];
+					gameCell.OutputInfo = new OutputInfoWPF() { cityGrid = mapCellGrid };
 
-		void City_InitShape(city.events.BasicCityEvent basicCityEvent) {
-			var cityOut = (basicCityEvent.city.OutputInfo as CityOutputInfoWPF);
+					if (gameCell.IsOpenLeft) {
+						Shape road = FormRoad();
+						road.Height *= roadHeightMod;
+						road.HorizontalAlignment = HorizontalAlignment.Left;
+						mapCellGrid.Children.Add(road);
+						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, heightMod: roadHeightMod);
+					}
+					if (gameCell.IsOpenRight) {
+						Shape road = FormRoad();
+						road.Height *= roadHeightMod;
+						road.HorizontalAlignment = HorizontalAlignment.Right;
+						mapCellGrid.Children.Add(road);
+						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, heightMod: roadHeightMod);
+					}
+					if (gameCell.IsOpenTop) {
+						Shape road = FormRoad();
+						road.Width *= roadWidthMod;
+						road.VerticalAlignment = VerticalAlignment.Top;
+						mapCellGrid.Children.Add(road);
+						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, widthMod: roadWidthMod);
+					}
+					if (gameCell.IsOpenBottom) {
+						Shape road = FormRoad();
+						road.Width *= roadWidthMod;
+						road.VerticalAlignment = VerticalAlignment.Bottom;
+						mapCellGrid.Children.Add(road);
+						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, widthMod: roadWidthMod);
+					}
 
-			Shape shape = new Ellipse() {
-				Fill = Brushes.Red,
-				Stroke = Brushes.Black,
-				StrokeThickness = 2,
-			};
+					if ((gameCell.IsOpenLeft || gameCell.IsOpenRight) &&
+						(gameCell.IsOpenTop || gameCell.IsOpenBottom)
+						) {
+						Shape road = FormRoad();
+						SetRoadSize(road, roadWidthMod, roadHeightMod);
+						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, roadWidthMod, roadHeightMod);
+						mapCellGrid.Children.Add(road);
+					}
 
-			ResizeShape();
-			cityOut.cityGrid.SizeChanged += (b, c) => ResizeShape();
+				}
+			}
 
-			Grid.SetZIndex(shape, 50);
-			cityOut.cityGrid.Children.Add(shape);
-
-			cityOut.cityShape = shape;
-
-			void ResizeShape() {
-				var size = GetCitySizeWithMod(this.citySizeMod);
-				shape.Width = size.Item1;
-				shape.Height = size.Item1;
+			Shape FormRoad() {
+				var rect = new Rectangle {
+					Fill = roadColor,
+					VerticalAlignment = VerticalAlignment.Center,
+					HorizontalAlignment = HorizontalAlignment.Center,
+				};
+				SetRoadSize(rect);
+				return rect;
+			}
+			void SetRoadSize(Shape shape, double widthMod = 0.5, double heightMod = 0.5) {
+				var originalSize = GetSizeWithMod(1);
+				shape.Width = originalSize.Item1 * widthMod;
+				shape.Height = originalSize.Item2 * heightMod;
 			}
 		}
 
-		void City_InitWarriorsCnt(city.events.BasicCityEvent basicCityEvent) {
-			//Времена заглушка
-			(basicCityEvent.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.Add(new Label() { Content = basicCityEvent.city.PlayerId});
+		//---------------------------------------------- Events - city ----------------------------------------------
+		void City_InitGrid(city.events.BasicCityEvent basicCityEvent) {
+			Grid cityGrid = new Grid();
+			Grid.SetColumn(cityGrid, basicCityEvent.city.X);
+			Grid.SetRow(cityGrid, basicCityEvent.city.Y);
+			Grid.SetZIndex(cityGrid, 50);
+			mainGrid.Children.Add(cityGrid);
+			(basicCityEvent.city.OutputInfo as OutputInfoWPF).cityGrid = cityGrid;
+		}
 
-			basicCityEvent.city.Captured += (a)=> {
-				(a.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.RemoveAt((a.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.Count - 1);
-				(a.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.Add(new Label() { Content = a.city.PlayerId, Background = Brushes.White });
-				
-			};
+		void City_InitShape(city.events.BasicCityEvent basicCityEvent) {
+			var cityOut = (basicCityEvent.city.OutputInfo as OutputInfoWPF);
+			Shape shape = new Ellipse();
+
+			SetShapeStyle(shape, basicCityEvent.city.PlayerId);
+			basicCityEvent.city.Captured += (b) => SetShapeStyle(shape, basicCityEvent.city.PlayerId);
+		
+			ResizeCityShape(shape, this.citySizeMod);
+			cityOut.cityGrid.SizeChanged += (b, c) => ResizeCityShape(shape, this.citySizeMod);
+
+			Grid.SetZIndex(shape, 30);
+			cityOut.cityGrid.Children.Add(shape);
+			cityOut.cityShape = shape;
+		}
+
+		void City_InitWarriorsCnt(city.events.BasicCityEvent basicCityEvent) {
+
 		}
 
 		void City_UnitIncome(city.events.CityIncomeEvent cityEvent) {
@@ -125,6 +195,13 @@ namespace taw.game.output {
 		}
 
 		//---------------------------------------------- Events - Support ----------------------------------------------
+		Tuple<double, double> GetSizeWithMod(double mod) {
+			double citySizeX = mainGrid.GetOneCellSize().X * mod,
+			citySizeY = mainGrid.GetOneCellSize().Y * mod;
+
+			return new Tuple<double, double>(citySizeX, citySizeY);
+		}
+
 		Tuple<double, double> GetCitySizeWithMod(double mod) {
 			double citySizeX = mainGrid.GetOneCellSize().X * mod,
 			citySizeY = mainGrid.GetOneCellSize().Y * mod;
@@ -137,6 +214,19 @@ namespace taw.game.output {
 
 			return new Tuple<double, double>(citySizeX, citySizeY);
 		}
+
+		void ResizeCityShape(Shape shape, double mod) {
+			var size = GetCitySizeWithMod(mod);
+			shape.Width = size.Item1;
+			shape.Height = size.Item1;
+		}
+
+		void SetShapeStyle(Shape shape, int PlayerId) {
+			shape.StrokeThickness = cityStrokeThickness;
+			shape.Fill = cityShapesColors[PlayerId % cityShapesColors.Count];
+			shape.Stroke = cityStrokesColors[PlayerId % cityStrokesColors.Count];
+		}
+
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public override bool TickReact() {
