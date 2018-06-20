@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="game\basicInterfaces\GameEvent.cs" />
+    <Compile Include="game\basicInterfaces\IInputable.cs" />
     <Compile Include="game\basicInterfaces\IOutputable.cs" />
     <Compile Include="game\basicInterfaces\ISettingable.cs" />
     <Compile Include="game\city\events\BasicCityEvent.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="game\map\generators\BasicGenerator.cs" />
     <Compile Include="game\output\BasicOutput.cs" />
     <Compile Include="game\output\WPFOutput.cs" />
+    <Compile Include="game\output\wpf\CityOutputInfoWPF.cs" />
     <Compile Include="game\output\wpf\WPFOutputExtensions.cs" />
     <Compile Include="game\Rand.cs" />
     <Compile Include="game\settings\controlable\botControl\BasicBotSettings.cs" />

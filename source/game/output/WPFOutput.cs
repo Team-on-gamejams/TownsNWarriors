@@ -26,7 +26,7 @@ using taw.game.output.wpf;
 namespace taw.game.output {
 	/*Z-Levels:
 		Canvas: 100
-		Warriors: 3
+		Warriors: 25
 		City: 50
 	*/
 	class WPFOutput : BasicOutput {
@@ -67,7 +67,7 @@ namespace taw.game.output {
 
 		void InitCityEvents() {
 			foreach (var city in game.GameMap.Cities) {
-				city.OutputInfo = new CityOutputInfo();
+				city.OutputInfo = new CityOutputInfoWPF();
 				city.FirstTick += City_InitGrid;
 				city.FirstTick += City_InitShape;
 				city.FirstTick += City_InitWarriorsCnt;
@@ -82,11 +82,11 @@ namespace taw.game.output {
 			Grid.SetRow(cityGrid, basicCityEvent.city.X);
 			mainGrid.Children.Add(cityGrid);
 
-			(basicCityEvent.city.OutputInfo as CityOutputInfo).cityGrid = cityGrid;
+			(basicCityEvent.city.OutputInfo as CityOutputInfoWPF).cityGrid = cityGrid;
 		}
 
 		void City_InitShape(city.events.BasicCityEvent basicCityEvent) {
-			var cityOut = (basicCityEvent.city.OutputInfo as CityOutputInfo);
+			var cityOut = (basicCityEvent.city.OutputInfo as CityOutputInfoWPF);
 
 			Shape shape = new Ellipse() {
 				Fill = Brushes.Red,
@@ -110,7 +110,14 @@ namespace taw.game.output {
 		}
 
 		void City_InitWarriorsCnt(city.events.BasicCityEvent basicCityEvent) {
-			
+			//Времена заглушка
+			(basicCityEvent.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.Add(new Label() { Content = basicCityEvent.city.PlayerId});
+
+			basicCityEvent.city.Captured += (a)=> {
+				(a.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.RemoveAt((a.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.Count - 1);
+				(a.city.OutputInfo as CityOutputInfoWPF).cityGrid.Children.Add(new Label() { Content = a.city.PlayerId, Background = Brushes.White });
+				
+			};
 		}
 
 		void City_UnitIncome(city.events.CityIncomeEvent cityEvent) {
@@ -142,11 +149,5 @@ namespace taw.game.output {
 			return new taw.game.settings.output.WPFOutputSettings();
 		}
 
-
-		public class CityOutputInfo {
-			public Grid cityGrid;
-			public Shape cityShape;
-			public PathFigure warriorsArc;
-		}
 	}
 }

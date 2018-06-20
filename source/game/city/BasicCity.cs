@@ -12,7 +12,7 @@ using taw.game.city.events;
 
 
 namespace taw.game.city {
-	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable, IOutputable {
+	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable, IOutputable, IInputable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static taw.game.map.GameMap gameMap;
 		private int x, y;
@@ -33,6 +33,7 @@ namespace taw.game.city {
 		public int X { get => x; set => x = value; }
 		public int Y { get => y; set => y = value; }
 		public object OutputInfo { get; set; }
+		public object InputInfo { get; set; }
 
 		//---------------------------------------------- Events ----------------------------------------------
 		public delegate void CityBasicDelegate(BasicCityEvent cityEvent);
