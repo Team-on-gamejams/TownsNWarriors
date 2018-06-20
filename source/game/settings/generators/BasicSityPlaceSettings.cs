@@ -9,8 +9,8 @@ using taw.game.map.generators.city;
 
 namespace taw.game.settings.generators {
 	class BasicSityPlaceSettings : SettinsSetter {
-		public override void SetSettings(Settingable obj) {
-			if (!(obj is BasicSityPlacer mapGenerator))
+		public override void SetSettings(ISettingable obj) {
+			if (!(obj is BasicCityPlacer mapGenerator))
 				throw new ApplicationException("Wrong generator in BasicSityPlaceSettings.SetSettings");
 
 		}

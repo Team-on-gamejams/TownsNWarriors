@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace taw.game.controlable {
-	public interface Controlable : taw.game.basicInterfaces.Tickable, taw.game.basicInterfaces.WithPlayerId,
-		taw.game.basicInterfaces.Settingable {
+	public interface Controlable : taw.game.basicInterfaces.ITickable, taw.game.basicInterfaces.IWithPlayerId,
+		taw.game.basicInterfaces.ISettingable {
 	}
 }

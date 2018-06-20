@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace taw.game.basicInterfaces {
-	public interface Tickable {
-		bool TickReact();
+	interface IOutputable {
+		object OutputInfo { get; set; }
 	}
 }

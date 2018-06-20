@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using taw.game.settings;
 
 namespace taw.game.map.generators.idSetters {
-	abstract class BasicIdSetter : BasicGenerator, basicInterfaces.Settingable {
+	public abstract class BasicIdSetter : BasicGenerator, basicInterfaces.ISettingable {
 		public byte bots;
 		public List<byte> townsPerBot;
 		public byte townsPerPlayer;
@@ -14,14 +14,14 @@ namespace taw.game.map.generators.idSetters {
 		public abstract void SetId();
 
 		public BasicIdSetter() {
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		public virtual SettinsSetter CreateLinkedSetting() {
 			return new taw.game.settings.generators.BasicIdSetterSettings();
 		}
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 	}

@@ -49,8 +49,21 @@ namespace taw.window {
 			GameWindow gameWindow = new GameWindow();
 			MainWindow.ReopenWindow(this, gameWindow);
 
-			game.Game game = new game.Game(gameWindow);
-			game.Play();
+			game.Game game = new game.Game();
+
+			var mapGen = new game.map.generators.map.TunnelMapGenerator();
+			var cityGen = new game.map.generators.city.CityPlacer14();
+			var idGen = new game.map.generators.idSetters.IdSetterDiffCorners();
+			game.CreateGameMap(mapGen, cityGen, idGen);
+
+
+			var output = new taw.game.output.WPFOutput(game, gameWindow);
+			var controlsInput = new List<taw.game.controlable.Controlable>();
+			controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer(1));
+			for (int i = 0; i < idGen.bots; ++i)
+				controlsInput.Add(new game.controlable.botControl.RushBot(game.GameMap, game.GameMap.Cities, game.GameMap.Units, (byte)(i + 2)));
+
+			game.Play(output, controlsInput);
 
 			this.Close();
 		}

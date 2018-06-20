@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace taw.game.map.generators {
-	abstract class BasicGenerator {
+	public abstract class BasicGenerator {
 		protected GameMap gameMap;
 
 		public void SetGameMap(GameMap map) => this.gameMap = map;

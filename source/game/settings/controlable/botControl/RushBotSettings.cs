@@ -9,7 +9,7 @@ using taw.game.controlable.botControl;
 
 namespace taw.game.settings.controlable.botControl {
 	class RushBotSettings : BasicBotSettings {
-		public override void SetSettings(Settingable obj) {
+		public override void SetSettings(ISettingable obj) {
 			if (!(obj is RushBot bot))
 				throw new ApplicationException("Wrong rushBot in RushBotSettings.SetSettings");
 

@@ -9,12 +9,14 @@ using taw.game.output;
 
 namespace taw.game.settings.output {
 	class WPFOutputSettings : BasicOutputSettings {
-		public override void SetSettings(Settingable obj) {
+		public override void SetSettings(ISettingable obj) {
 			if (!(obj is WPFOutput output))
 				throw new ApplicationException("Wrong generator in WPFOutputSettings.SetSettings");
 
 			base.SetSettings(obj);
 
+			output.cityIsSquere = true;
+			output.citySizeMod = 0.50;
 		}
 
 		protected override void LoadSettingsFromFile() {

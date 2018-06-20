@@ -8,10 +8,8 @@ using taw.game;
 using taw.game.map;
 using taw.game.settings;
 
-using taw.game.sity;
+using taw.game.city;
 using taw.game.unit;
-
-using static taw.game.settings.values;
 
 namespace taw.game.map.generators.map {
 	class TunnelMapGenerator : BasicMapGenerator {
@@ -24,7 +22,7 @@ namespace taw.game.map.generators.map {
 
 		//------------------------------------------ Ctor ------------------------------------------
 		public TunnelMapGenerator() {
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//------------------------------------------ Inharitated methods ------------------------------------------
@@ -36,9 +34,9 @@ namespace taw.game.map.generators.map {
 			List<KeyValuePair<int, int>> digPos;
 
 			if (crossOnStart)
-				digPos = new List<KeyValuePair<int, int>>() { new KeyValuePair<int, int>(rnd.Next(1, gameMap.SizeX - 1), rnd.Next(1, gameMap.SizeY - 1)) };
+				digPos = new List<KeyValuePair<int, int>>() { new KeyValuePair<int, int>(Rand.Next(1, gameMap.SizeX - 1), Rand.Next(1, gameMap.SizeY - 1)) };
 			else
-				digPos = new List<KeyValuePair<int, int>>() { new KeyValuePair<int, int>(rnd.Next(0, gameMap.SizeX), rnd.Next(0, gameMap.SizeY)) };
+				digPos = new List<KeyValuePair<int, int>>() { new KeyValuePair<int, int>(Rand.Next(0, gameMap.SizeX), Rand.Next(0, gameMap.SizeY)) };
 
 			while (digPos.Count != 0) {
 				Dig(digPos[0].Key, digPos[0].Value);
@@ -50,27 +48,27 @@ namespace taw.game.map.generators.map {
 			void Dig(int x, int y) {
 				++digNum;
 
-				if (digNum > ignoreSkipChanceForFirstNTitles && rnd.Next(0, 100) < skipChance)
+				if (digNum > ignoreSkipChanceForFirstNTitles && Rand.NextPersent() < skipChance)
 					return;
 
-				map[y, x].isVisited = true;
+				map[y, x].IsVisited = true;
 				List<KeyValuePair<int, int>> jumpPos = new List<KeyValuePair<int, int>>();
-				if (x != gameMap.SizeX - 1 && !map[y, x + 1].isVisited)
+				if (x != gameMap.SizeX - 1 && !map[y, x + 1].IsVisited)
 					jumpPos.Add(new KeyValuePair<int, int>(x + 1, y));
-				if (x != 0 && !map[y, x - 1].isVisited)
+				if (x != 0 && !map[y, x - 1].IsVisited)
 					jumpPos.Add(new KeyValuePair<int, int>(x - 1, y));
-				if (y != gameMap.SizeY - 1 && !map[y + 1, x].isVisited)
+				if (y != gameMap.SizeY - 1 && !map[y + 1, x].IsVisited)
 					jumpPos.Add(new KeyValuePair<int, int>(x, y + 1));
-				if (y != 0 && !map[y - 1, x].isVisited)
+				if (y != 0 && !map[y - 1, x].IsVisited)
 					jumpPos.Add(new KeyValuePair<int, int>(x, y - 1));
 
-				byte jumpCnt = (byte)(jumpPos.Count != 0 ? rnd.Next(1, jumpPos.Count) : 0);
+				byte jumpCnt = (byte)(jumpPos.Count != 0 ? Rand.Next(1, jumpPos.Count) : 0);
 
 				if (crossOnStart && digNum == 1) 
 					jumpCnt = 4;
 
 				while (jumpCnt-- != 0) {
-					var curr = jumpPos[rnd.Next(0, jumpPos.Count)];
+					var curr = jumpPos[Rand.Next(0, jumpPos.Count)];
 					jumpPos.Remove(curr);
 
 					if (curr.Key == x + 1) 
@@ -119,7 +117,7 @@ namespace taw.game.map.generators.map {
 			public bool IsOpenRight { get; set; }
 			public bool IsOpenBottom { get; set; }
 
-			public bool isVisited { get; set; }
+			public bool IsVisited { get; set; }
 		}
 	}
 }

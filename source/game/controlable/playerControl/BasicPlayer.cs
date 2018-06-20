@@ -11,13 +11,13 @@ namespace taw.game.controlable.playerControl {
 
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public byte playerId { get; set; }
+		public byte PlayerId { get; set; }
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicPlayer(byte PlayerId) {
-			playerId = PlayerId;
-			GetSettings(CreateLinkedSetting());
+			this.PlayerId = PlayerId;
+			SetSettings(CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -27,7 +27,7 @@ namespace taw.game.controlable.playerControl {
 
 		public abstract SettinsSetter CreateLinkedSetting();
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 	}

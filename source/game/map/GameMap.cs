@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using taw.game;
 using taw.game.settings;
 
-using taw.game.sity;
+using taw.game.city;
 using taw.game.unit;
 using taw.game.controlable.botControl;
 
@@ -17,11 +17,11 @@ namespace taw.game.map {
 		int sizeX, sizeY;
 
 		List<List<GameCell>> map;
-		List<BasicSity> sities;
+		List<BasicCity> cities;
 		List<BasicUnit> units;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public List<BasicSity> Sities { get => sities; set => sities = value; }
+		public List<BasicCity> Cities { get => cities; set => cities = value; }
 		public List<BasicUnit> Units => units;
 		public List<List<GameCell>> Map => map;
 		public int SizeX => sizeX;
@@ -37,15 +37,15 @@ namespace taw.game.map {
 					map[i].Add(new GameCell());
 			}
 
-			sities = new List<BasicSity>();
+			cities = new List<BasicCity>();
 			units = new List<BasicUnit>();
 
-			BasicSity.gameMap = this;
+			BasicCity.gameMap = this;
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public void Tick() {
-			foreach (var sity in sities)
+			foreach (var sity in cities)
 				sity.TickReact();
 
 			REPEAT_UNITS_TURN:
@@ -55,12 +55,12 @@ namespace taw.game.map {
 			}
 		}
 
-		public void SendWarriors(List<BasicSity> from, BasicSity to) {
+		public void SendWarriors(List<BasicCity> from, BasicCity to) {
             foreach (var i in from)
 				SendWarriors(i, to);
 		}
 
-    	public void SendWarriors(BasicSity from, BasicSity to) {
+    	public void SendWarriors(BasicCity from, BasicCity to) {
 			if (from == to)
 				return;
 
@@ -68,10 +68,6 @@ namespace taw.game.map {
 
 			if (unit== null)
 				return;
-
-			unit.SetCanvas(canvas);
-
-			unit.InitializeShape();
 
 			units.Add(unit);
 		}

@@ -12,7 +12,7 @@ namespace taw.game.map.generators.idSetters {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public IdSetterDiffCorners() {
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//------------------------------------------ Inharitated methods ------------------------------------------
@@ -22,11 +22,11 @@ namespace taw.game.map.generators.idSetters {
 				int mini = gameMap.SizeY, minj = gameMap.SizeX;
 				for (int i = 0; i < gameMap.SizeY; ++i) 
 					for (int j = 0; j < gameMap.SizeX; ++j) 
-						if (gameMap.Map[i][j].Sity != null && gameMap.Map[i][j].Sity.playerId == 0 && mini + minj > i + j) {
+						if (gameMap.Map[i][j].Sity != null && gameMap.Map[i][j].Sity.PlayerId == 0 && mini + minj > i + j) {
 							mini = i;
 							minj = j;
 						}
-				gameMap.Map[mini][minj].Sity.playerId = 1;
+				gameMap.Map[mini][minj].Sity.PlayerId = 1;
 			}
 
 			bool end = false;
@@ -36,7 +36,7 @@ namespace taw.game.map.generators.idSetters {
 					int maxi = 0, maxj = 0;
 					for (int i = gameMap.SizeY - 1; i >= 0; --i)
 						for (int j = gameMap.SizeX - 1; j >= 0; --j)
-							if (gameMap.Map[i][j].Sity != null && gameMap.Map[i][j].Sity.playerId == 0 && maxi + maxj < i + j) {
+							if (gameMap.Map[i][j].Sity != null && gameMap.Map[i][j].Sity.PlayerId == 0 && maxi + maxj < i + j) {
 								maxi = i;
 								maxj = j;
 							}
@@ -44,7 +44,7 @@ namespace taw.game.map.generators.idSetters {
 						end = true;
 						break;
 					}
-					gameMap.Map[maxi][maxj].Sity.playerId = (byte)(botNum + 2);
+					gameMap.Map[maxi][maxj].Sity.PlayerId = (byte)(botNum + 2);
 				}
 				if (end)
 					break;

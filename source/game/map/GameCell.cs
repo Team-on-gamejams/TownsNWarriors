@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using taw.game.sity;
+using taw.game.city;
 using taw.game.unit;
-using taw.game.IO;
 
 namespace taw.game.map {
-	public partial class GameCell : GameCellDrawableObj {
+	public partial class GameCell : basicInterfaces.IOutputable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		Lazy<List<BasicUnit>> units;
 
@@ -19,8 +18,10 @@ namespace taw.game.map {
 		public bool IsOpenRight { get; set; }
 		public bool IsOpenBottom { get; set; }
 
-		public BasicSity Sity { get; set; }
+		public BasicCity Sity { get; set; }
 		public List<BasicUnit> Units => units.Value;
+
+		public object OutputInfo { get; set; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public GameCell() {

@@ -9,7 +9,7 @@ using taw.game.controlable.playerControl;
 
 namespace taw.game.settings.controlable.playerControl {
 	class BasicPlayerSettigns : settings.SettinsSetter {
-		public override void SetSettings(Settingable obj) {
+		public override void SetSettings(ISettingable obj) {
 			if (!(obj is BasicPlayer player))
 				throw new ApplicationException("Wrong BasicPlayer in BasicPlayerSettigns.SetSettings");
 

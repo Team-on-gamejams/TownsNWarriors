@@ -11,7 +11,7 @@ namespace taw.game.controlable.botControl {
 		//Map
 		protected game.map.GameMap map;
 		//All cities on map
-		protected List<game.sity.BasicSity> sities;
+		protected List<game.city.BasicCity> sities;
 		//All existing units
 		protected List<game.unit.BasicUnit> units;
 
@@ -20,27 +20,27 @@ namespace taw.game.controlable.botControl {
 
 
 		//---------------------------------------------- Properties ----------------------------------------------
-		public byte playerId { get; set; }
+		public byte PlayerId { get; set; }
 
 		public abstract bool TickReact();
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicBot(game.map.GameMap Map,
-			List<game.sity.BasicSity> Sities,
+			List<game.city.BasicCity> Sities,
 			List<game.unit.BasicUnit> Units,
 			byte botId) {
 
 			map = Map;
 			sities = Sities;
 			units = Units;
-			playerId = botId;
+			PlayerId = botId;
 
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Settingable ----------------------------------------------
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 

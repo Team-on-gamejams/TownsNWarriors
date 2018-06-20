@@ -9,7 +9,7 @@ using taw.game.map.generators.idSetters;
 
 namespace taw.game.settings.generators {
 	class IdSetterDiffCornersSettings : BasicIdSetterSettings {
-		public override void SetSettings(Settingable obj) {
+		public override void SetSettings(ISettingable obj) {
 			if (!(obj is IdSetterDiffCorners idSetter))
 				throw new ApplicationException("Wrong generator in TunnelMapGeneratorSettings.SetSettings");
 

@@ -9,8 +9,8 @@ using taw.game.map.generators.city;
 
 namespace taw.game.settings.generators {
 	class SityPlacer14Settings : BasicSityPlaceSettings {
-		public override void SetSettings(Settingable obj) {
-			if (!(obj is SityPlacer14 sityPlacer))
+		public override void SetSettings(ISettingable obj) {
+			if (!(obj is CityPlacer14 sityPlacer))
 				throw new ApplicationException("Wrong generator in TunnelMapGeneratorSettings.SetSettings");
 
 			base.SetSettings(obj);

@@ -9,7 +9,7 @@ namespace taw.game.basicInterfaces {
 	/// Якщо клас помічений як Settingable, то для нього має бути створений відповідний класс SettinsSetter.
 	/// Або, якщо клас унаслідуваний від Settingable-класу, то можна використовувати його SettinsSetter.
 	/// </summary>
-	public interface Settingable {
+	public interface ISettingable {
 		/// <summary>
 		/// Встановлює налаштування для обєкту
 		/// </summary>
@@ -19,7 +19,7 @@ namespace taw.game.basicInterfaces {
 		/// }
 		/// </example>
 		/// <param name="settinsSetter">Відповідний цьому класу клас налаштувань, або клас налаштувань для батькіського класу</param>
-		void GetSettings(taw.game.settings.SettinsSetter settinsSetter);
+		void SetSettings(taw.game.settings.SettinsSetter settinsSetter);
 
 		/// <summary>
 		/// Має бути virtual.

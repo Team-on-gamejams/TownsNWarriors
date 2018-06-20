@@ -9,29 +9,29 @@ using taw.game.output;
 
 
 namespace taw.game.output {
-	abstract class BasicOutput  : basicInterfaces.Tickable,
-		basicInterfaces.Settingable  {
+	public abstract class BasicOutput  : basicInterfaces.ITickable,
+		basicInterfaces.ISettingable  {
 		//---------------------------------------------- Fields ----------------------------------------------
-
+		protected readonly Game game;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicOutput() {
-			GetSettings(CreateLinkedSetting());
+		public BasicOutput(Game Game) {
+			game = Game;
+
+			SetSettings(CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public abstract bool TickReact();
 
-
 		//---------------------------------------------- Settinggable ----------------------------------------------
 		public abstract SettinsSetter CreateLinkedSetting();
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
-
 	}
 }

@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace taw.game.basicInterfaces {
-	public interface WithPlayerId {
+	public interface IWithPlayerId {
 		/// <summary>
 		/// 0  - нейтральний
 		/// 1  - игрок
 		/// 2+ - боти
 		/// </summary>
-		byte playerId { get; set; }
+		byte PlayerId { get; set; }
 	}
 }

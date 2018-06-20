@@ -23,19 +23,14 @@ using taw.game.controlable.playerControl;
 using taw.game.settings;
 
 namespace taw.game {
-	public class Game : basicInterfaces.Settingable {
+	public class Game : basicInterfaces.ISettingable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		//Deprecated
 		GameMap gameMap;
-		Grid mainGrid;
-		Canvas mainCanvas;
-		GameWindow IOWindow;
-
-		bool isPlay;
 
 		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
 
-		//New
+		bool isPlay;
+
 		private int y;
 		private int x;
 
@@ -45,18 +40,15 @@ namespace taw.game {
 		//---------------------------------------------- Properties ----------------------------------------------
 		public int X { get => x; set => x = value; }
 		public int Y { get => y; set => y = value; }
+		public GameMap GameMap { get => gameMap; set => gameMap = value; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow) {
-			GetSettings(CreateLinkedSetting());
+		public Game() {
+			SetSettings(CreateLinkedSetting());
 
-			this.IOWindow = IOWindow;
 			isPlay = true;
-			mainGrid = IOWindow.mainGameGrid;
 
-			FillIOWindow();
-
-			loopTimer.Interval = globalGameInfo.milisecondsPerTick;
+			loopTimer.Interval = GlobalGameInfo.milisecondsPerTick;
 			loopTimer.Tick += (a, b) => {
 				if (isPlay) {
 					Loop();
@@ -65,77 +57,45 @@ namespace taw.game {
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public void Play() {
+		public void Play(output.BasicOutput output, List<controlable.Controlable> controlables) {
 			isPlay = true;
-			game.globalGameInfo.tick = 1;
+			game.GlobalGameInfo.tick = 1;
 
-			CreateGameMap();
-			InitGameMap();
+			this.output = output;
+
+			controlsInput = controlables;
 
 			loopTimer.Start();
 		}
 
-		void FillIOWindow() {
-			for (int i = 0; i < X; ++i)
-				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-			for (int i = 0; i < Y; ++i)
-				mainGrid.RowDefinitions.Add(new RowDefinition());
+		public void CreateGameMap(game.map.generators.map.BasicMapGenerator mapGenerator,
+			game.map.generators.city.BasicCityPlacer sityPlacer,
+			game.map.generators.idSetters.BasicIdSetter idSetter
+			) {
+			GameMap = new GameMap(X, Y);
 
-			mainCanvas = new Canvas();
-			Grid.SetZIndex(mainCanvas, 2);
-			mainGrid.Children.Add(mainCanvas);
-		}
+			mapGenerator.SetGameMap(GameMap);
+			mapGenerator.GenerateRandomMap();
 
-		void CreateGameMap() {
-			settings.size.OneCellSizeX = 0;
-			settings.size.OneCellSizeY = 0;
+			sityPlacer.SetGameMap(GameMap);
+			sityPlacer.PlaceSities();
 
-			settings.values.seed = (int) DateTime.Now.Ticks;
-
-			gameMap = new GameMap(X, Y);
-
-			var mapGen = new game.map.generators.map.TunnelMapGenerator();
-			mapGen.SetGameMap(gameMap);
-			mapGen.GenerateRandomMap();
-			var cityGen = new game.map.generators.city.SityPlacer14();
-			cityGen.SetGameMap(gameMap);
-			cityGen.PlaceSities();
-			var idGen = new game.map.generators.idSetters.IdSetterDiffCorners();
-			idGen.SetGameMap(gameMap);
-			idGen.SetId();
-
-			output = new WPFOutput();
-
-			controlsInput = new List<controlable.Controlable>(idGen.bots + 1);
-			controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer(1));
-			for (int i = 0; i < idGen.bots; ++i)
-				controlsInput.Add(new game.controlable.botControl.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
-		}
-
-		void InitGameMap() {
-			gameMap.SetCanvas(mainCanvas);
-			gameMap.DrawStatic(mainGrid);
-
-			settings.size.OneCellSizeX = mainGrid.RenderSize.Width / gameMap.SizeX;
-			settings.size.OneCellSizeY = mainGrid.RenderSize.Height / gameMap.SizeY;
-			mainGrid.SizeChanged += (c, d) => {
-				settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
-				settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
-			};
+			idSetter.SetGameMap(GameMap);
+			idSetter.SetId();
 		}
 
 		void Loop() {
-			gameMap.Tick();
+			GameMap.Tick();
 
 			foreach (var control in controlsInput)
 				if (control != null)
 					control.TickReact();
 
-			++game.globalGameInfo.tick;
-			gameMap.UpdateMap();
+			++game.GlobalGameInfo.tick;
+			output.TickReact();
 		}
 		//---------------------------------------------- Settingable ----------------------------------------------
-		public void GetSettings(SettinsSetter settingsSetter) {
+		public void SetSettings(SettinsSetter settingsSetter) {
 			settingsSetter.SetSettings(this);
 		}
 

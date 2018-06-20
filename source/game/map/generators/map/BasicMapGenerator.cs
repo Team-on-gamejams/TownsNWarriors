@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using taw.game.settings;
 
 namespace taw.game.map.generators.map {
-	abstract class BasicMapGenerator : BasicGenerator, basicInterfaces.Settingable {
+	public abstract class BasicMapGenerator : BasicGenerator, basicInterfaces.ISettingable {
 		public abstract void GenerateRandomMap();
 
 		public BasicMapGenerator() {
-			this.GetSettings(this.CreateLinkedSetting());
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		public virtual SettinsSetter CreateLinkedSetting() {
 			return new taw.game.settings.generators.BasicMapGeneratorSettings();
 		}
 
-		public void GetSettings(SettinsSetter settinsSetter) {
+		public void SetSettings(SettinsSetter settinsSetter) {
 			settinsSetter.SetSettings(this);
 		}
 	}

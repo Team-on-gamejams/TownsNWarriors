@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using taw.game.sity;
+using taw.game.city;
 using taw.game.settings;
 
-using static taw.game.settings.values;
-
 namespace taw.game.map.generators.city {
-	class SityPlacer14 : BasicSityPlacer {
+	class CityPlacer14 : BasicCityPlacer {
 		//---------------------------------------------- Fields ----------------------------------------------
-		List<BasicSity> sities = new List<BasicSity>();
+		List<BasicCity> sities = new List<BasicCity>();
 		List<KeyValuePair<int, int>> bestSitiesPos = new List<KeyValuePair<int, int>>();
 
 		public bool quadIsRoad;
@@ -31,8 +29,8 @@ namespace taw.game.map.generators.city {
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public SityPlacer14() {
-			this.GetSettings(this.CreateLinkedSetting());
+		public CityPlacer14() {
+			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//---------------------------------------------- Methods - main ----------------------------------------------
@@ -52,7 +50,7 @@ namespace taw.game.map.generators.city {
 				InsertIntoMap();
 			} while (sities.Count != 0);
 
-			gameMap.Sities = GetSitiesOnMap();
+			gameMap.Cities = GetSitiesOnMap();
 		}
 
 		//-------------------------------------------- Methods - parts --------------------------------------------
@@ -72,11 +70,11 @@ namespace taw.game.map.generators.city {
 			if (gameQuads < minQuads)
 				gameQuads = minQuads;
 
-			sitiesCnt = rnd.Next(citiesPerQuadMin * gameQuads,
+			sitiesCnt = Rand.Next(citiesPerQuadMin * gameQuads,
 				citiesPerQuadMax * gameQuads);
 
 			for (int i = 0; i < sitiesCnt; ++i)
-				sities.Add(new BasicSity());
+				sities.Add(new BasicCity());
 		}
 
 		void FormBestPosition() {
@@ -86,13 +84,13 @@ namespace taw.game.map.generators.city {
 					(gameMap.Map[i][j].IsOpenTop ? 1 : 0) +
 					(gameMap.Map[i][j].IsOpenLeft ? 1 : 0) +
 					(gameMap.Map[i][j].IsOpenRight ? 1 : 0);
-					if (s == 1 && (rnd.Next(0, 100) < chancePosWith1Road || alwaysFillWith1Road))
+					if (s == 1 && (Rand.NextPersent() < chancePosWith1Road || alwaysFillWith1Road))
 						bestSitiesPos.Add(new KeyValuePair<int, int>(i, j));
-					else if (s == 2 && rnd.Next(0, 100) < chancePosWith2Road)
+					else if (s == 2 && Rand.NextPersent() < chancePosWith2Road)
 						bestSitiesPos.Add(new KeyValuePair<int, int>(i, j));
-					else if (s == 3 && rnd.Next(0, 100) < chancePosWith3Road)
+					else if (s == 3 && Rand.NextPersent() < chancePosWith3Road)
 						bestSitiesPos.Add(new KeyValuePair<int, int>(i, j));
-					else if (s == 4 && rnd.Next(0, 100) < chancePosWith4Road)
+					else if (s == 4 && Rand.NextPersent() < chancePosWith4Road)
 						bestSitiesPos.Add(new KeyValuePair<int, int>(i, j));
 				}
 			}
@@ -100,16 +98,16 @@ namespace taw.game.map.generators.city {
 		}
 
 		void MixSitiesAndPos() {
-			int times = rnd.Next(bestSitiesPos.Count + 1, (bestSitiesPos.Count + 1) * 3);
+			int times = Rand.Next(bestSitiesPos.Count + 1, (bestSitiesPos.Count + 1) * 3);
 
 			for (int i = 0; i < times; ++i) {
 				int pos1, pos2;
 				object tmp;
 
 				if (bestSitiesPos.Count > 2) {
-					pos1 = rnd.Next(0, bestSitiesPos.Count);
+					pos1 = Rand.Next(0, bestSitiesPos.Count);
 					do
-						pos2 = rnd.Next(0, bestSitiesPos.Count);
+						pos2 = Rand.Next(0, bestSitiesPos.Count);
 					while (pos2 == pos1);
 
 					tmp = bestSitiesPos[pos1];
@@ -118,13 +116,13 @@ namespace taw.game.map.generators.city {
 				}
 
 				if (sities.Count > 2) {
-					pos1 = rnd.Next(0, sities.Count);
+					pos1 = Rand.Next(0, sities.Count);
 					do
-						pos2 = rnd.Next(0, sities.Count);
+						pos2 = Rand.Next(0, sities.Count);
 					while (pos2 == pos1);
 					tmp = sities[pos1];
 					sities[pos1] = sities[pos2];
-					sities[pos2] = (BasicSity)tmp;
+					sities[pos2] = (BasicCity)tmp;
 				}
 			}
 
@@ -138,7 +136,7 @@ namespace taw.game.map.generators.city {
 						int s = (gameMap.Map[i][j].IsOpenBottom ? 1 : 0) + (gameMap.Map[i][j].IsOpenTop ? 1 : 0) +
 								(gameMap.Map[i][j].IsOpenLeft ? 1 : 0) + (gameMap.Map[i][j].IsOpenRight ? 1 : 0);
 						if (s == 1) {
-							gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].Sity = sities[0];
+							InsertCity(k, 0);
 							bestSitiesPos.RemoveAt(k);
 							sities.RemoveAt(0);
 							--k;
@@ -151,13 +149,19 @@ namespace taw.game.map.generators.city {
 		void InsertIntoMap() {
 			while (sities.Count != 0 && bestSitiesPos.Count != 0) {
 				if (IsFreeAround(0)) {
-					gameMap.Map[bestSitiesPos[0].Key][bestSitiesPos[0].Value].Sity = sities[0];
+					InsertCity(0, 0);
 					bestSitiesPos.RemoveAt(0);
 					sities.RemoveAt(0);
 				}
 				else
 					bestSitiesPos.RemoveAt(0);
 			}
+		}
+
+		void InsertCity(int idPos, int idCity) {
+			gameMap.Map[bestSitiesPos[idPos].Key][bestSitiesPos[idPos].Value].Sity = sities[idCity];
+			sities[idCity].X = bestSitiesPos[idPos].Value;
+			sities[idCity].Y = bestSitiesPos[idPos].Key;
 		}
 
 		//-------------------------------------- Methods - Support --------------------------------------------
@@ -189,8 +193,8 @@ namespace taw.game.map.generators.city {
 			return rez;
 		}
 
-		List<sity.BasicSity> GetSitiesOnMap() {
-			List<sity.BasicSity> list = new List<BasicSity>();
+		List<game.city.BasicCity> GetSitiesOnMap() {
+			List<BasicCity> list = new List<BasicCity>();
 			for (int i = 0; i < gameMap.SizeY; ++i)
 				for (int j = 0; j < gameMap.SizeX; ++j)
 					if (gameMap.Map[i][j].Sity != null)
