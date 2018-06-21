@@ -85,6 +85,7 @@
     <Compile Include="game\output\BasicOutput.cs" />
     <Compile Include="game\output\WPFOutput.cs" />
     <Compile Include="game\output\wpf\CityOutputInfoWPF.cs" />
+    <Compile Include="game\output\wpf\UnitOutputInfoWPF.cs" />
     <Compile Include="game\output\wpf\WPFOutputExtensions.cs" />
     <Compile Include="game\Rand.cs" />
     <Compile Include="game\settings\controlable\botControl\BasicBotSettings.cs" />

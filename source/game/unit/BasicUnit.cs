@@ -14,7 +14,7 @@ namespace taw.game.unit {
 		//---------------------------------------------- Fields ----------------------------------------------
 		protected List<KeyValuePair<int, int>> path;
 		protected int currPathIndex;
-		protected ushort currTickOnCell;
+		public ushort currTickOnCell;
 
 		public ushort warriorsCnt;
 		public BasicCity destination;
@@ -25,6 +25,12 @@ namespace taw.game.unit {
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
 		public object OutputInfo { get; set; }
+
+		public int Y { get => path[currPathIndex].Value; }
+		public int X { get => path[currPathIndex].Key; }
+
+		public int NextY { get => path[currPathIndex + 1].Value; }
+		public int NextX { get => path[currPathIndex + 1].Key; }
 
 		//---------------------------------------------- Events ----------------------------------------------
 		public delegate void UnitBasicDelegate(BasicUnitEvent cityEvent);
@@ -61,7 +67,7 @@ namespace taw.game.unit {
 
 		//---------------------------------------------- Methods ----------------------------------------------
 		public bool TickReact() {
-			if (GlobalGameInfo.tick == 1 && FirstTick != null)
+			if (currTickOnCell == 0 && currPathIndex == 0 && FirstTick != null)
 				FirstTick(basicUnitEvent);
 
 			Tick?.Invoke(basicUnitEvent);

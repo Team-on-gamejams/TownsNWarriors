@@ -22,12 +22,15 @@ namespace taw.game.settings.output {
 
 			output.gameGridBackgroundColor = Brushes.Black;
 			output.roadColor = Brushes.Gray;
-			output.roadWidthMod = 0.33;
-			output.roadHeightMod = 0.33;
+			output.roadWidthMod = 0.20;
+			output.roadHeightMod = 0.20;
 
 
 			output.cityIsSquere = true;
-			output.citySizeMod = 0.80;
+			output.citySizeMod = 0.70;
+
+			output.unitIsSquere = true;
+			output.unitSizeMod = 0.55;
 
 			output.cityShapesColors = new List<System.Windows.Media.Brush>() {
 				Brushes.Wheat,
@@ -60,7 +63,13 @@ namespace taw.game.settings.output {
 
 			output.cityStrokeThickness = 2;
 			output.cityStrokesColors = new List<Brush>() {
-				Brushes.White,
+				//Brushes.White,
+				new SolidColorBrush(new Color(){
+					R = (byte)( 255 - (output.gameGridBackgroundColor as SolidColorBrush).Color.R),
+					G = (byte)( 255 - (output.gameGridBackgroundColor as SolidColorBrush).Color.G),
+					B = (byte)( 255 - (output.gameGridBackgroundColor as SolidColorBrush).Color.B),
+					A = (output.gameGridBackgroundColor as SolidColorBrush).Color.A,
+				}),
 			};
 
 		}

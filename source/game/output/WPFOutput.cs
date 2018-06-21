@@ -27,15 +27,20 @@ namespace taw.game.output {
 	/*Z-Levels:
 	GameGrid:
 		Canvas: 100
-
-		GameCellShape 25:
+			Unit
+				UnitShape
+				UnitLabel
 
 		SityShape 50:
 			WarriorsLabel: 20
 			City: 30
+
+		GameCellShape 25:
 	*/
 	class WPFOutput : BasicOutput {
 		//---------------------------------------------- Fields ----------------------------------------------
+		static Point cellSize;
+
 		Grid mainGrid;
 		Canvas mainCanvas;
 		window.GameWindow window;
@@ -45,6 +50,10 @@ namespace taw.game.output {
 		public Brush gameGridBackgroundColor;
 		public Brush roadColor;
 		public double roadWidthMod, roadHeightMod;
+
+		public bool unitIsSquere;
+		public double unitSizeMod;
+
 
 		public bool cityIsSquere;
 		public double citySizeMod;
@@ -78,6 +87,16 @@ namespace taw.game.output {
 			Grid.SetRowSpan(mainCanvas, mainGrid.RowDefinitions.Count);
 			Grid.SetZIndex(mainCanvas, 100);
 			mainGrid.Children.Add(mainCanvas);
+
+			ChangeLinkedToGridValues();
+			mainGrid.SizeChanged += (a, b) => ChangeLinkedToGridValues();
+
+			void ChangeLinkedToGridValues() {
+				cellSize = mainGrid.GetOneCellSize();
+				var unitSize = GetSizeWithMod(this.unitSizeMod, unitIsSquere);
+				UnitOutputInfoWPF.shiftX = cellSize.X / 2 - unitSize.Item1 / 2;
+				UnitOutputInfoWPF.shiftY = cellSize.Y / 2 - unitSize.Item2 / 2;
+			}
 		}
 
 		void InitCityEvents() {
@@ -87,6 +106,7 @@ namespace taw.game.output {
 				city.FirstTick += City_InitShape;
 				city.FirstTick += City_InitWarriorsCnt;
 				city.UnitIncome += City_UnitIncome;
+				city.UnitSend += City_UnitSend;
 			}
 		}
 
@@ -155,7 +175,7 @@ namespace taw.game.output {
 				return rect;
 			}
 			void SetRoadSize(Shape shape, double widthMod = 0.5, double heightMod = 0.5) {
-				var originalSize = GetSizeWithMod(1);
+				var originalSize = GetSizeWithMod(1, false);
 				shape.Width = originalSize.Item1 * widthMod;
 				shape.Height = originalSize.Item2 * heightMod;
 			}
@@ -194,18 +214,91 @@ namespace taw.game.output {
 
 		}
 
-		//---------------------------------------------- Events - Support ----------------------------------------------
-		Tuple<double, double> GetSizeWithMod(double mod) {
-			double citySizeX = mainGrid.GetOneCellSize().X * mod,
-			citySizeY = mainGrid.GetOneCellSize().Y * mod;
-
-			return new Tuple<double, double>(citySizeX, citySizeY);
+		void City_UnitSend(city.events.CityUnitsEvent cityEvent) {
+			cityEvent.unit.OutputInfo = new wpf.UnitOutputInfoWPF();
+			cityEvent.unit.FirstTick += Unit_FirstTick;
+			cityEvent.unit.Tick += Unit_Tick;
+			cityEvent.unit.ReachDestination += Unit_ReachDestination;
 		}
 
-		Tuple<double, double> GetCitySizeWithMod(double mod) {
-			double citySizeX = mainGrid.GetOneCellSize().X * mod,
-			citySizeY = mainGrid.GetOneCellSize().Y * mod;
-			if (cityIsSquere) {
+		//---------------------------------------------- Events - unit ----------------------------------------------
+		void Unit_FirstTick(unit.events.BasicUnitEvent unitEvent) {
+			if (!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
+				return;
+
+			Grid unitGrid = new Grid();
+
+			Shape unitShape = new Ellipse() {
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center
+			};
+			SetShapeStyle(unitShape, unitEvent.unit.PlayerId);
+			unitGrid.Children.Add(unitShape);
+
+			Label unitLabel = new Label() {
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				HorizontalContentAlignment = HorizontalAlignment.Center,
+				VerticalContentAlignment = VerticalAlignment.Center,
+				Foreground = unitShape.Stroke,
+				Content = unitEvent.unit.warriorsCnt,
+			};
+			unitGrid.Children.Add(unitLabel);
+
+			SetSizes();
+			mainGrid.SizeChanged += (a, b) => SetSizes();
+
+			mainCanvas.Children.Add(unitGrid);
+
+			outInfo.grid = unitGrid;
+			outInfo.shape = unitShape;
+			outInfo.unitsCnt = unitLabel;
+
+			void SetSizes() {
+				var s = GetSizeWithMod(this.unitSizeMod, unitIsSquere);
+				unitGrid.Width = s.Item1;
+				unitGrid.Height = s.Item2;
+				unitShape.Width = s.Item1;
+				unitShape.Height = s.Item2;
+				unitLabel.Width = s.Item1;
+				unitLabel.Height = s.Item2;
+				unitLabel.FontSize = unitLabel.Width / 1.328352013284 - 5;
+			}
+		}
+
+		void Unit_Tick(unit.events.BasicUnitEvent unitEvent) {
+			if (!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
+				return;
+
+			double pixelPerTurnX = cellSize.X / unitEvent.unit.tickPerTurn;
+			double pixelPerTurnY = cellSize.Y / unitEvent.unit.tickPerTurn;
+
+			double length = UnitOutputInfoWPF.shiftX + unitEvent.unit.X * cellSize.X;
+			if (unitEvent.unit.X > unitEvent.unit.NextX)
+				length -= unitEvent.unit.currTickOnCell * pixelPerTurnX;
+			else if (unitEvent.unit.X < unitEvent.unit.NextX)
+				length += unitEvent.unit.currTickOnCell * pixelPerTurnX;
+			Canvas.SetLeft(outInfo.grid, length);
+
+			length = UnitOutputInfoWPF.shiftY + unitEvent.unit.Y * cellSize.Y;
+			if (unitEvent.unit.Y > unitEvent.unit.NextY)
+				length -= unitEvent.unit.currTickOnCell * pixelPerTurnY;
+			else if (unitEvent.unit.Y < unitEvent.unit.NextY)
+				length += unitEvent.unit.currTickOnCell * pixelPerTurnY;
+			Canvas.SetTop(outInfo.grid, length);
+		}
+
+		void Unit_ReachDestination(unit.events.UnitReachDestinationEvent unitEvent) {
+			if (!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
+				return;
+			mainCanvas.Children.Remove(outInfo.grid);
+		}
+
+		//---------------------------------------------- Events - Support ----------------------------------------------
+		Tuple<double, double> GetSizeWithMod(double mod, bool makeSquare) {
+			double citySizeX = cellSize.X * mod,
+			citySizeY = cellSize.Y * mod;
+			if (makeSquare) {
 				if (citySizeX > citySizeY)
 					citySizeX = citySizeY;
 				else if (citySizeY > citySizeX)
@@ -216,7 +309,7 @@ namespace taw.game.output {
 		}
 
 		void ResizeCityShape(Shape shape, double mod) {
-			var size = GetCitySizeWithMod(mod);
+			var size = GetSizeWithMod(mod, this.cityIsSquere);
 			shape.Width = size.Item1;
 			shape.Height = size.Item1;
 		}

@@ -166,13 +166,13 @@ namespace taw.game.city {
 
 			UNOPTIMAL_PATH_FINDER:
 
-			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
+			var recList = new Queue<RecInfo>();
+			recList.Enqueue(new RecInfo() { x = fromX, y = fromY, value = 0 });
 			while (recList.Count != 0) {
 				if (rez == true)
-					RecAvoidEnemyCities(recList[0]);
+					RecAvoidEnemyCities(recList.Dequeue());
 				else
-					RecThroughEnemyCities(recList[0]);
-				recList.RemoveAt(0);
+					RecThroughEnemyCities(recList.Dequeue());
 			}
 
 			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
@@ -227,13 +227,13 @@ namespace taw.game.city {
 			//Дадає клетки в ліст для наступного пошуку
 			void AddNearbyToRecList(int x, int y, int val) {
 				if (finder[y, x].IsOpenBottom)
-					recList.Add(new RecInfo() { x = x, y = y + 1, value = val });
+					recList.Enqueue(new RecInfo() { x = x, y = y + 1, value = val });
 				if (finder[y, x].IsOpenRight)
-					recList.Add(new RecInfo() { x = x + 1, y = y, value = val });
+					recList.Enqueue(new RecInfo() { x = x + 1, y = y, value = val });
 				if (finder[y, x].IsOpenTop)
-					recList.Add(new RecInfo() { x = x, y = y - 1, value = val });
+					recList.Enqueue(new RecInfo() { x = x, y = y - 1, value = val });
 				if (finder[y, x].IsOpenLeft)
-					recList.Add(new RecInfo() { x = x - 1, y = y, value = val });
+					recList.Enqueue(new RecInfo() { x = x - 1, y = y, value = val });
 			}
 
 			//Будує сам шлях від міста до міста
