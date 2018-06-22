@@ -43,9 +43,8 @@ namespace taw.game.controlable.playerControl {
 		static WPFLocalPlayer() {
 			selectedCity = new List<BasicCity>(10);
 			selectedCityGroups = new List<BasicCity>[10];
-			for(byte i = 0; i < 10; ++i) {
+			for(byte i = 0; i < 10; ++i)
 				selectedCityGroups[i] = new List<BasicCity>();
-			}
 		}
 
 		public WPFLocalPlayer(byte PlayerId, Game game, window.GameWindow gameWindow) : base(PlayerId, game) {
@@ -64,11 +63,20 @@ namespace taw.game.controlable.playerControl {
 		}
 
 		void InitHotkeys(Window window) {
-			window.InputBindings.Add(
-				new InputBinding(new HotkeyCommand() { ExecuteDelegate=SelectAll},
-						 new KeyGesture(Key.A, ModifierKeys.Control)
-				)
-			);
+			window.InputBindings.Add(new InputBinding(
+				new HotkeyCommand() { ExecuteDelegate=SelectAll}, 
+				new KeyGesture(Key.A, ModifierKeys.Control)));
+
+			window.KeyDown += (a, b) => {
+				if(Key.D0 <= b.Key && b.Key <= Key.D9) {
+					if ((Keyboard.Modifiers & ModifierKeys.Control) > 0)
+						CreateGroup((byte)(b.Key - Key.D0));
+					else if((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+						AddToGroup((byte)(b.Key - Key.D0));
+					else
+						SelectGroup((byte)(b.Key - Key.D0));
+				}
+			};
 		}
 
 		//---------------------------------------------- Hotkeys ----------------------------------------------
@@ -76,7 +84,7 @@ namespace taw.game.controlable.playerControl {
 			public event EventHandler CanExecuteChanged;
 			public bool CanExecute(object parameter) => true;
 			public Action<object> ExecuteDelegate;
-			public void Execute(object eventArgs) => ExecuteDelegate?.Invoke(eventArgs);
+			public virtual void Execute(object eventArgs) => ExecuteDelegate?.Invoke(eventArgs);
 		}
 
 		void SelectAll(object eventArgs) {
@@ -89,6 +97,29 @@ namespace taw.game.controlable.playerControl {
 			}
 			if (!isAddOne)
 				UnselectAll();
+		}
+
+		void CreateGroup(byte groupNum) {
+			if (selectedCity.Count != 0) {
+				selectedCityGroups[groupNum].Clear();
+				for (int i = 0; i < selectedCity.Count; ++i)
+					selectedCityGroups[groupNum].Add(selectedCity[i]);
+			}
+		}
+
+		void AddToGroup(byte groupNum) {
+			if (selectedCity.Count != 0) {
+				for (int i = 0; i < selectedCity.Count; ++i)
+					selectedCityGroups[groupNum].Add(selectedCity[i]);
+			}
+		}
+
+		void SelectGroup(byte groupNum) {
+			if (selectedCityGroups[groupNum].Count != 0) {
+				UnselectAll();
+				for (int i = 0; i < selectedCityGroups[groupNum].Count; ++i)
+					SelectCity(selectedCityGroups[groupNum][i], false);
+			}
 		}
 
 
