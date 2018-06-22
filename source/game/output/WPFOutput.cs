@@ -32,8 +32,8 @@ namespace taw.game.output {
 				UnitLabel
 
 		SityShape 50:
-			WarriorsLabel: 20
 			City: 30
+			WarriorsLabel: 40
 
 		GameCellShape 25:
 	*/
@@ -53,6 +53,7 @@ namespace taw.game.output {
 
 		public bool unitIsSquere;
 		public double unitSizeMod;
+		public Brush unitTextColor;
 
 
 		public bool cityIsSquere;
@@ -60,6 +61,11 @@ namespace taw.game.output {
 		public List<Brush> cityShapesColors;
 		public List<Brush> cityStrokesColors;
 		public double cityStrokeThickness;
+		
+		public double unitWarriorsCntRelativeMod;
+
+		public double cityWarriorsCntRelativeMod;
+		public Brush cityWarriorsCntStrokeColor;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
@@ -91,6 +97,8 @@ namespace taw.game.output {
 			ChangeLinkedToGridValues();
 			mainGrid.SizeChanged += (a, b) => ChangeLinkedToGridValues();
 
+			window.dominationBar.Children.Add(new TextBox() {Text = Rand.Seed.ToString() });
+
 			void ChangeLinkedToGridValues() {
 				cellSize = mainGrid.GetOneCellSize();
 				var unitSize = GetSizeWithMod(this.unitSizeMod, unitIsSquere);
@@ -106,6 +114,7 @@ namespace taw.game.output {
 				city.FirstTick += City_InitShape;
 				city.FirstTick += City_InitWarriorsCnt;
 				city.UnitIncome += City_UnitIncome;
+				city.UnitGet += City_UnitGet;
 				city.UnitSend += City_UnitSend;
 			}
 		}
@@ -207,11 +216,42 @@ namespace taw.game.output {
 		}
 
 		void City_InitWarriorsCnt(city.events.BasicCityEvent basicCityEvent) {
+			var cityOut = (basicCityEvent.city.OutputInfo as OutputInfoWPF);
+			TextBlock textBlock = new TextBlock {
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Foreground = this.cityWarriorsCntStrokeColor,
+				Text = basicCityEvent.city.currWarriors + " / " + basicCityEvent.city.maxWarriors,
+			};
 
+			Viewbox viewbox = new Viewbox() {
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Child = textBlock,
+			};
+
+			ResizeViewbox();
+			cityOut.cityGrid.SizeChanged += (a, b) => ResizeViewbox();
+
+			Grid.SetZIndex(viewbox, 40);
+			cityOut.cityGrid.Children.Add(viewbox);
+			cityOut.warriorCnt = textBlock;
+
+			void ResizeViewbox() {
+				var size = GetSizeWithMod(this.citySizeMod, cityIsSquere);
+				viewbox.Width = size.Item1 * cityWarriorsCntRelativeMod;
+				viewbox.Height = size.Item2 * cityWarriorsCntRelativeMod;
+			}
 		}
 
 		void City_UnitIncome(city.events.CityIncomeEvent cityEvent) {
+			(cityEvent.city.OutputInfo as OutputInfoWPF).warriorCnt.Text = cityEvent.city.currWarriors + " / " + cityEvent.city.maxWarriors;
+		}
 
+		void City_UnitGet(city.events.CityUnitsEvent cityEvent) {
+			City_UnitIncome(new city.events.CityIncomeEvent((cityEvent as city.events.BasicCityEvent),
+				cityEvent.city.PlayerId == cityEvent.unit.PlayerId
+				));
 		}
 
 		void City_UnitSend(city.events.CityUnitsEvent cityEvent) {
@@ -219,6 +259,10 @@ namespace taw.game.output {
 			cityEvent.unit.FirstTick += Unit_FirstTick;
 			cityEvent.unit.Tick += Unit_Tick;
 			cityEvent.unit.ReachDestination += Unit_ReachDestination;
+
+			City_UnitIncome(new city.events.CityIncomeEvent((cityEvent as city.events.BasicCityEvent),
+				false
+				));
 		}
 
 		//---------------------------------------------- Events - unit ----------------------------------------------
@@ -233,17 +277,25 @@ namespace taw.game.output {
 				HorizontalAlignment = HorizontalAlignment.Center
 			};
 			SetShapeStyle(unitShape, unitEvent.unit.PlayerId);
+			Grid.SetZIndex(unitShape, 1);
 			unitGrid.Children.Add(unitShape);
 
-			Label unitLabel = new Label() {
+
+			TextBlock textBlock = new TextBlock {
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
-				HorizontalContentAlignment = HorizontalAlignment.Center,
-				VerticalContentAlignment = VerticalAlignment.Center,
-				Foreground = unitShape.Stroke,
-				Content = unitEvent.unit.warriorsCnt,
+				Foreground = this.cityWarriorsCntStrokeColor,
+				Text = unitEvent.unit.warriorsCnt.ToString(),
 			};
-			unitGrid.Children.Add(unitLabel);
+
+			Viewbox viewbox = new Viewbox() {
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Child = textBlock,
+			};
+
+			Grid.SetZIndex(viewbox, 2);
+			unitGrid.Children.Add(viewbox);
 
 			SetSizes();
 			mainGrid.SizeChanged += (a, b) => SetSizes();
@@ -252,7 +304,7 @@ namespace taw.game.output {
 
 			outInfo.grid = unitGrid;
 			outInfo.shape = unitShape;
-			outInfo.unitsCnt = unitLabel;
+			outInfo.unitsCnt = textBlock;
 
 			void SetSizes() {
 				var s = GetSizeWithMod(this.unitSizeMod, unitIsSquere);
@@ -260,9 +312,8 @@ namespace taw.game.output {
 				unitGrid.Height = s.Item2;
 				unitShape.Width = s.Item1;
 				unitShape.Height = s.Item2;
-				unitLabel.Width = s.Item1;
-				unitLabel.Height = s.Item2;
-				unitLabel.FontSize = unitLabel.Width / 1.328352013284 - 5;
+				viewbox.Width = s.Item1 * unitWarriorsCntRelativeMod;
+				viewbox.Height = s.Item2 * unitWarriorsCntRelativeMod;
 			}
 		}
 

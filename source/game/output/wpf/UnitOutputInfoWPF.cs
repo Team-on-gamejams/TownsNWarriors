@@ -21,6 +21,6 @@ namespace taw.game.output.wpf {
 
 		public Grid grid;
 		public Shape shape;
-		public Label unitsCnt;
+		public TextBlock unitsCnt;
 	}
 }

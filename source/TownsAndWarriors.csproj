@@ -81,6 +81,7 @@
     <Compile Include="game\controlable\Controlable.cs" />
     <Compile Include="game\controlable\playerControl\BasicPlayer.cs" />
     <Compile Include="game\controlable\playerControl\WPFLocalPlayer.cs" />
+    <Compile Include="game\controlable\playerControl\wpf\CityInputInfoWPF.cs" />
     <Compile Include="game\map\generators\BasicGenerator.cs" />
     <Compile Include="game\output\BasicOutput.cs" />
     <Compile Include="game\output\WPFOutput.cs" />

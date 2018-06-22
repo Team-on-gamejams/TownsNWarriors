@@ -23,28 +23,40 @@ using taw.game.map;
 using taw.game.city.events;
 
 using taw.game.output.wpf;
+using taw.game.controlable.playerControl.wpf;
 
 namespace taw.game.controlable.playerControl {
 	class WPFLocalPlayer : BasicPlayer {
 		//---------------------------------------------- Fields ----------------------------------------------
 		static List<city.BasicCity> selectedCity;
+		static List<city.BasicCity>[] selectedCityGroups;
 
 		window.GameWindow window;
 
+		public double citySelectedStrokeThickness;
+		public Brush citySelectedStrokeColor;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
+		static WPFLocalPlayer() {
+			selectedCity = new List<BasicCity>(10);
+			selectedCityGroups = new List<BasicCity>[10];
+			for(byte i = 0; i < 10; ++i) {
+				selectedCityGroups[i] = new List<BasicCity>();
+			}
+		}
+
 		public WPFLocalPlayer(byte PlayerId, Game game, window.GameWindow gameWindow) : base(PlayerId, game) {
-			selectedCity = new List<BasicCity>(game.GameMap.Cities.Count);
+			window = gameWindow;
 
 			InitCityEvents();
 		}
 
 		void InitCityEvents() {
 			foreach (var city in game.GameMap.Cities) {
-				city.InputInfo = null;
+				city.InputInfo = new CityInputInfoWPF();
 				city.FirstTick += City_InitLMBPress;
 			}
 			
@@ -55,18 +67,32 @@ namespace taw.game.controlable.playerControl {
 			if (!(cityEvent.city.OutputInfo is OutputInfoWPF outInfo))
 				throw new ApplicationException("Wrong OutputInfo in taw.game.controlable.playerControl.WPFLocalPlayer.City_InitLMBPress(BasicCityEvent cityEvent). Must be CityOutputInfoWPF");
 
-			outInfo.cityGrid.MouseLeftButtonDown += (a, b)=>{
-				if (cityEvent.city.PlayerId == PlayerId) {
-					if (!selectedCity.Contains(cityEvent.city)) 
-						selectedCity.Add(cityEvent.city);
-				}
-				else if (selectedCity.Count != 0) {
-					game.GameMap.SendWarriors(selectedCity, cityEvent.city);
-					selectedCity.Clear();
-				}
-			};
+			outInfo.cityShape.MouseLeftButtonDown  += (a, b) => SelectCity(cityEvent.city);
+			outInfo.warriorCnt.MouseLeftButtonDown += (a, b) => SelectCity(cityEvent.city);
 
+		}
 
+		void SelectCity(BasicCity city) {
+			var inInfo = city.InputInfo as CityInputInfoWPF;
+			var outInfo = city.OutputInfo as OutputInfoWPF;
+
+			if (city.PlayerId == PlayerId && !selectedCity.Contains(city)) {
+				selectedCity.Add(city);
+				inInfo.strokeColorBeforeSelection = outInfo.cityShape.Stroke;
+				inInfo.strokeThicknessBeforeSelection = outInfo.cityShape.StrokeThickness;
+				outInfo.cityShape.Stroke = this.citySelectedStrokeColor;
+				outInfo.cityShape.StrokeThickness = this.citySelectedStrokeThickness;
+			}
+			else if (selectedCity.Count != 0) {
+				game.GameMap.SendWarriors(selectedCity, city);
+				selectedCity.ForEach((a) => {
+					(a.OutputInfo as OutputInfoWPF).cityShape.Stroke =
+					(a.InputInfo as CityInputInfoWPF).strokeColorBeforeSelection;
+					(a.OutputInfo as OutputInfoWPF).cityShape.StrokeThickness =
+					(a.InputInfo as CityInputInfoWPF).strokeThicknessBeforeSelection;
+				});
+				selectedCity.Clear();
+			}
 		}
 
 		//---------------------------------------------- Events - Support ----------------------------------------------

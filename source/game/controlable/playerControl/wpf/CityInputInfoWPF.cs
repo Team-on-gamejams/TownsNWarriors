@@ -15,10 +15,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 
-namespace taw.game.output.wpf {
-	public class OutputInfoWPF {
-		public Grid cityGrid;
-		public Shape cityShape;
-		public TextBlock warriorCnt;
+
+namespace taw.game.controlable.playerControl.wpf {
+	class CityInputInfoWPF {
+		public Brush strokeColorBeforeSelection;
+		public double  strokeThicknessBeforeSelection;
 	}
 }

@@ -27,10 +27,11 @@ namespace taw.game.settings.output {
 
 
 			output.cityIsSquere = true;
-			output.citySizeMod = 0.70;
+			output.citySizeMod = 0.80;
 
 			output.unitIsSquere = true;
 			output.unitSizeMod = 0.55;
+			output.unitTextColor = Brushes.Black;
 
 			output.cityShapesColors = new List<System.Windows.Media.Brush>() {
 				Brushes.Wheat,
@@ -64,6 +65,7 @@ namespace taw.game.settings.output {
 			output.cityStrokeThickness = 2;
 			output.cityStrokesColors = new List<Brush>() {
 				//Brushes.White,
+				//Brushes.Black,
 				new SolidColorBrush(new Color(){
 					R = (byte)( 255 - (output.gameGridBackgroundColor as SolidColorBrush).Color.R),
 					G = (byte)( 255 - (output.gameGridBackgroundColor as SolidColorBrush).Color.G),
@@ -72,7 +74,10 @@ namespace taw.game.settings.output {
 				}),
 			};
 
-		}
+			output.unitWarriorsCntRelativeMod = 0.55;
+			output.cityWarriorsCntRelativeMod = 0.70;
+			output.cityWarriorsCntStrokeColor = Brushes.Black;
+	}
 
 		protected override void LoadSettingsFromFile() {
 			throw new NotImplementedException();

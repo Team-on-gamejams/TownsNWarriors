@@ -111,8 +111,6 @@ namespace taw.game.city {
 
 		//Опрацьовує юніта, який зайшов у місто
 		public void GetUnits(BasicUnit unit) {
-			UnitGet?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
-
 			if (PlayerId == unit.PlayerId) {
 				this.currWarriors += unit.warriorsCnt;
 				if (!saveOvercapedUnits && currWarriors > maxWarriors)
@@ -124,18 +122,26 @@ namespace taw.game.city {
 				if (currWarriors > unit.warriorsCnt) {
 					currWarriors -= unit.warriorsCnt;
 				}
-				else if (currWarriors < unit.warriorsCnt ||
-						(PlayerId == 0 && equalsMeanCapturedForNeutral) ||					
-						(equalsMeanCaptured)
+				else if (
+						(currWarriors < unit.warriorsCnt) ||
+						(
+							currWarriors == unit.warriorsCnt &&
+							((PlayerId == 0 && equalsMeanCapturedForNeutral) ||
+							(equalsMeanCaptured))
+						)
 					) {
 					CityCaptureEvent captureCityEvent = new CityCaptureEvent(basicCityEvent, PlayerId, unit.PlayerId);
 					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
 					PlayerId = unit.PlayerId;
 					Captured?.Invoke(captureCityEvent);
 				}
+				else if(currWarriors == unit.warriorsCnt) {
+					currWarriors = 0;
+				}
 			}
 
 			gameMap.Units.Remove(unit);
+			UnitGet?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
 		}
 
 		//Повертає шлях до міста. є 2 типи шляхів
