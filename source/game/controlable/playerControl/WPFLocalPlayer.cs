@@ -52,6 +52,7 @@ namespace taw.game.controlable.playerControl {
 			window = gameWindow;
 
 			InitCityEvents();
+			InitHotkeys(window);
 		}
 
 		void InitCityEvents() {
@@ -59,8 +60,43 @@ namespace taw.game.controlable.playerControl {
 				city.InputInfo = new CityInputInfoWPF();
 				city.FirstTick += City_InitLMBPress;
 			}
-			
+
 		}
+
+		void InitHotkeys(Window window) {
+			window.InputBindings.Add(
+				new InputBinding(new HotkeyCommand() { ExecuteDelegate=SelectAll},
+						 new KeyGesture(Key.A, ModifierKeys.Control)
+				)
+			);
+		}
+
+		//---------------------------------------------- Hotkeys ----------------------------------------------
+		public class HotkeyCommand : ICommand {
+			private Window _window;
+
+			public Action<object> ExecuteDelegate;
+
+			public event EventHandler CanExecuteChanged;
+			public bool CanExecute(object parameter) => true;
+
+			public void Execute(object eventArgs) {
+				ExecuteDelegate?.Invoke(eventArgs);
+			}
+		}
+
+		void SelectAll(object eventArgs) {
+			bool isAddOne = false;
+			foreach (var city in game.GameMap.Cities) {
+				if (city.PlayerId == PlayerId && !selectedCity.Contains(city)) {
+					SelectCity(city);
+					isAddOne = true;
+				}
+			}
+			if (!isAddOne)
+				UnselectAll();
+		}
+
 
 		//---------------------------------------------- Events - city ----------------------------------------------
 		private void City_InitLMBPress(BasicCityEvent cityEvent) {
@@ -85,14 +121,18 @@ namespace taw.game.controlable.playerControl {
 			}
 			else if (selectedCity.Count != 0) {
 				game.GameMap.SendWarriors(selectedCity, city);
-				selectedCity.ForEach((a) => {
-					(a.OutputInfo as OutputInfoWPF).cityShape.Stroke =
-					(a.InputInfo as CityInputInfoWPF).strokeColorBeforeSelection;
-					(a.OutputInfo as OutputInfoWPF).cityShape.StrokeThickness =
-					(a.InputInfo as CityInputInfoWPF).strokeThicknessBeforeSelection;
-				});
-				selectedCity.Clear();
+				UnselectAll();
 			}
+		}
+
+		void UnselectAll() {
+			selectedCity.ForEach((a) => {
+				(a.OutputInfo as OutputInfoWPF).cityShape.Stroke =
+				(a.InputInfo as CityInputInfoWPF).strokeColorBeforeSelection;
+				(a.OutputInfo as OutputInfoWPF).cityShape.StrokeThickness =
+				(a.InputInfo as CityInputInfoWPF).strokeThicknessBeforeSelection;
+			});
+			selectedCity.Clear();
 		}
 
 		//---------------------------------------------- Events - Support ----------------------------------------------
