@@ -18,7 +18,7 @@ namespace taw.game {
 		}
 
 		static Rand() {
-			Seed = 0;// (int)DateTime.Now.Ticks;
+			Seed = (int)DateTime.Now.Ticks;
 		}
 
 		//[minVal maxVal)
