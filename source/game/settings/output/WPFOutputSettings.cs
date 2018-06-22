@@ -17,10 +17,10 @@ namespace taw.game.settings.output {
 
 			base.SetSettings(obj);
 
-			output.windowBackgroundColor = Brushes.DimGray;
+			output.windowBackgroundColor = Brushes.White;
 
 
-			output.gameGridBackgroundColor = Brushes.Black;
+			output.gameGridBackgroundColor = Brushes.White;
 			output.roadColor = Brushes.Gray;
 			output.roadWidthMod = 0.20;
 			output.roadHeightMod = 0.20;

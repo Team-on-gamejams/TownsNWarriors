@@ -58,7 +58,7 @@ namespace taw.game.controlable.playerControl {
 		void InitCityEvents() {
 			foreach (var city in game.GameMap.Cities) {
 				city.InputInfo = new CityInputInfoWPF();
-				city.FirstTick += City_InitLMBPress;
+				city.FirstTick += City_InitMouse;
 			}
 
 		}
@@ -73,23 +73,17 @@ namespace taw.game.controlable.playerControl {
 
 		//---------------------------------------------- Hotkeys ----------------------------------------------
 		public class HotkeyCommand : ICommand {
-			private Window _window;
-
-			public Action<object> ExecuteDelegate;
-
 			public event EventHandler CanExecuteChanged;
 			public bool CanExecute(object parameter) => true;
-
-			public void Execute(object eventArgs) {
-				ExecuteDelegate?.Invoke(eventArgs);
-			}
+			public Action<object> ExecuteDelegate;
+			public void Execute(object eventArgs) => ExecuteDelegate?.Invoke(eventArgs);
 		}
 
 		void SelectAll(object eventArgs) {
 			bool isAddOne = false;
 			foreach (var city in game.GameMap.Cities) {
 				if (city.PlayerId == PlayerId && !selectedCity.Contains(city)) {
-					SelectCity(city);
+					SelectCity(city, false);
 					isAddOne = true;
 				}
 			}
@@ -99,30 +93,47 @@ namespace taw.game.controlable.playerControl {
 
 
 		//---------------------------------------------- Events - city ----------------------------------------------
-		private void City_InitLMBPress(BasicCityEvent cityEvent) {
+		private void City_InitMouse(BasicCityEvent cityEvent) {
 			if (!(cityEvent.city.OutputInfo is OutputInfoWPF outInfo))
 				throw new ApplicationException("Wrong OutputInfo in taw.game.controlable.playerControl.WPFLocalPlayer.City_InitLMBPress(BasicCityEvent cityEvent). Must be CityOutputInfoWPF");
 
-			outInfo.cityShape.MouseLeftButtonDown  += (a, b) => SelectCity(cityEvent.city);
-			outInfo.warriorCnt.MouseLeftButtonDown += (a, b) => SelectCity(cityEvent.city);
+			outInfo.cityShape.MouseLeftButtonDown  += (a, b) => SelectCity(cityEvent.city, true);
+			outInfo.warriorCnt.MouseLeftButtonDown += (a, b) => SelectCity(cityEvent.city, true);
 
+			outInfo.cityShape.MouseRightButtonDown += (a, b) => SendUnits(cityEvent.city);
+			outInfo.warriorCnt.MouseRightButtonDown += (a, b) => SendUnits(cityEvent.city);
 		}
 
-		void SelectCity(BasicCity city) {
-			var inInfo = city.InputInfo as CityInputInfoWPF;
-			var outInfo = city.OutputInfo as OutputInfoWPF;
+		void SelectCity(BasicCity city, bool IsRemoveIfSelected) {
+			if (!selectedCity.Contains(city)) {
+				if (city.PlayerId == PlayerId) {
+					var inInfo = city.InputInfo as CityInputInfoWPF;
+					var outInfo = city.OutputInfo as OutputInfoWPF;
 
-			if (city.PlayerId == PlayerId && !selectedCity.Contains(city)) {
-				selectedCity.Add(city);
-				inInfo.strokeColorBeforeSelection = outInfo.cityShape.Stroke;
-				inInfo.strokeThicknessBeforeSelection = outInfo.cityShape.StrokeThickness;
-				outInfo.cityShape.Stroke = this.citySelectedStrokeColor;
-				outInfo.cityShape.StrokeThickness = this.citySelectedStrokeThickness;
+					selectedCity.Add(city);
+					inInfo.strokeColorBeforeSelection = outInfo.cityShape.Stroke;
+					inInfo.strokeThicknessBeforeSelection = outInfo.cityShape.StrokeThickness;
+					outInfo.cityShape.Stroke = this.citySelectedStrokeColor;
+					outInfo.cityShape.StrokeThickness = this.citySelectedStrokeThickness;
+				}
 			}
-			else if (selectedCity.Count != 0) {
-				game.GameMap.SendWarriors(selectedCity, city);
-				UnselectAll();
-			}
+			else if (IsRemoveIfSelected)
+				UnselectCity(city);
+		}
+
+		void SendUnits(BasicCity city) {
+			foreach (var i in selectedCity)
+				if(i.PlayerId == PlayerId)
+					game.GameMap.SendWarriors(i, city);
+			UnselectAll();
+		}
+
+		void UnselectCity(BasicCity city) {
+			(city.OutputInfo as OutputInfoWPF).cityShape.Stroke =
+				(city.InputInfo as CityInputInfoWPF).strokeColorBeforeSelection;
+			(city.OutputInfo as OutputInfoWPF).cityShape.StrokeThickness =
+				(city.InputInfo as CityInputInfoWPF).strokeThicknessBeforeSelection;
+			selectedCity.Remove(city);
 		}
 
 		void UnselectAll() {
@@ -134,6 +145,7 @@ namespace taw.game.controlable.playerControl {
 			});
 			selectedCity.Clear();
 		}
+
 
 		//---------------------------------------------- Events - Support ----------------------------------------------
 

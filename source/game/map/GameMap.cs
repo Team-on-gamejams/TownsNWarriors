@@ -55,11 +55,6 @@ namespace taw.game.map {
 			}
 		}
 
-		public void SendWarriors(List<BasicCity> from, BasicCity to) {
-            foreach (var i in from)
-				SendWarriors(i, to);
-		}
-
     	public void SendWarriors(BasicCity from, BasicCity to) {
 			if (from == to)
 				return;
