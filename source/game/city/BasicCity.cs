@@ -192,36 +192,37 @@ namespace taw.game.city {
 			//Пошук шляху в обхід ворога
 			void RecAvoidEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
-
 				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
-					finder[y, x].num > minFindValue)
+					(info.value > minFindValue) ||
+					(gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && 
+					(x != toX || y != toY))
+				)
 					return;
 
-				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+				if (x == toX && y == toY && info.value < minFindValue)
 					minFindValue = finder[y, x].num;
-
-				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && x != toX && y != toY)
-					return;
 
 				finder[y, x].num = info.value++;
 
-				AddNearbyToRecList(x, y, info.value);
+				if(x != toX || y != toY)
+					AddNearbyToRecList(x, y, info.value);
 			}
 
 			//Пошук шляху напролом
 			void RecThroughEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
-
 				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
-					finder[y, x].num > minFindValue)
+					(info.value > minFindValue)
+				)
 					return;
 
-				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+				if (x == toX && y == toY && info.value < minFindValue)
 					minFindValue = finder[y, x].num;
 
 				finder[y, x].num = info.value++;
 
-				AddNearbyToRecList(x, y, info.value);
+				if (x != toX || y != toY)
+					AddNearbyToRecList(x, y, info.value);
 			}
 
 			//Дадає клетки в ліст для наступного пошуку
@@ -251,24 +252,24 @@ namespace taw.game.city {
 					if (finder[y, x].IsOpenRight)
 						nextPathElement.Add(new KeyValuePair<int, int>(x + 1, y));
 
-					if (nextPathElement.Count > 1) {
-						int timesToChange = Rand.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
-						while (timesToChange-- != 0) {
-							int pos1, pos2;
-							do {
-								pos1 = Rand.Next(0, nextPathElement.Count);
-								pos2 = Rand.Next(0, nextPathElement.Count);
-							} while (pos1 == pos2);
-							KeyValuePair<int, int> tmp = nextPathElement[pos1];
-							nextPathElement[pos1] = nextPathElement[pos2];
-							nextPathElement[pos2] = tmp;
-						};
-					}
+					//if (nextPathElement.Count > 1) {
+					//	int timesToChange = Rand.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
+					//	while (timesToChange-- != 0) {
+					//		int pos1 = Rand.Next(0, nextPathElement.Count), pos2;
+					//		do 
+					//			pos2 = Rand.Next(0, nextPathElement.Count);
+					//		while (pos1 == pos2);
+					//		KeyValuePair<int, int> tmp = nextPathElement[pos1];
+					//		nextPathElement[pos1] = nextPathElement[pos2];
+					//		nextPathElement[pos2] = tmp;
+					//	};
+					//}
 
 					while (nextPathElement.Count != 0) {
-						if (BuildBackPath(nextPathElement[0].Key, nextPathElement[0].Value, prevValue - 1))
+						int rPos = Rand.Next(0, nextPathElement.Count);
+						if (BuildBackPath(nextPathElement[rPos].Key, nextPathElement[rPos].Value, prevValue - 1))
 							break;
-						nextPathElement.RemoveAt(0);
+						nextPathElement.RemoveAt(rPos);
 					}
 
 					return true;
