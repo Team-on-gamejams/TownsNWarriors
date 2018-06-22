@@ -61,8 +61,8 @@ namespace taw.game.controlable.playerControl {
 						selectedCity.Add(cityEvent.city);
 				}
 				else if (selectedCity.Count != 0) {
-					selectedCity.Clear();
 					game.GameMap.SendWarriors(selectedCity, cityEvent.city);
+					selectedCity.Clear();
 				}
 			};
 
