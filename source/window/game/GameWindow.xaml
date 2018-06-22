@@ -72,7 +72,7 @@
 
 			</Grid>
 
-			<Grid x:Name="mainGameGrid" ShowGridLines="False" Grid.Row="1" Grid.Column="0">
+			<Grid x:Name="mainGameGrid" ShowGridLines="False" Grid.Row="1" Grid.Column="0" Margin="5 5 5 5">
 
 			</Grid>
 

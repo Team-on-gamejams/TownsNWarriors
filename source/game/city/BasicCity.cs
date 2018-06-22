@@ -12,7 +12,7 @@ using taw.game.city.events;
 
 
 namespace taw.game.city {
-	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable, IOutputable {
+	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable, IOutputable, IInputable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		public static taw.game.map.GameMap gameMap;
 		private int x, y;
@@ -33,6 +33,7 @@ namespace taw.game.city {
 		public int X { get => x; set => x = value; }
 		public int Y { get => y; set => y = value; }
 		public object OutputInfo { get; set; }
+		public object InputInfo { get; set; }
 
 		//---------------------------------------------- Events ----------------------------------------------
 		public delegate void CityBasicDelegate(BasicCityEvent cityEvent);
@@ -110,8 +111,6 @@ namespace taw.game.city {
 
 		//Опрацьовує юніта, який зайшов у місто
 		public void GetUnits(BasicUnit unit) {
-			UnitGet?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
-
 			if (PlayerId == unit.PlayerId) {
 				this.currWarriors += unit.warriorsCnt;
 				if (!saveOvercapedUnits && currWarriors > maxWarriors)
@@ -123,18 +122,26 @@ namespace taw.game.city {
 				if (currWarriors > unit.warriorsCnt) {
 					currWarriors -= unit.warriorsCnt;
 				}
-				else if (currWarriors < unit.warriorsCnt ||
-						(PlayerId == 0 && equalsMeanCapturedForNeutral) ||					
-						(equalsMeanCaptured)
+				else if (
+						(currWarriors < unit.warriorsCnt) ||
+						(
+							currWarriors == unit.warriorsCnt &&
+							((PlayerId == 0 && equalsMeanCapturedForNeutral) ||
+							(equalsMeanCaptured))
+						)
 					) {
 					CityCaptureEvent captureCityEvent = new CityCaptureEvent(basicCityEvent, PlayerId, unit.PlayerId);
 					currWarriors = (ushort)(unit.warriorsCnt - currWarriors);
 					PlayerId = unit.PlayerId;
 					Captured?.Invoke(captureCityEvent);
 				}
+				else if(currWarriors == unit.warriorsCnt) {
+					currWarriors = 0;
+				}
 			}
 
 			gameMap.Units.Remove(unit);
+			UnitGet?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
 		}
 
 		//Повертає шлях до міста. є 2 типи шляхів
@@ -165,13 +172,13 @@ namespace taw.game.city {
 
 			UNOPTIMAL_PATH_FINDER:
 
-			var recList = new List<RecInfo>() { new RecInfo() { x = fromX, y = fromY, value = 0 } };
+			var recList = new Queue<RecInfo>();
+			recList.Enqueue(new RecInfo() { x = fromX, y = fromY, value = 0 });
 			while (recList.Count != 0) {
 				if (rez == true)
-					RecAvoidEnemyCities(recList[0]);
+					RecAvoidEnemyCities(recList.Dequeue());
 				else
-					RecThroughEnemyCities(recList[0]);
-				recList.RemoveAt(0);
+					RecThroughEnemyCities(recList.Dequeue());
 			}
 
 			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
@@ -191,48 +198,49 @@ namespace taw.game.city {
 			//Пошук шляху в обхід ворога
 			void RecAvoidEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
-
 				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
-					finder[y, x].num > minFindValue)
+					(info.value > minFindValue) ||
+					(gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && 
+					(x != toX || y != toY))
+				)
 					return;
 
-				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+				if (x == toX && y == toY && info.value < minFindValue)
 					minFindValue = finder[y, x].num;
-
-				if (gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && x != toX && y != toY)
-					return;
 
 				finder[y, x].num = info.value++;
 
-				AddNearbyToRecList(x, y, info.value);
+				if(x != toX || y != toY)
+					AddNearbyToRecList(x, y, info.value);
 			}
 
 			//Пошук шляху напролом
 			void RecThroughEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
-
 				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
-					finder[y, x].num > minFindValue)
+					(info.value > minFindValue)
+				)
 					return;
 
-				if (x == toX && y == toY && finder[y, x].num < minFindValue)
+				if (x == toX && y == toY && info.value < minFindValue)
 					minFindValue = finder[y, x].num;
 
 				finder[y, x].num = info.value++;
 
-				AddNearbyToRecList(x, y, info.value);
+				if (x != toX || y != toY)
+					AddNearbyToRecList(x, y, info.value);
 			}
 
 			//Дадає клетки в ліст для наступного пошуку
 			void AddNearbyToRecList(int x, int y, int val) {
 				if (finder[y, x].IsOpenBottom)
-					recList.Add(new RecInfo() { x = x, y = y + 1, value = val });
+					recList.Enqueue(new RecInfo() { x = x, y = y + 1, value = val });
 				if (finder[y, x].IsOpenRight)
-					recList.Add(new RecInfo() { x = x + 1, y = y, value = val });
+					recList.Enqueue(new RecInfo() { x = x + 1, y = y, value = val });
 				if (finder[y, x].IsOpenTop)
-					recList.Add(new RecInfo() { x = x, y = y - 1, value = val });
+					recList.Enqueue(new RecInfo() { x = x, y = y - 1, value = val });
 				if (finder[y, x].IsOpenLeft)
-					recList.Add(new RecInfo() { x = x - 1, y = y, value = val });
+					recList.Enqueue(new RecInfo() { x = x - 1, y = y, value = val });
 			}
 
 			//Будує сам шлях від міста до міста
@@ -250,24 +258,24 @@ namespace taw.game.city {
 					if (finder[y, x].IsOpenRight)
 						nextPathElement.Add(new KeyValuePair<int, int>(x + 1, y));
 
-					if (nextPathElement.Count > 1) {
-						int timesToChange = Rand.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
-						while (timesToChange-- != 0) {
-							int pos1, pos2;
-							do {
-								pos1 = Rand.Next(0, nextPathElement.Count);
-								pos2 = Rand.Next(0, nextPathElement.Count);
-							} while (pos1 == pos2);
-							KeyValuePair<int, int> tmp = nextPathElement[pos1];
-							nextPathElement[pos1] = nextPathElement[pos2];
-							nextPathElement[pos2] = tmp;
-						};
-					}
+					//if (nextPathElement.Count > 1) {
+					//	int timesToChange = Rand.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
+					//	while (timesToChange-- != 0) {
+					//		int pos1 = Rand.Next(0, nextPathElement.Count), pos2;
+					//		do 
+					//			pos2 = Rand.Next(0, nextPathElement.Count);
+					//		while (pos1 == pos2);
+					//		KeyValuePair<int, int> tmp = nextPathElement[pos1];
+					//		nextPathElement[pos1] = nextPathElement[pos2];
+					//		nextPathElement[pos2] = tmp;
+					//	};
+					//}
 
 					while (nextPathElement.Count != 0) {
-						if (BuildBackPath(nextPathElement[0].Key, nextPathElement[0].Value, prevValue - 1))
+						int rPos = Rand.Next(0, nextPathElement.Count);
+						if (BuildBackPath(nextPathElement[rPos].Key, nextPathElement[rPos].Value, prevValue - 1))
 							break;
-						nextPathElement.RemoveAt(0);
+						nextPathElement.RemoveAt(rPos);
 					}
 
 					return true;

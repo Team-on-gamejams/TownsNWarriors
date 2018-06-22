@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace taw.game {
 	static class Rand {
-		static Random rand = new Random((int)DateTime.Now.Ticks);
+		static Random rand;
 		static int seed;
 
 		public static int Seed {
@@ -15,6 +15,10 @@ namespace taw.game {
 				seed = value;
 				rand = new Random(seed);
 			}
+		}
+
+		static Rand() {
+			Seed = (int)DateTime.Now.Ticks;
 		}
 
 		//[minVal maxVal)

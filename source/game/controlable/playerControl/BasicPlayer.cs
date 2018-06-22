@@ -8,15 +8,16 @@ using taw.game.settings;
 namespace taw.game.controlable.playerControl {
  	abstract class BasicPlayer : Controlable {
 		//---------------------------------------------- Fields ----------------------------------------------
-
+		protected readonly Game game;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicPlayer(byte PlayerId) {
+		public BasicPlayer(byte PlayerId, Game Game) {
 			this.PlayerId = PlayerId;
+			game = Game;
 			SetSettings(CreateLinkedSetting());
 		}
 
