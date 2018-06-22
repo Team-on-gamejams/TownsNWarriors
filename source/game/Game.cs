@@ -14,39 +14,41 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TownsAndWarriors.window;
-using TownsAndWarriors.game.map;
+using taw.window;
+using taw.game.map;
 
+using taw.game.output;
+using taw.game.controlable.botControl;
+using taw.game.controlable.playerControl;
+using taw.game.settings;
 
-namespace TownsAndWarriors.game {
-	public class Game {
+namespace taw.game {
+	public class Game : basicInterfaces.ISettingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		GameMap gameMap;
-		Grid mainGrid;
-		Canvas mainCanvas;
-		GameWindow IOWindow;
-
-		bool isPlay, isNeedToExit;
-		int x, y;
 
 		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
 
-		//---------------------------------------------- Properties ----------------------------------------------
+		bool isPlay;
 
+		private int y;
+		private int x;
+
+		List<controlable.Controlable> controlsInput;
+		BasicOutput output;
+
+		//---------------------------------------------- Properties ----------------------------------------------
+		public int X { get => x; set => x = value; }
+		public int Y { get => y; set => y = value; }
+		public GameMap GameMap { get => gameMap; set => gameMap = value; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow, int X, int Y) {
-			this.IOWindow = IOWindow;
+		public Game() {
+			SetSettings(CreateLinkedSetting());
+
 			isPlay = true;
-			isNeedToExit = false;
-			mainGrid = IOWindow.mainGameGrid;
 
-			x = X;
-			y = Y;
-
-			FillIOWindow();
-
-			loopTimer.Interval = settings.values.milisecondsPerTick;
+			loopTimer.Interval = GlobalGameInfo.milisecondsPerTick;
 			loopTimer.Tick += (a, b) => {
 				if (isPlay) {
 					Loop();
@@ -55,121 +57,50 @@ namespace TownsAndWarriors.game {
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public void Play() {
+		public void Play(output.BasicOutput output, List<controlable.Controlable> controlables) {
 			isPlay = true;
-			game.globalGameInfo.tick = 1;
+			game.GlobalGameInfo.tick = 1;
 
-			CreateGameMap();
-			InitGameMap();
+			this.output = output;
+
+			controlsInput = controlables;
 
 			loopTimer.Start();
 		}
 
-		void FillIOWindow() {
-			for (int i = 0; i < x; ++i)
-				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-			for (int i = 0; i < y; ++i)
-				mainGrid.RowDefinitions.Add(new RowDefinition());
+		public void CreateGameMap(game.map.generators.map.BasicMapGenerator mapGenerator,
+			game.map.generators.city.BasicCityPlacer sityPlacer,
+			game.map.generators.idSetters.BasicIdSetter idSetter
+			) {
+			GameMap = new GameMap(X, Y);
 
-			mainCanvas = new Canvas();
-			Grid.SetZIndex(mainCanvas, 2);
-			mainGrid.Children.Add(mainCanvas);
-		}
+			mapGenerator.SetGameMap(GameMap);
+			mapGenerator.GenerateRandomMap();
 
-		void CreateGameMap() {
-			settings.size.OneCellSizeX = 0;
-			settings.size.OneCellSizeY = 0;
+			sityPlacer.SetGameMap(GameMap);
+			sityPlacer.PlaceSities();
 
-			settings.values.seed = (int)
-				DateTime.Now.Ticks;
-			//1340092764;
-
-			gameMap = GameMap.GenerateRandomMap(
-				x, y,
-				new game.map.mapGenerators.TunnelMapGenerator(),
-				new game.map.mapGenerators.SityPlacer14(),
-				new game.map.mapGenerators.CityIdDiffCorners()
-				);
-
-			for (int i = 0; i < settings.values.generator_CityId_Bots; ++i)
-				gameMap.SetBot(i, new bot.RushBot(gameMap, gameMap.Sities, gameMap.Units, (byte)(i + 2)));
-		}
-
-		void InitGameMap() {
-			gameMap.SetCanvas(mainCanvas);
-			gameMap.DrawStatic(mainGrid);
-			SetGrowTimer();
+			idSetter.SetGameMap(GameMap);
+			idSetter.SetId();
 		}
 
 		void Loop() {
-			++game.globalGameInfo.tick;
-			//MessageBox.Show("game" + game.globalGameInfo.tick.ToString());
-			gameMap.UpdateMap();
-			gameMap.Tick();
+			GameMap.Tick();
 
-			WinProcess();
+			foreach (var control in controlsInput)
+				if (control != null)
+					control.TickReact();
+
+			++game.GlobalGameInfo.tick;
+			output.TickReact();
+		}
+		//---------------------------------------------- Settingable ----------------------------------------------
+		public void SetSettings(SettinsSetter settingsSetter) {
+			settingsSetter.SetSettings(this);
 		}
 
-		void WinProcess() {
-			int id = 0;
-			if (IsWin()) {
-				mainCanvas.Children.Clear();
-				isPlay = false;
-				loopTimer.Stop();
-
-				string winner = "";
-				if (id == 1)
-					winner = "You win!";
-				else
-					winner = "Bot win! Seems like you looser";
-
-
-				if (MessageBox.Show("Do you want to play again?", winner, MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
-					this.Play();
-				}
-				else {
-					IOWindow.Close();
-				}
-			}
-
-			bool IsWin() {
-				foreach (var sity in gameMap.Sities) {
-					if (sity.playerId != 0) {
-						id = sity.playerId;
-						break;
-					}
-				}
-
-				foreach (var sity in gameMap.Sities)
-					if (sity.playerId != 0 && sity.playerId != id)
-						return false;
-
-				return true;
-			}
-		}
-
-		void SetGrowTimer() {
-			System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-			timer.Interval = 10;
-
-			timer.Tick += (a, b) => {
-				if ((int)settings.size.OneCellSizeX < (int)(mainGrid.RenderSize.Width / gameMap.SizeX))
-					settings.size.OneCellSizeX += settings.size.growIncr;
-				if ((int)settings.size.OneCellSizeY < (int)(mainGrid.RenderSize.Height / gameMap.SizeY))
-					settings.size.OneCellSizeY += settings.size.growIncr;
-
-				if ((int)settings.size.OneCellSizeX >= (int)(mainGrid.RenderSize.Width / gameMap.SizeX) &&
-					(int)settings.size.OneCellSizeY >= (int)(mainGrid.RenderSize.Height / gameMap.SizeY)) {
-					timer.Stop();
-					mainGrid.SizeChanged += (c, d) => {
-						settings.size.OneCellSizeX = d.NewSize.Width / gameMap.SizeX;
-						settings.size.OneCellSizeY = d.NewSize.Height / gameMap.SizeY;
-					};
-					IOWindow.Width++;
-				}
-			};
-
-			timer.Start();
+		public SettinsSetter CreateLinkedSetting() {
+			return new settings.game.GameSettings();
 		}
 	}
 }

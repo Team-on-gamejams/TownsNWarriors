@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EFF05EB0-09EC-432C-9B95-55A5766DD752}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TownsAndWarriors</RootNamespace>
+    <RootNamespace>taw</RootNamespace>
     <AssemblyName>TownsAndWarriors</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -70,6 +70,47 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="game\basicInterfaces\GameEvent.cs" />
+    <Compile Include="game\basicInterfaces\IInputable.cs" />
+    <Compile Include="game\basicInterfaces\IOutputable.cs" />
+    <Compile Include="game\basicInterfaces\ISettingable.cs" />
+    <Compile Include="game\city\events\BasicCityEvent.cs" />
+    <Compile Include="game\city\events\CaptureCityEvent.cs" />
+    <Compile Include="game\city\events\CityIncomeEvent.cs" />
+    <Compile Include="game\city\events\CityUnitsEvent.cs" />
+    <Compile Include="game\controlable\Controlable.cs" />
+    <Compile Include="game\controlable\playerControl\BasicPlayer.cs" />
+    <Compile Include="game\controlable\playerControl\WPFLocalPlayer.cs" />
+    <Compile Include="game\controlable\playerControl\wpf\CityInputInfoWPF.cs" />
+    <Compile Include="game\map\generators\BasicGenerator.cs" />
+    <Compile Include="game\output\BasicOutput.cs" />
+    <Compile Include="game\output\WPFOutput.cs" />
+    <Compile Include="game\output\wpf\CityOutputInfoWPF.cs" />
+    <Compile Include="game\output\wpf\UnitOutputInfoWPF.cs" />
+    <Compile Include="game\output\wpf\WPFOutputExtensions.cs" />
+    <Compile Include="game\Rand.cs" />
+    <Compile Include="game\settings\controlable\botControl\BasicBotSettings.cs" />
+    <Compile Include="game\settings\controlable\botControl\RushBotSettings.cs" />
+    <Compile Include="game\settings\city\BasicCitySettings.cs" />
+    <Compile Include="game\settings\controlable\playerControl\BasicPlayerSettigns.cs" />
+    <Compile Include="game\settings\controlable\playerControl\WPFLocalPlayerSettings.cs" />
+    <Compile Include="game\settings\game\GameSettings.cs" />
+    <Compile Include="game\settings\generators\BasicIdSetterSettings.cs" />
+    <Compile Include="game\settings\generators\BasicMapGeneratorSettings.cs" />
+    <Compile Include="game\settings\generators\BasicSityPlaceSettings.cs" />
+    <Compile Include="game\settings\generators\IdSetterDiffCornersSettings.cs" />
+    <Compile Include="game\settings\generators\SityPlacer14Settings.cs" />
+    <Compile Include="game\settings\generators\TunnelMapGeneratorSettings.cs" />
+    <Compile Include="game\settings\output\BasicOutputSettings.cs" />
+    <Compile Include="game\settings\output\WPFOutputSettings.cs" />
+    <Compile Include="game\settings\unit\BasicUnitSettings.cs" />
+    <Compile Include="game\settings\city\CitySettings.cs" />
+    <Compile Include="game\settings\SettinsSetter.cs" />
+    <Compile Include="game\settings\unit\UnitSettings.cs" />
+    <Compile Include="game\unit\BasicUnit.cs" />
+    <Compile Include="game\unit\events\BasicUnitEvent.cs" />
+    <Compile Include="game\unit\events\UnitMoveEvent.cs" />
+    <Compile Include="game\unit\events\UnitReachDestinationEvent.cs" />
     <Compile Include="window\MainMenu\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -121,37 +162,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="audio\Audio.cs" />
-    <Compile Include="game\basicInterfaces\withPlayerId.cs" />
-    <Compile Include="game\bot\BasicBot.cs" />
-    <Compile Include="game\bot\RushBot.cs" />
-    <Compile Include="game\bot\SimpleBot.cs" />
+    <Compile Include="game\basicInterfaces\IWithPlayerId.cs" />
+    <Compile Include="game\controlable\botControl\BasicBot.cs" />
+    <Compile Include="game\controlable\botControl\RushBot.cs" />
     <Compile Include="game\globalGameInfo.cs" />
-    <Compile Include="game\IO\BasicSity.cs" />
-    <Compile Include="game\IO\BasicUnit.cs" />
-    <Compile Include="game\IO\CastleCity.cs" />
-    <Compile Include="game\IO\GameCell.cs" />
-    <Compile Include="game\IO\GameMap.cs" />
-    <Compile Include="game\IO\HorseCity.cs" />
-    <Compile Include="game\IO\HorseUnit.cs" />
-    <Compile Include="game\map\mapGenerators\cityId\BasicCityId.cs" />
-    <Compile Include="game\map\mapGenerators\cityId\CityIdDiffCorners.cs" />
-    <Compile Include="game\map\mapGenerators\city\BasicSityPlacer.cs" />
-    <Compile Include="game\map\mapGenerators\road\BasicMapGenerator.cs" />
-    <Compile Include="game\map\mapGenerators\city\SityPlacer14.cs" />
-    <Compile Include="game\map\mapGenerators\road\TunnelMapGenerator.cs" />
-    <Compile Include="game\settings\colors.cs" />
-    <Compile Include="game\settings\size.cs" />
-    <Compile Include="game\sity\BasicSity.cs" />
-    <Compile Include="game\sity\CastleCity.cs" />
-    <Compile Include="game\sity\HorseCity.cs" />
-    <Compile Include="game\unit\BasicUnit.cs" />
+    <Compile Include="game\map\generators\idSetters\BasicIdSetter.cs" />
+    <Compile Include="game\map\generators\idSetters\IdSetterDiffCorners.cs" />
+    <Compile Include="game\map\generators\city\BasicCityPlacer.cs" />
+    <Compile Include="game\map\generators\map\BasicMapGenerator.cs" />
+    <Compile Include="game\map\generators\city\CityPlacer14.cs" />
+    <Compile Include="game\map\generators\map\TunnelMapGenerator.cs" />
+    <Compile Include="game\city\BasicCity.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\map\GameCell.cs" />
-    <Compile Include="game\IO\GameCellDrawableObj.cs" />
     <Compile Include="game\map\GameMap.cs" />
-    <Compile Include="game\settings\values.cs" />
-    <Compile Include="game\basicInterfaces\tickable.cs" />
-    <Compile Include="game\unit\HorseUnit.cs" />
+    <Compile Include="game\basicInterfaces\ITickable.cs" />
     <Compile Include="window\MainMenu\CreditsWindow.xaml.cs">
       <DependentUpon>CreditsWindow.xaml</DependentUpon>
     </Compile>
@@ -259,6 +284,9 @@
     <Resource Include="img\window\mainWindow\backgroundUser3.jpg" />
     <Resource Include="img\window\mainWindow\background.jpg" />
     <Resource Include="img\window\lobby\background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

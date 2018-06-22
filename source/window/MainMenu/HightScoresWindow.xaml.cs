@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace TownsAndWarriors.window {
+namespace taw.window {
 	/// <summary>
 	/// Interaction logic for HightScores.xaml
 	/// </summary>
@@ -27,8 +27,9 @@ namespace TownsAndWarriors.window {
 
 			double size = (this.Width - 20) / 3;
 			Thickness e = new Thickness(0, 5, 5, 5);
-			StackPanel d = new StackPanel();
-			d.Orientation = Orientation.Horizontal;
+			StackPanel d = new StackPanel {
+				Orientation = Orientation.Horizontal
+			};
 
 			Label f = new Label();
 			Label w = new Label();

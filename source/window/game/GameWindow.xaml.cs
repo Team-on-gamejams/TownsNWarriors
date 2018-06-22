@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 
-namespace TownsAndWarriors.window {
+namespace taw.window {
 	/// <summary>
 	/// Interaction logic for GameWindow.xaml
 	/// </summary>
