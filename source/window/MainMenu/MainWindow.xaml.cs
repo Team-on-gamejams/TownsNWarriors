@@ -59,9 +59,15 @@ namespace taw.window {
 
 			var output = new taw.game.output.WPFOutput(game, gameWindow);
 			var controlsInput = new List<taw.game.controlable.Controlable>();
-			controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer(1, game, gameWindow));
-			for (int i = 0; i < idGen.bots; ++i)
-				controlsInput.Add(new game.controlable.botControl.RushBot(game.GameMap, game.GameMap.Cities, game.GameMap.Units, (byte)(i + 2)));
+
+			for (int i = 0; i < idGen.townsPerControl.Count; ++i)
+				if(i == 0)
+					controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer((byte)(i + 1), game, gameWindow));
+				else
+					controlsInput.Add(new game.controlable.botControl.RushBot(game.GameMap, 
+						game.GameMap.Cities, 
+						game.GameMap.Units, (byte)(i + 1))
+					);
 
 			game.Play(output, controlsInput);
 

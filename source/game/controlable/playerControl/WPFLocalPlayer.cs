@@ -67,6 +67,7 @@ namespace taw.game.controlable.playerControl {
 				new HotkeyCommand() { ExecuteDelegate=SelectAll}, 
 				new KeyGesture(Key.A, ModifierKeys.Control)));
 
+			//WPF не дозволяє ставити KeyGesture на цифри без ModifierKeys
 			window.KeyDown += (a, b) => {
 				if(Key.D0 <= b.Key && b.Key <= Key.D9) {
 					if ((Keyboard.Modifiers & ModifierKeys.Control) > 0)

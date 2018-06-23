@@ -13,10 +13,7 @@ namespace taw.game.settings.generators {
 			if (!(obj is BasicIdSetter idSetter))
 				throw new ApplicationException("Wrong generator in BasicIdSetterSettings.SetSettings");
 
-			idSetter.bots = 1;
-			idSetter.townsPerBot = new List<byte>() {1, 2, 2};
-			idSetter.townsPerPlayer = 1;
-
+			idSetter.townsPerControl = new List<byte>() {1, 1, 1, 1};
 		}
 
 		protected override void LoadSettingsFromFile() {
