@@ -22,6 +22,11 @@ namespace taw.game.controlable.botControl {
 		List<city.BasicCity> rushingSities = new List<city.BasicCity>();
 		List<city.BasicCity> canAttackDirectly = new List<city.BasicCity>();
 
+		//All cities on map
+		protected List<game.city.BasicCity> sities;
+		//All existing units
+		protected List<game.unit.BasicUnit> units;
+
 
 		bool isRushing = false;
 		byte rushWaveRemains;
@@ -44,17 +49,13 @@ namespace taw.game.controlable.botControl {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public RushBot(game.map.GameMap Map,
-			List<game.city.BasicCity> Sities,
-			List<game.unit.BasicUnit> Units,
 			byte botId
-			) : base(Map, Sities, Units, botId) {
-			map = Map;
-			sities = Sities;
-			units = Units;
-			PlayerId = botId;
+			) : base(Map, botId) {
+			sities = Map.Cities;
+			units = Map.Units;
 		}
 
-		//	//---------------------------------------------- Methods - Main ----------------------------------------------
+		//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
 			if (GlobalGameInfo.tick > ignoreFirstNTicks &&
 				GlobalGameInfo.tick % tickReact == 0) {
@@ -319,5 +320,4 @@ namespace taw.game.controlable.botControl {
 		}
 
 	}
-
 }

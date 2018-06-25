@@ -10,10 +10,6 @@ namespace taw.game.controlable.botControl {
 		//---------------------------------------------- Fields ----------------------------------------------
 		//Map
 		protected game.map.GameMap map;
-		//All cities on map
-		protected List<game.city.BasicCity> sities;
-		//All existing units
-		protected List<game.unit.BasicUnit> units;
 
 		public byte ignoreFirstNTicks;
 		public byte tickReact;
@@ -26,13 +22,8 @@ namespace taw.game.controlable.botControl {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicBot(game.map.GameMap Map,
-			List<game.city.BasicCity> Sities,
-			List<game.unit.BasicUnit> Units,
 			byte botId) {
-
 			map = Map;
-			sities = Sities;
-			units = Units;
 			PlayerId = botId;
 
 			this.SetSettings(this.CreateLinkedSetting());
