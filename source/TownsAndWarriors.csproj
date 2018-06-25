@@ -78,6 +78,14 @@
     <Compile Include="game\city\events\CaptureCityEvent.cs" />
     <Compile Include="game\city\events\CityIncomeEvent.cs" />
     <Compile Include="game\city\events\CityUnitsEvent.cs" />
+    <Compile Include="game\controlable\botControl\BasicPartsBot.cs" />
+    <Compile Include="game\controlable\botControl\parts\attack\CaptureNeutral.cs" />
+    <Compile Include="game\controlable\botControl\parts\BasicPart.cs" />
+    <Compile Include="game\controlable\botControl\parts\PartCommand.cs" />
+    <Compile Include="game\controlable\botControl\parts\PartCommandWithPriority.cs" />
+    <Compile Include="game\controlable\botControl\parts\PartWithPriority.cs" />
+    <Compile Include="game\controlable\botControl\support\UnitsMovingToCity.cs" />
+    <Compile Include="game\controlable\botControl\support\LogicalPlayersSingletone.cs" />
     <Compile Include="game\controlable\Controlable.cs" />
     <Compile Include="game\controlable\playerControl\BasicPlayer.cs" />
     <Compile Include="game\controlable\playerControl\WPFLocalPlayer.cs" />
@@ -223,7 +231,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="game\controlable\botControl\parts\defense\" />
+    <Folder Include="game\controlable\botControl\parts\other\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>
