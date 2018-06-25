@@ -10,7 +10,7 @@ using taw.game.unit;
 using taw.game.controlable.botControl.parts;
 
 namespace taw.game.controlable.botControl {
-	class BasicPartsBot : BasicBot {	
+	class BasicPartsBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		List<PartWithPriority> parts;
 		List<PartCommandWithPriority> commands;
@@ -28,11 +28,11 @@ namespace taw.game.controlable.botControl {
 		public override bool TickReact() {
 			if (GlobalGameInfo.tick > ignoreFirstNTicks && GlobalGameInfo.tick % tickReact == 0) {
 				commands.Clear();
-				foreach (var part in parts) 
+				foreach (var part in parts)
 					if (part.Part.TickReact())
 						commands.Add(new PartCommandWithPriority(part.Priority, part.Part.GetTickReactResult()));
 
-				commands.Sort(new Comparison<PartCommandWithPriority>((a, b) =>  a.Priority - b.Priority));
+				commands.Sort(new Comparison<PartCommandWithPriority>((a, b) => a.Priority - b.Priority));
 
 				//for (int i = 0; i < commands.Count; ++i) {
 				//	for (int j = 0; j < commands.Count; ++j) {
@@ -44,7 +44,7 @@ namespace taw.game.controlable.botControl {
 				//	}
 				//}
 
-				if(commands.Count != 0)
+				if (commands.Count != 0)
 					ExecuteCommand(commands[0].Command);
 
 
@@ -59,7 +59,10 @@ namespace taw.game.controlable.botControl {
 
 		//---------------------------------------------- Methods - behavior ----------------------------------------------
 		public void AddPart(BasicPart part, short priority) => AddPart(new PartWithPriority(priority, part));
-		public void AddPart(PartWithPriority partWithPriority) => parts.Add(partWithPriority);
+		public void AddPart(PartWithPriority partWithPriority){
+			partWithPriority.Part.PlayerId = this.PlayerId;
+			parts.Add(partWithPriority);
+		}
 		public void GetPartEnumerator() => parts.GetEnumerator();
 		public void RemovePart(PartWithPriority partWithPriority) => parts.Remove(partWithPriority);
 		public void ClearParts(PartWithPriority partWithPriority) => parts.Clear();
