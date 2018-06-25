@@ -116,11 +116,11 @@ namespace taw.game.controlable.playerControl {
 		}
 
 		void SelectGroup(byte groupNum) {
-			if (selectedCityGroups[groupNum].Count != 0) {
+			//if (selectedCityGroups[groupNum].Count != 0) {
 				UnselectAll();
 				for (int i = 0; i < selectedCityGroups[groupNum].Count; ++i)
 					SelectCity(selectedCityGroups[groupNum][i], false);
-			}
+			//}
 		}
 
 
