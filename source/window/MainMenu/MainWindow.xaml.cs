@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using taw.game;
+using taw.game.controlable.botControl;
 
 
 namespace taw.window {
@@ -60,14 +61,18 @@ namespace taw.window {
 			var output = new taw.game.output.WPFOutput(game, gameWindow);
 			var controlsInput = new List<taw.game.controlable.Controlable>();
 
-			for (int i = 0; i < idGen.townsPerControl.Count; ++i)
+			for (int i = 0; i < idGen.ControlsCnt; ++i)
 				if(i == 0)
 					controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer((byte)(i + 1), game, gameWindow));
-				else
-					controlsInput.Add(new game.controlable.botControl.RushBot(game.GameMap, 
-						game.GameMap.Cities, 
-						game.GameMap.Units, (byte)(i + 1))
-					);
+			else if(i == 1) {
+				var partBot = new BasicPartsBot(game.GameMap, (byte)(i + 1));
+				//partBot.AddPart(new CaptureNeutral(), 100);
+				controlsInput.Add(partBot);
+			}
+			else
+				controlsInput.Add(new RushBot(game.GameMap, (byte)(i + 1)));
+
+			taw.game.controlable.botControl.support.LogicalPlayersSingletone.Init(game.GameMap, idGen.ControlsCnt);
 
 			game.Play(output, controlsInput);
 
