@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
@@ -14,8 +13,7 @@ using taw.game.city.events;
 namespace taw.game.city {
 	public partial class BasicCity : ITickable, IWithPlayerId, ISettingable, IOutputable, IInputable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		public static taw.game.map.GameMap gameMap;
-		private int x, y;
+		public static map.GameMap gameMap;
 
 		//Load from settings
 		public ushort currWarriors, maxWarriors;
@@ -26,12 +24,12 @@ namespace taw.game.city {
 		public bool removeOvercapedUnits;
 
 		public bool equalsMeanCaptured;
-		public bool equalsMeanCapturedForNeutral; 
+		public bool equalsMeanCapturedForNeutral;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
-		public int X { get => x; set => x = value; }
-		public int Y { get => y; set => y = value; }
+		public int X { get; set; }
+		public int Y { get; set; }
 		public object OutputInfo { get; set; }
 		public object InputInfo { get; set; }
 
@@ -56,7 +54,6 @@ namespace taw.game.city {
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicCity() {
 			this.SetSettings(this.CreateLinkedSetting());
-
 			basicCityEvent = new BasicCityEvent(this);
 		}
 
@@ -85,24 +82,20 @@ namespace taw.game.city {
 		}
 
 		//Повертає кількість воїнів, які вийдуть при наступній атаці
-		public ushort GetAtkWarriors() {
-			return (ushort)Math.Round(currWarriors * sendPersent * atkPersent);
-		}
+		public ushort GetAtkWarriors() => (ushort)Math.Round(GetAtkWarriorsWithoutAtk() * atkPersent);
+		ushort GetAtkWarriorsWithoutAtk() => (ushort)Math.Round(currWarriors * sendPersent);
 
 		//Повертає кількість воїнів, яких вистачить щоб вбити всіх в цьому місті (до 0)
-		public ushort GetDefWarriors() {
-			return (ushort)Math.Round(currWarriors * defPersent);
-		}
+		public ushort GetDefWarriors() => (ushort)Math.Round(currWarriors * defPersent);
 
 		//Створює юніта і задає йому шлях для руху
 		public BasicUnit SendUnit(BasicCity to) {
-			ushort sendWarriors = GetAtkWarriors();
+			ushort sendWarriors = GetAtkWarriorsWithoutAtk();
 			if(sendWarriors == 0) 
 				return null;
 			
 			currWarriors -= sendWarriors;
-			if (currWarriors < 0)
-				currWarriors = 0;
+			sendWarriors = (ushort)Math.Round(sendWarriors * atkPersent);
 
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
 			UnitSend?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
@@ -153,94 +146,90 @@ namespace taw.game.city {
 				return null;
 			}
 
+			isDirectly = true;
 			int minFindValue = int.MaxValue;
-			bool rez = true;
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
-			int fromX = 0, fromY = 0, toX = 0, toY = 0;
+			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
 
-			for (int i = 0; i < finder.GetLength(0); ++i) {
-				for (int j = 0; j < finder.GetLength(1); ++j) {
+			for (int i = 0; i < finder.GetLength(0); ++i)
+				for (int j = 0; j < finder.GetLength(1); ++j)
 					finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
-					if (gameMap.Map[i][j].Sity == this) {
-						fromX = j; fromY = i;
-					}
-					else if (gameMap.Map[i][j].Sity == to) {
-						toX = j; toY = i;
-					}
-				}
-			}
 
 			UNOPTIMAL_PATH_FINDER:
 
-			var recList = new Queue<RecInfo>();
-			recList.Enqueue(new RecInfo() { x = fromX, y = fromY, value = 0 });
-			while (recList.Count != 0) {
-				if (rez == true)
-					RecAvoidEnemyCities(recList.Dequeue());
+			var recQueue = new Queue<RecInfo>();
+			recQueue.Enqueue(new RecInfo() { x = X, y = Y, value = 0 });
+			while (recQueue.Count != 0) {
+				if (isDirectly)
+					RecAvoidEnemyCities(recQueue.Dequeue());
 				else
-					RecThroughEnemyCities(recList.Dequeue());
+					RecThroughEnemyCities(recQueue.Dequeue());
 			}
 
-			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
-			BuildBackPath(toX, toY, finder[toY, toX].num);
+			BuildBackPath(to.X, to.Y, finder[to.Y, to.X].num);
 			reversedPath.Reverse();
 
-			if (reversedPath.Count == 0 && rez) {
-				rez = false;
-				recList.Clear();
+			if (reversedPath.Count == 0 && isDirectly) {
+				isDirectly = false;
+				recQueue.Clear();
 				for (int i = 0; i < finder.GetLength(0); ++i)
 					for (int j = 0; j < finder.GetLength(1); ++j)
 						finder[i, j].num = -1;
 				goto UNOPTIMAL_PATH_FINDER;
 			}
 
+			if (reversedPath.Count != 0 && !isDirectly) 
+				SetNewDestination();
+			
+
 			//------------------------------- Inner methods ---------------------------------------
 			//Пошук шляху в обхід ворога
 			void RecAvoidEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
-				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
-					(info.value > minFindValue) ||
-					(gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && 
-					(x != toX || y != toY))
+				if ((finder[y, x].num != -1 && finder[y, x].num <= info.value) ||
+					(info.value >= minFindValue) ||
+					(
+						gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && 
+						(x != to.X || y != to.Y)
+					)
 				)
 					return;
 
-				if (x == toX && y == toY && info.value < minFindValue)
-					minFindValue = finder[y, x].num;
+				if (x == to.X && y == to.Y)
+					minFindValue = info.value;
 
 				finder[y, x].num = info.value++;
 
-				if(x != toX || y != toY)
+				if(x != to.X || y != to.Y)
 					AddNearbyToRecList(x, y, info.value);
 			}
 
 			//Пошук шляху напролом
 			void RecThroughEnemyCities(RecInfo info) {
-				int x = info.x, y = info.y;
-				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
-					(info.value > minFindValue)
+				if ((finder[info.y, info.x].num != -1 && finder[info.y, info.x].num <= info.value) ||
+					(info.value >= minFindValue)
 				)
 					return;
 
-				if (x == toX && y == toY && info.value < minFindValue)
-					minFindValue = finder[y, x].num;
+				if (info.x == to.X && info.y == to.Y)
+					minFindValue = info.value;
 
-				finder[y, x].num = info.value++;
+				finder[info.y, info.x].num = info.value++;
 
-				if (x != toX || y != toY)
-					AddNearbyToRecList(x, y, info.value);
+				if (info.x != to.X || info.y != to.Y)
+					AddNearbyToRecList(info.x, info.y, info.value);
 			}
 
 			//Дадає клетки в ліст для наступного пошуку
 			void AddNearbyToRecList(int x, int y, int val) {
 				if (finder[y, x].IsOpenBottom)
-					recList.Enqueue(new RecInfo() { x = x, y = y + 1, value = val });
+					recQueue.Enqueue(new RecInfo() { x = x, y = y + 1, value = val });
 				if (finder[y, x].IsOpenRight)
-					recList.Enqueue(new RecInfo() { x = x + 1, y = y, value = val });
+					recQueue.Enqueue(new RecInfo() { x = x + 1, y = y, value = val });
 				if (finder[y, x].IsOpenTop)
-					recList.Enqueue(new RecInfo() { x = x, y = y - 1, value = val });
+					recQueue.Enqueue(new RecInfo() { x = x, y = y - 1, value = val });
 				if (finder[y, x].IsOpenLeft)
-					recList.Enqueue(new RecInfo() { x = x - 1, y = y, value = val });
+					recQueue.Enqueue(new RecInfo() { x = x - 1, y = y, value = val });
 			}
 
 			//Будує сам шлях від міста до міста
@@ -258,19 +247,6 @@ namespace taw.game.city {
 					if (finder[y, x].IsOpenRight)
 						nextPathElement.Add(new KeyValuePair<int, int>(x + 1, y));
 
-					//if (nextPathElement.Count > 1) {
-					//	int timesToChange = Rand.Next(nextPathElement.Count + 1, (nextPathElement.Count + 1) * 2);
-					//	while (timesToChange-- != 0) {
-					//		int pos1 = Rand.Next(0, nextPathElement.Count), pos2;
-					//		do 
-					//			pos2 = Rand.Next(0, nextPathElement.Count);
-					//		while (pos1 == pos2);
-					//		KeyValuePair<int, int> tmp = nextPathElement[pos1];
-					//		nextPathElement[pos1] = nextPathElement[pos2];
-					//		nextPathElement[pos2] = tmp;
-					//	};
-					//}
-
 					while (nextPathElement.Count != 0) {
 						int rPos = Rand.Next(0, nextPathElement.Count);
 						if (BuildBackPath(nextPathElement[rPos].Key, nextPathElement[rPos].Value, prevValue - 1))
@@ -282,26 +258,33 @@ namespace taw.game.city {
 				}
 				return false;
 			}
+
+			//Якщо послали в місто куди нема прямого шляху, то встановить новий Destination. Гравцю шо з цим методом, шо без нього, все одно нічого не помітно. 
+			//Але крепко воно діє на бота. Бот бачить що його рашать, і пробує щось робити, а ворог навіть не дійшов)
+			void SetNewDestination() {
+				for(int i = 0; i < reversedPath.Count; ++i) {
+					if(gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity != null &&
+						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity.PlayerId != this.PlayerId) {
+						reversedPath.RemoveRange(i + 1, reversedPath.Count - i - 1);
+						break;
+					}
+
+				}
+			}
 			//------------------------------- END of Inner methods ---------------------------------------
 
-			isDirectly = rez;
 			if (reversedPath.Count != 0)
 				return reversedPath;
 			return null;
 		}
 
-		public void SetSettings(SettinsSetter settinsSetter) {
-			settinsSetter.SetSettings(this);
-		}
+		public void SetSettings(SettinsSetter settinsSetter) => settinsSetter.SetSettings(this);
 
-		public virtual SettinsSetter CreateLinkedSetting() {
-			return new settings.city.BasicCitySettings();
-		}
+		public virtual SettinsSetter CreateLinkedSetting() => new settings.city.BasicCitySettings();
 
 		//Створює юнита, якого посилатиме це місто
-		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) {
-			return new BasicUnit(sendWarriors, this.PlayerId, BuildOptimalPath(to, out bool b), to);
-		}
+		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) =>
+			new BasicUnit(sendWarriors, this.PlayerId, BuildOptimalPath(to, out bool b), to);
 
 		//////////////////////////////////////////////////////////////////////////
 
