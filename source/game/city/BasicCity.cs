@@ -151,8 +151,8 @@ namespace taw.game.city {
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
 			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
 
-			for (int i = 0; i < finder.GetLength(0); ++i) 
-				for (int j = 0; j < finder.GetLength(1); ++j) 
+			for (int i = 0; i < finder.GetLength(0); ++i)
+				for (int j = 0; j < finder.GetLength(1); ++j)
 					finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
 
 			UNOPTIMAL_PATH_FINDER:
@@ -178,12 +178,16 @@ namespace taw.game.city {
 				goto UNOPTIMAL_PATH_FINDER;
 			}
 
+			if (reversedPath.Count != 0 && !isDirectly) 
+				SetNewDestination();
+			
+
 			//------------------------------- Inner methods ---------------------------------------
 			//Пошук шляху в обхід ворога
 			void RecAvoidEnemyCities(RecInfo info) {
 				int x = info.x, y = info.y;
-				if ((finder[y, x].num != -1 && finder[y, x].num < info.value) ||
-					(info.value > minFindValue) ||
+				if ((finder[y, x].num != -1 && finder[y, x].num <= info.value) ||
+					(info.value >= minFindValue) ||
 					(
 						gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && 
 						(x != to.X || y != to.Y)
@@ -192,7 +196,7 @@ namespace taw.game.city {
 					return;
 
 				if (x == to.X && y == to.Y)
-					minFindValue = finder[y, x].num;
+					minFindValue = info.value;
 
 				finder[y, x].num = info.value++;
 
@@ -202,13 +206,13 @@ namespace taw.game.city {
 
 			//Пошук шляху напролом
 			void RecThroughEnemyCities(RecInfo info) {
-				if ((finder[info.y, info.x].num != -1 && finder[info.y, info.x].num < info.value) ||
-					(info.value > minFindValue)
+				if ((finder[info.y, info.x].num != -1 && finder[info.y, info.x].num <= info.value) ||
+					(info.value >= minFindValue)
 				)
 					return;
 
 				if (info.x == to.X && info.y == to.Y)
-					minFindValue = finder[info.y, info.x].num;
+					minFindValue = info.value;
 
 				finder[info.y, info.x].num = info.value++;
 
@@ -253,6 +257,19 @@ namespace taw.game.city {
 					return true;
 				}
 				return false;
+			}
+
+			//Якщо послали в місто куди нема прямого шляху, то встановить новий Destination. Гравцю шо з цим методом, шо без нього, все одно нічого не помітно. 
+			//Але крепко воно діє на бота. Бот бачить що його рашать, і пробує щось робити, а ворог навіть не дійшов)
+			void SetNewDestination() {
+				for(int i = 0; i < reversedPath.Count; ++i) {
+					if(gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity != null &&
+						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity.PlayerId != this.PlayerId) {
+						reversedPath.RemoveRange(i + 1, reversedPath.Count - i - 1);
+						break;
+					}
+
+				}
 			}
 			//------------------------------- END of Inner methods ---------------------------------------
 
