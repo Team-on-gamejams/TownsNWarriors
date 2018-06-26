@@ -107,12 +107,25 @@ namespace taw.game.city {
 			}
 		}
 
+		public void ResendUnit(BasicCity to, BasicUnit unit) {
+			var path = BuildOptimalPath(to, out BasicCity realDest);
+			unit.SetPath(path, realDest, to);
+		}
+
 		//Опрацьовує юніта, який зайшов у місто
 		public void GetUnits(BasicUnit unit) {
+			bool needResend = false;
+
 			if (PlayerId == unit.PlayerId) {
-				this.currWarriors += unit.warriorsCnt;
-				if (!saveOvercapedUnits && currWarriors > maxWarriors)
-					currWarriors = maxWarriors;
+				if (unit.planedDestination != this) {
+					needResend = true;
+				}
+				else {
+					this.currWarriors += unit.warriorsCnt;
+					if (!saveOvercapedUnits && currWarriors > maxWarriors)
+						currWarriors = maxWarriors;
+				}
+				
 			}
 			else {
 				unit.warriorsCnt = (ushort)Math.Round((2 - this.defPersent) * unit.warriorsCnt);
@@ -138,8 +151,13 @@ namespace taw.game.city {
 				}
 			}
 
-			gameMap.Units.Remove(unit);
-			UnitGet?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
+			if (needResend) {
+				ResendUnit(unit.planedDestination, unit);
+			}
+			else {
+				gameMap.Units.Remove(unit);
+				UnitGet?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
+			}
 		}
 
 		//Повертає шлях до міста. є 2 типи шляхів
@@ -295,7 +313,7 @@ namespace taw.game.city {
 		//Створює юнита, якого посилатиме це місто
 		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) {
 			var path = BuildOptimalPath(to, out BasicCity realDest);
-			return new BasicUnit(sendWarriors, this.PlayerId, path, realDest);
+			return new BasicUnit(sendWarriors, this.PlayerId, path, realDest, to);
 		}
 
 		public void ClearHashedPath() => hashedPath.Clear();

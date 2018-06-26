@@ -79,7 +79,11 @@
     <Compile Include="game\city\events\CityIncomeEvent.cs" />
     <Compile Include="game\city\events\CityUnitsEvent.cs" />
     <Compile Include="game\controlable\botControl\BasicPartsBot.cs" />
+    <Compile Include="game\controlable\botControl\parts\attack\CaptureNeutral.cs" />
+    <Compile Include="game\controlable\botControl\parts\attack\RushWeakestPlayer.cs" />
+    <Compile Include="game\controlable\botControl\parts\BasicPart.cs" />
     <Compile Include="game\controlable\botControl\parts\Command.cs" />
+    <Compile Include="game\controlable\botControl\parts\defence\WaitIfWeakest.cs" />
     <Compile Include="game\controlable\botControl\support\UnitsMovingToCity.cs" />
     <Compile Include="game\controlable\botControl\support\LogicalPlayersSingletone.cs" />
     <Compile Include="game\controlable\Controlable.cs" />
@@ -228,8 +232,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="game\controlable\botControl\parts\attack\" />
-    <Folder Include="game\controlable\botControl\parts\defense\" />
     <Folder Include="game\controlable\botControl\parts\other\" />
   </ItemGroup>
   <ItemGroup>

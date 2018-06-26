@@ -24,6 +24,7 @@ namespace taw.game.controlable.botControl {
 		public BasicPartsBot(GameMap Map, byte botId) : base(Map, botId) {
 			currCommands = new List<Command>();
 			longTimeCommands = new List<Command>();
+			parts = new List<BasicPart>();
 		}
 
 		//---------------------------------------------- Methods - Main ----------------------------------------------
