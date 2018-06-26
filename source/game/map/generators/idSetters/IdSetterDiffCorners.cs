@@ -24,8 +24,8 @@ namespace taw.game.map.generators.idSetters {
 					int needI = -1, needJ = -1;
 					for (int i = gameMap.SizeY - 1; i >= 0; --i) {
 						for (int j = gameMap.SizeX - 1; j >= 0; --j)
-							if (gameMap.Map[i][j].Sity != null &&
-								gameMap.Map[i][j].Sity.PlayerId == 0 && 
+							if (gameMap.Map[i][j].City != null &&
+								gameMap.Map[i][j].City.PlayerId == 0 && 
 								(
 								((controlNum + 1) % 4 == 1 && IsNearbyLeftTop(needI, needJ, i, j)) ||
 								((controlNum + 1) % 4 == 2 && IsNearbyRightTop(needI, needJ, i, j)) ||
@@ -44,7 +44,7 @@ namespace taw.game.map.generators.idSetters {
 					}
 
 
-					gameMap.Map[needI][needJ].Sity.PlayerId = (byte)(controlNum + 1);
+					gameMap.Map[needI][needJ].City.PlayerId = (byte)(controlNum + 1);
 				}
 
 				if (end)

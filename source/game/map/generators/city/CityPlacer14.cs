@@ -159,7 +159,7 @@ namespace taw.game.map.generators.city {
 		}
 
 		void InsertCity(int idPos, int idCity) {
-			gameMap.Map[bestSitiesPos[idPos].Key][bestSitiesPos[idPos].Value].Sity = sities[idCity];
+			gameMap.Map[bestSitiesPos[idPos].Key][bestSitiesPos[idPos].Value].City = sities[idCity];
 			sities[idCity].X = bestSitiesPos[idPos].Value;
 			sities[idCity].Y = bestSitiesPos[idPos].Key;
 		}
@@ -169,26 +169,26 @@ namespace taw.game.map.generators.city {
 		bool IsFreeAround(int k) {
 			return (bestSitiesPos[k].Key == 0 || !gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenTop ||
 					(bestSitiesPos[k].Key > 0 && gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenTop &&
-												 gameMap.Map[bestSitiesPos[k].Key - 1][bestSitiesPos[k].Value].Sity == null)) &&
+												 gameMap.Map[bestSitiesPos[k].Key - 1][bestSitiesPos[k].Value].City == null)) &&
 
 					(bestSitiesPos[k].Key == gameMap.Map.Count - 1 || !gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenBottom ||
 					(bestSitiesPos[k].Key < gameMap.Map.Count - 1 && gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenBottom &&
-												 gameMap.Map[bestSitiesPos[k].Key + 1][bestSitiesPos[k].Value].Sity == null)) &&
+												 gameMap.Map[bestSitiesPos[k].Key + 1][bestSitiesPos[k].Value].City == null)) &&
 
 					(bestSitiesPos[k].Value == 0 || !gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenLeft ||
 					(bestSitiesPos[k].Value > 0 && gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenLeft &&
-												 gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value - 1].Sity == null)) &&
+												 gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value - 1].City == null)) &&
 
 					(bestSitiesPos[k].Value == gameMap.Map[0].Count - 1 || !gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenRight ||
 					(bestSitiesPos[k].Value < gameMap.Map[0].Count - 1 && gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value].IsOpenRight &&
-												 gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value + 1].Sity == null));
+												 gameMap.Map[bestSitiesPos[k].Key][bestSitiesPos[k].Value + 1].City == null));
 		}
 
 		int CntSities() {
 			int rez = 0;
 			for (int i = 0; i < gameMap.SizeY; ++i)
 				for (int j = 0; j < gameMap.SizeX; ++j)
-					if (gameMap.Map[i][j].Sity != null)
+					if (gameMap.Map[i][j].City != null)
 						++rez;
 			return rez;
 		}
@@ -197,8 +197,8 @@ namespace taw.game.map.generators.city {
 			List<BasicCity> list = new List<BasicCity>();
 			for (int i = 0; i < gameMap.SizeY; ++i)
 				for (int j = 0; j < gameMap.SizeX; ++j)
-					if (gameMap.Map[i][j].Sity != null)
-						list.Add(gameMap.Map[i][j].Sity);
+					if (gameMap.Map[i][j].City != null)
+						list.Add(gameMap.Map[i][j].City);
 			return list;
 		}
 

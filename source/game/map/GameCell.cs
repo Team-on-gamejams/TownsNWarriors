@@ -18,7 +18,7 @@ namespace taw.game.map {
 		public bool IsOpenRight { get; set; }
 		public bool IsOpenBottom { get; set; }
 
-		public BasicCity Sity { get; set; }
+		public BasicCity City { get; set; }
 		public List<BasicUnit> Units => units.Value;
 
 		public object OutputInfo { get; set; }
@@ -27,7 +27,7 @@ namespace taw.game.map {
 		public GameCell() {
 			IsOpenBottom = IsOpenLeft = IsOpenRight = IsOpenTop = false;
 			units = new Lazy<List<BasicUnit>>();
-			Sity = null;
+			City = null;
 		}
 	}
 }

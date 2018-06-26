@@ -26,6 +26,8 @@ namespace taw.game.city {
 		public bool equalsMeanCaptured;
 		public bool equalsMeanCapturedForNeutral;
 
+		Dictionary<BasicCity, Tuple<List<KeyValuePair<int, int>>, bool>> hashedPath;
+
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
 		public int X { get; set; }
@@ -55,6 +57,7 @@ namespace taw.game.city {
 		public BasicCity() {
 			this.SetSettings(this.CreateLinkedSetting());
 			basicCityEvent = new BasicCityEvent(this);
+			hashedPath = new Dictionary<BasicCity, Tuple<List<KeyValuePair<int, int>>, bool>>();
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -146,6 +149,11 @@ namespace taw.game.city {
 				return null;
 			}
 
+			if (hashedPath.ContainsKey(to)) {
+				isDirectly = hashedPath[to].Item2;
+				return hashedPath[to].Item1;
+			}
+
 			isDirectly = true;
 			int minFindValue = int.MaxValue;
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
@@ -189,7 +197,7 @@ namespace taw.game.city {
 				if ((finder[y, x].num != -1 && finder[y, x].num <= info.value) ||
 					(info.value >= minFindValue) ||
 					(
-						gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && 
+						gameMap.Map[y][x].City != null && gameMap.Map[y][x].City.PlayerId != this.PlayerId && 
 						(x != to.X || y != to.Y)
 					)
 				)
@@ -263,8 +271,9 @@ namespace taw.game.city {
 			//Але крепко воно діє на бота. Бот бачить що його рашать, і пробує щось робити, а ворог навіть не дійшов)
 			void SetNewDestination() {
 				for(int i = 0; i < reversedPath.Count; ++i) {
-					if(gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity != null &&
-						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity.PlayerId != this.PlayerId) {
+					if(gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City != null &&
+						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City.PlayerId != this.PlayerId) {
+						to = gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City;
 						reversedPath.RemoveRange(i + 1, reversedPath.Count - i - 1);
 						break;
 					}
@@ -273,8 +282,11 @@ namespace taw.game.city {
 			}
 			//------------------------------- END of Inner methods ---------------------------------------
 
-			if (reversedPath.Count != 0)
+			if (reversedPath.Count != 0) {
+				if(!hashedPath.ContainsKey(to))
+					hashedPath.Add(to, new Tuple<List<KeyValuePair<int, int>>, bool>(reversedPath, isDirectly));
 				return reversedPath;
+			}
 			return null;
 		}
 
@@ -285,6 +297,8 @@ namespace taw.game.city {
 		//Створює юнита, якого посилатиме це місто
 		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) =>
 			new BasicUnit(sendWarriors, this.PlayerId, BuildOptimalPath(to, out bool b), to);
+
+		public void ClearHashedPath() => hashedPath.Clear();
 
 		//////////////////////////////////////////////////////////////////////////
 

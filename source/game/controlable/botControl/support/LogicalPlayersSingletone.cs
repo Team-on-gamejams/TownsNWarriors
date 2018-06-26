@@ -53,6 +53,12 @@ namespace taw.game.controlable.botControl.support {
 						.EnemyUnitsMovingToCity.Remove(args.unit);
 				};
 
+				city.Captured += (args) => {
+					foreach (var i in ControlInfoForParts[args.prevPlayerId]) 
+						i.Key.ClearHashedPath();
+					foreach (var i in ControlInfoForParts[args.newPlayerId]) 
+						i.Key.ClearHashedPath();
+				};
 			}
 
 		}
