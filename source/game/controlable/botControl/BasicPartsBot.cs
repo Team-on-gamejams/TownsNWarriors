@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using taw.game.city;
 using taw.game.map;
 using taw.game.unit;
 
 using taw.game.controlable.botControl.parts;
+using taw.game.controlable.botControl.support;
 
 namespace taw.game.controlable.botControl {
 	class BasicPartsBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		List<PartWithPriority> parts;
 		List<PartCommandWithPriority> commands;
+		List<PartCommandWithPriority> LongTimeCommands;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
@@ -26,7 +26,9 @@ namespace taw.game.controlable.botControl {
 
 		//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
-			if (GlobalGameInfo.tick > ignoreFirstNTicks && GlobalGameInfo.tick % tickReact == 0) {
+			if (GlobalGameInfo.tick > ignoreFirstNTicks && GlobalGameInfo.tick % tickReact == 0 &&
+				LogicalPlayersSingletone.ControlInfoForParts[this.PlayerId].Count != 0
+				) {
 				commands.Clear();
 				foreach (var part in parts)
 					if (part.Part.TickReact())
@@ -44,8 +46,9 @@ namespace taw.game.controlable.botControl {
 				//	}
 				//}
 
-				if (commands.Count != 0)
+				if (commands.Count != 0) {
 					ExecuteCommand(commands[0].Command);
+				}
 
 
 				return true;
@@ -53,8 +56,22 @@ namespace taw.game.controlable.botControl {
 			return false;
 		}
 
-		void ExecuteCommand(PartCommand command) {
+		bool ExecuteCommand(PartCommand command) {
+			if (command.CityTo == null && command.CityFrom == null)
+				return false;
 
+			BasicCity to = command.CityTo, from = command.CityFrom;
+			int warriors = command.MinWarriors, tick = command.MaxTick;
+
+			if(from == null && to != null) {
+				foreach (var i in LogicalPlayersSingletone.ControlInfoForParts[this.PlayerId]) {
+					from = i.Key;
+					break;
+				}
+				BasicCity.gameMap.SendWarriors(from, to);
+			}
+
+			return false;
 		}
 
 		//---------------------------------------------- Methods - behavior ----------------------------------------------

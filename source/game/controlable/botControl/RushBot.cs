@@ -58,7 +58,8 @@ namespace taw.game.controlable.botControl {
 		//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
 			if (GlobalGameInfo.tick > ignoreFirstNTicks &&
-				GlobalGameInfo.tick % tickReact == 0) {
+				GlobalGameInfo.tick % tickReact == 0 &&
+				game.controlable.botControl.support.LogicalPlayersSingletone.ControlInfoForParts[this.PlayerId].Count != 0) {
 
 				RecalcBotSities();
 				RecalcRushingSities();
