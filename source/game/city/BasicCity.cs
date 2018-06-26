@@ -94,7 +94,7 @@ namespace taw.game.city {
 		//Створює юніта і задає йому шлях для руху
 		public BasicUnit SendUnit(BasicCity to) {
 			ushort sendWarriors = GetAtkWarriorsWithoutAtk();
-			if(sendWarriors == 0) 
+			if(sendWarriors == 0 || to == this) 
 				return null;
 			
 			currWarriors -= sendWarriors;
@@ -102,6 +102,8 @@ namespace taw.game.city {
 
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
 			UnitSend?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
+			if (unit != null)
+				gameMap.Units.Add(unit);
 			return unit;
 		}
 

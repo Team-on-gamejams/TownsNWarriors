@@ -54,17 +54,5 @@ namespace taw.game.map {
 					goto REPEAT_UNITS_TURN;
 			}
 		}
-
-    	public void SendWarriors(BasicCity from, BasicCity to) {
-			if (from == to)
-				return;
-
-			var unit = from.SendUnit(to);
-
-			if (unit== null)
-				return;
-
-			units.Add(unit);
-		}
 	}
 }

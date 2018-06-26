@@ -68,7 +68,7 @@ namespace taw.game.controlable.botControl {
 					from = i.Key;
 					break;
 				}
-				BasicCity.gameMap.SendWarriors(from, to);
+				from.SendUnit(to);
 			}
 
 			return false;

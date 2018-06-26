@@ -156,7 +156,7 @@ namespace taw.game.controlable.playerControl {
 		void SendUnits(BasicCity city) {
 			foreach (var i in selectedCity)
 				if(i.PlayerId == PlayerId)
-					game.GameMap.SendWarriors(i, city);
+					i.SendUnit(city);
 			UnselectAll();
 		}
 

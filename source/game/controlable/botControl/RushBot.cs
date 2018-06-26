@@ -12,25 +12,25 @@ namespace taw.game.controlable.botControl {
 	public class RushBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
 		//with bot cities
-		List<city.BasicCity> botSities = new List<city.BasicCity>();
-		List<BasicCity> overcapedBotSities = new List<BasicCity>();
+		List<city.BasicCity> botCities = new List<city.BasicCity>();
+		List<BasicCity> overcapedBotCities = new List<BasicCity>();
 
-		List<BasicCity> botSitiesUnderAttack = new List<BasicCity>();
-		List<List<BasicUnit>> botSitiesUnderAttackUnits = new List<List<BasicUnit>>();
+		List<BasicCity> botCitiesUnderAttack = new List<BasicCity>();
+		List<List<BasicUnit>> botCitiesUnderAttackUnits = new List<List<BasicUnit>>();
 
 		//With enemy cities
-		List<city.BasicCity> rushingSities = new List<city.BasicCity>();
+		List<city.BasicCity> rushingCities = new List<city.BasicCity>();
 		List<city.BasicCity> canAttackDirectly = new List<city.BasicCity>();
 
 		//All cities on map
-		protected List<game.city.BasicCity> sities;
+		protected List<game.city.BasicCity> cities;
 		//All existing units
 		protected List<game.unit.BasicUnit> units;
 
 
 		bool isRushing = false;
 		byte rushWaveRemains;
-		BasicCity rushSity;
+		BasicCity rushCity;
 
 		public bool protectCities;
 		public byte protectCities_MinimumUnitsLeft;
@@ -38,7 +38,7 @@ namespace taw.game.controlable.botControl {
 		public bool dropOvercapacityUnit;
 		public byte dropOvercapacityUnit_Nearby;
 
-		public bool moveUnitsToWeakSities;
+		public bool moveUnitsToWeakCities;
 
 		public List<KeyValuePair<byte, byte>> rushChances; 
 		public byte rushWithMinimumMoreUnits;
@@ -51,7 +51,7 @@ namespace taw.game.controlable.botControl {
 		public RushBot(game.map.GameMap Map,
 			byte botId
 			) : base(Map, botId) {
-			sities = Map.Cities;
+			cities = Map.Cities;
 			units = Map.Units;
 		}
 
@@ -61,26 +61,26 @@ namespace taw.game.controlable.botControl {
 				GlobalGameInfo.tick % tickReact == 0 &&
 				game.controlable.botControl.support.LogicalPlayersSingletone.ControlInfoForParts[this.PlayerId].Count != 0) {
 
-				RecalcBotSities();
-				RecalcRushingSities();
+				RecalcBotCities();
+				RecalcRushingCities();
 				RecalcCanAttackDirectly();
 
 				if (!isRushing)
 					CalculateWhoNeedToBeRushed();
 				if (isRushing)
-					RushFromAllSities();
+					RushFromAllCities();
 
-				RecalcOvercapedBotSities();
-				RecalcBotSitiesUnderAttack();
+				RecalcOvercapedBotCities();
+				RecalcBotCitiesUnderAttack();
 
 				if (protectCities)
-					ProtectSities();
+					ProtectCities();
 
 				if (dropOvercapacityUnit)
 					DropOvercapacityUnits();
 
-				if (moveUnitsToWeakSities)
-					MoveUnitsToWeakSity();
+				if (moveUnitsToWeakCities)
+					MoveUnitsToWeakCity();
 
 				return true;
 			}
@@ -90,56 +90,56 @@ namespace taw.game.controlable.botControl {
 
 		//---------------------------------------------- Methods - fillData ----------------------------------------------
 
-		void RecalcBotSities() {
-			botSities.Clear();
-			foreach (var sity in sities) {
-				if (sity.PlayerId == PlayerId)
-					botSities.Add(sity);
+		void RecalcBotCities() {
+			botCities.Clear();
+			foreach (var city in cities) {
+				if (city.PlayerId == PlayerId)
+					botCities.Add(city);
 			}
 		}
 
-		void RecalcRushingSities() {
-			rushingSities.Clear();
+		void RecalcRushingCities() {
+			rushingCities.Clear();
 			foreach (var unit in units) {
-				if (unit.PlayerId == PlayerId && !rushingSities.Contains(unit.destination))
-					rushingSities.Add(unit.destination);
+				if (unit.PlayerId == PlayerId && !rushingCities.Contains(unit.destination))
+					rushingCities.Add(unit.destination);
 			}
 		}
 
 		void RecalcCanAttackDirectly() {
 			canAttackDirectly.Clear();
-			foreach (var sity in sities) {
-				if (!botSities.Contains(sity)) {
+			foreach (var city in cities) {
+				if (!botCities.Contains(city)) {
 					bool directly = false;
-					foreach (var bs in botSities) {
-						bs.BuildOptimalPath(sity, out bool tmp);
+					foreach (var bs in botCities) {
+						bs.BuildOptimalPath(city, out bool tmp);
 						if (tmp) {
 							directly = true;
 							break;
 						}
 					}
 					if (directly)
-						canAttackDirectly.Add(sity);
+						canAttackDirectly.Add(city);
 				}
 			}
 		}
 
-		void RecalcOvercapedBotSities() {
-			overcapedBotSities.Clear();
-			foreach (var bs in botSities) {
+		void RecalcOvercapedBotCities() {
+			overcapedBotCities.Clear();
+			foreach (var bs in botCities) {
 				int currUnits = bs.currWarriors + dropOvercapacityUnit_Nearby;
 				foreach (var unit in units) 
 					if (unit.PlayerId == this.PlayerId && unit.destination == bs && unit.TicksLeftToDestination() <= this.tickReact)
 						currUnits += unit.warriorsCnt;
 				if (currUnits >= bs.maxWarriors)
-					overcapedBotSities.Add(bs);
+					overcapedBotCities.Add(bs);
 			}
 		}
 
-		void RecalcBotSitiesUnderAttack() {
-			botSitiesUnderAttack.Clear();
-			botSitiesUnderAttackUnits.Clear();
-			foreach (var bs in botSities) {
+		void RecalcBotCitiesUnderAttack() {
+			botCitiesUnderAttack.Clear();
+			botCitiesUnderAttackUnits.Clear();
+			foreach (var bs in botCities) {
 				bool isUnderAttack = false;
 				foreach (var unit in units) {
 					if (unit.PlayerId != this.PlayerId && unit.destination == bs) {
@@ -149,11 +149,11 @@ namespace taw.game.controlable.botControl {
 				}
 
 				if (isUnderAttack) {
-					botSitiesUnderAttackUnits.Add(new List<BasicUnit>());
-					botSitiesUnderAttack.Add(bs);
+					botCitiesUnderAttackUnits.Add(new List<BasicUnit>());
+					botCitiesUnderAttack.Add(bs);
 					foreach (var unit in units) {
 						if (unit.destination == bs) {
-							botSitiesUnderAttackUnits[botSitiesUnderAttackUnits.Count - 1].Add(unit);
+							botCitiesUnderAttackUnits[botCitiesUnderAttackUnits.Count - 1].Add(unit);
 						}
 					}
 				}
@@ -169,20 +169,20 @@ namespace taw.game.controlable.botControl {
 			for (byte i = 1; i <= rushChances.Count; ++i) {
 				potentialRushes.Add(new List<BasicCity>());
 
-				foreach (var sity in canAttackDirectly) {
-					uint potentialArmy = CalcPotentialArmy(i, sity.defPersent);
-					if (!rushingSities.Contains(sity) &&
-						 GetEnemyArmy(sity) < potentialArmy
+				foreach (var city in canAttackDirectly) {
+					uint potentialArmy = CalcPotentialArmy(i, city.defPersent);
+					if (!rushingCities.Contains(city) &&
+						 GetEnemyArmy(city) < potentialArmy
 					) {
 						bool isInPrev = false;
 						foreach (var rush in potentialRushes) {
-							if (rush.Contains(sity)) {
+							if (rush.Contains(city)) {
 								isInPrev = true;
 								break;
 							}
 						}
 						if (!isInPrev)
-							potentialRushes[i - 1].Add(sity);
+							potentialRushes[i - 1].Add(city);
 					}
 				}
 
@@ -221,28 +221,28 @@ namespace taw.game.controlable.botControl {
 				}
 
 				var potentialRush = potentialRushes[potentialRushPos];
-				rushSity = potentialRush[Rand.Next(0, potentialRush.Count)];
+				rushCity = potentialRush[Rand.Next(0, potentialRush.Count)];
 				isRushing = true;
 				rushWaveRemains = (byte)(potentialRushPos + 1);
 			}
 
 		}
 
-		void RushFromAllSities() {
-			if (rushSity.PlayerId == this.PlayerId)
+		void RushFromAllCities() {
+			if (rushCity.PlayerId == this.PlayerId)
 				isRushing = false;
 
 			if (rushWaveRemains-- == 0)
 				isRushing = false;
 			else
-				foreach (var sity in botSities)
-					map.SendWarriors(sity, rushSity);
+				foreach (var city in botCities)
+					city.SendUnit(rushCity);
 		}
 
-		void ProtectSities() {
-			//for (int i = 0; i < botSitiesUnderAttack.Count; ++i) {
-			//	var sity = botSitiesUnderAttack[i];
-			//	var units = botSitiesUnderAttackUnits[i];
+		void ProtectCities() {
+			//for (int i = 0; i < botCitiesUnderAttack.Count; ++i) {
+			//	var city = botCitiesUnderAttack[i];
+			//	var units = botCitiesUnderAttackUnits[i];
 
 			//	uint attackersCnt = 0;
 			//	foreach (var unit in units) {
@@ -260,12 +260,12 @@ namespace taw.game.controlable.botControl {
 		}
 
 		void DropOvercapacityUnits() {
-			//foreach (var i in overcapedBotSities) {
-			//	map.SendWarriors(i, this.sities[values.rnd.Next(0, sities.Count)]);
+			//foreach (var i in overcapedBotCities) {
+			//	map.SendWarriors(i, this.cities[values.rnd.Next(0, cities.Count)]);
 			//}
 		}
 
-		void MoveUnitsToWeakSity() {
+		void MoveUnitsToWeakCity() {
 
 		}
 
@@ -273,24 +273,24 @@ namespace taw.game.controlable.botControl {
 
 		uint CalcPotentialArmy(byte rushesCntBase, double enemyDefMult) {
 			uint potentialArmy = 0;
-			foreach (var sity in botSities) {
-				ushort sendWarriors = 0, currWarriors = sity.currWarriors, rushesCnt = rushesCntBase;
+			foreach (var city in botCities) {
+				ushort sendWarriors = 0, currWarriors = city.currWarriors, rushesCnt = rushesCntBase;
 				while (rushesCnt-- != 0) {
-					sendWarriors += (ushort)Math.Round(currWarriors * sity.sendPersent * sity.atkPersent);
-					currWarriors -= (ushort)(currWarriors * sity.sendPersent);
+					sendWarriors += (ushort)Math.Round(currWarriors * city.sendPersent * city.atkPersent);
+					currWarriors -= (ushort)(currWarriors * city.sendPersent);
 				}
 				potentialArmy += (uint)Math.Round((2 - enemyDefMult) * sendWarriors);
 			}
 			return potentialArmy;
 		}
 
-		int GetAvgDistance(BasicCity sity) {
+		int GetAvgDistance(BasicCity city) {
 			double avg = 0;
 
-			foreach (var bs in botSities) {
-				avg += bs.BuildOptimalPath(sity, out bool b).Count;
+			foreach (var bs in botCities) {
+				avg += bs.BuildOptimalPath(city, out bool b).Count;
 			}
-			avg /= botSities.Count();
+			avg /= botCities.Count();
 
 			return (int)Math.Round(avg);
 		}
@@ -298,22 +298,22 @@ namespace taw.game.controlable.botControl {
 		int GetAvgSpeed() {
 			double avg = 0;
 
-			foreach (var bs in botSities) {
+			foreach (var bs in botCities) {
 				avg += bs.CreateLinkedUnit(0, null).tickPerTurn;
 			}
-			avg /= botSities.Count();
+			avg /= botCities.Count();
 
 			return (int)Math.Round(avg);
 		}
 
-		double GetEnemyArmy(BasicCity sityTo) {
-			if (sityTo.PlayerId == 0)
-				return sityTo.currWarriors +
+		double GetEnemyArmy(BasicCity cityTo) {
+			if (cityTo.PlayerId == 0)
+				return cityTo.currWarriors +
 					rushWithMinimumMoreUnits;
 			else
-				return sityTo.currWarriors +
+				return cityTo.currWarriors +
 					rushWithMinimumMoreUnits +
-					GetAvgSpeed() * GetAvgDistance(sityTo) / sityTo.ticksPerIncome;
+					GetAvgSpeed() * GetAvgDistance(cityTo) / cityTo.ticksPerIncome;
 		}
 
 		public override SettinsSetter CreateLinkedSetting() {
