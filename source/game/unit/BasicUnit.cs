@@ -52,18 +52,23 @@ namespace taw.game.unit {
 		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicCity destination, BasicCity PlanedDestination) {
 			this.warriorsCnt = warriorsCnt;
 			this.PlayerId = PlayerId;
-			path = Path;
-			this.destination = destination;
 
-			currTickOnCell = 0;
-			currPathIndex = 0;
+			SetPath(Path, destination, PlanedDestination);
 
-			if(path != null)
+			if (path != null)
 				BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Add(this);
 
 			SetSettings(CreateLinkedSetting());
 
 			basicUnitEvent = new BasicUnitEvent(this);
+		}
+
+		public void SetPath(List<KeyValuePair<int, int>> Path, BasicCity destination, BasicCity PlanedDestination) {
+			this.destination = destination;
+			planedDestination = PlanedDestination;
+			path = Path;
+			currTickOnCell = 0;
+			currPathIndex = 0;
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
