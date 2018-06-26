@@ -295,7 +295,7 @@ namespace taw.game.city {
 		//Створює юнита, якого посилатиме це місто
 		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) {
 			var path = BuildOptimalPath(to, out BasicCity realDest);
-			return new BasicUnit(sendWarriors, this.PlayerId, path, realDest);
+			return new BasicUnit(sendWarriors, this.PlayerId, path, realDest, to);
 		}
 
 		public void ClearHashedPath() => hashedPath.Clear();

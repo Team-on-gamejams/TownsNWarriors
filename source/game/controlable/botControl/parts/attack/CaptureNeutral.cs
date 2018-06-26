@@ -14,18 +14,18 @@ namespace taw.game.controlable.botControl.parts.attack {
 		}
 
 		public override bool TickReact() {
-			if (lp.ControlInfoForParts[0].Count != 0) {
-				command = new Command {
-					fromType = Command.FromType.Direct,
-					toType = Command.ToType.Direct,
-				};
+			//if (lp.ControlInfoForParts[0].Count != 0) {
+			//	command = new Command {
+			//		fromType = Command.FromType.Direct,
+			//		toType = Command.ToType.Direct,
+			//	};
 
-				BasicCity from;
+			//	BasicCity from;
 
-				BasicCity to;
-				foreach (var city in lp.ControlInfoForParts[0].Keys) {
-				}
-			}
+			//	BasicCity to;
+			//	foreach (var city in lp.ControlInfoForParts[0].Keys) {
+			//	}
+			//}
 			return false;
 		}
 	}
