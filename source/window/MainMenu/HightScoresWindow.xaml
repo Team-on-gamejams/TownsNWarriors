@@ -1,0 +1,32 @@
+﻿<Window x:Class="taw.window.HightScoresWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:taw.window"
+        mc:Ignorable="d"
+        Title="Eternal heroes burrowed here" Height="300" Width="300">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<Label Grid.Column="0" Content="Nickname" Background="Red" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Margin="5" FontSize="8"/>
+			<Label Grid.Column="1" Content="Score" Background="Blue" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Margin="5" FontSize="8"/>
+			<Label Grid.Column="2" Content="Date" Background="Yellow" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Margin="5" FontSize="8"/>
+
+		</Grid>
+		<Grid Grid.Row="1">
+			<ListView Name="list">
+
+			</ListView>
+		</Grid>
+
+	</Grid>
+</Window>

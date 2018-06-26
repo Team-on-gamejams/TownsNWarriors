@@ -1,0 +1,18 @@
+﻿<Window x:Class="taw.window.InGameMenuEsc"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:taw.window"
+        mc:Ignorable="d"
+        Title="Still waiting for better title" Height="300" Width="300">
+    <Grid>
+		<StackPanel>
+			<Button Style="{StaticResource InformButton}" Height="30" Margin="7" Content="Come Back"/>
+			<Button Style="{StaticResource InformButton}" Height="30" Margin="7" Content="Exit"/>
+			<Button Style="{StaticResource InformButton}" Height="30" Margin="7" Content="Load"/>
+			<Button Style="{StaticResource InformButton}" Height="30" Margin="7" Content="Change Nick"/>
+			<Image Height="80" Margin="7" Stretch="Fill"/>
+		</StackPanel>
+	</Grid>
+</Window>

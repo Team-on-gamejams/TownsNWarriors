@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors {
-	public partial class GameCell : GameCellDrawableObj {
+using taw.game.city;
+using taw.game.unit;
+
+namespace taw.game.map {
+	public partial class GameCell : basicInterfaces.IOutputable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		Lazy<List<BasicUnit>> units;
 
@@ -15,9 +18,10 @@ namespace TownsAndWarriors {
 		public bool IsOpenRight { get; set; }
 		public bool IsOpenBottom { get; set; }
 
-		public BasicSity Sity { get; set; }
+		public BasicCity Sity { get; set; }
 		public List<BasicUnit> Units => units.Value;
 
+		public object OutputInfo { get; set; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public GameCell() {

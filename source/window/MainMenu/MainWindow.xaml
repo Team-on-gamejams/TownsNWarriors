@@ -1,0 +1,96 @@
+﻿<Window x:Class="taw.window.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:taw.window"
+        mc:Ignorable="d"
+        Title="The best game in the world!" Height="450" Width="800"
+		MinHeight="450" MinWidth="800"
+		Style="{StaticResource MainWindowStyle}"
+		>
+
+	<DockPanel LastChildFill="False">
+		<DockPanel.Background>
+			<ImageBrush ImageSource="..\..\img\window\mainWindow\background.jpg">
+			</ImageBrush>
+		</DockPanel.Background>
+
+		<DockPanel LastChildFill="True" DockPanel.Dock="Right" Margin="7 50 15 15">
+
+			<Button Click="Button_Click_Exit" DockPanel.Dock="Bottom" Content="Exit"/>
+
+			<StackPanel VerticalAlignment="Center" Orientation="Vertical"  >
+				<Button Click="Button_Click_Singleplayer" Content="Singleplayer"/>
+				<Button Click="Button_Click_Hightscores" Content="Hall of honor"/>
+				<Button Click="Button_Click_Settings" Content="Settings"/>
+				<Button Click="Button_Click_Credits" Content="Credits"/>
+			</StackPanel>
+			
+		</DockPanel>
+
+		<Grid Margin="7 7 7 7" MinWidth="200" x:Name="ChoosePlayerGrid" Opacity="1" DockPanel.Dock="Left">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="3*"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="1">
+				<Grid.Background>
+					<ImageBrush Opacity="0.55" ImageSource="..\..\img\window\mainWindow\backgroundUser2.jpg">
+					</ImageBrush>
+				</Grid.Background>
+
+				<Rectangle Fill="Transparent" Stroke="Black" StrokeThickness="5">
+					
+				</Rectangle>
+			</Grid>
+
+			<DockPanel Margin="15 7 15 7" LastChildFill="True" Grid.Row="1">
+			
+				<Grid DockPanel.Dock="Bottom">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+					</Grid.ColumnDefinitions>
+
+					<Button  Click="Button_Click_Delete_Profile"  Style="{StaticResource MainWindowAutoSizeButton}" Content="Delete"/>
+					<Button  Click="Button_Click_Select_Profile"  Style="{StaticResource MainWindowAutoSizeButton}" Grid.Column="2"  Content="Select"/>
+				</Grid>
+
+				<StackPanel Margin="0 0 0 10" DockPanel.Dock="Top" MinHeight="80">
+					<Label Foreground="Wheat">Profiles:</Label>
+					<TextBlock MaxWidth="180" TextWrapping="Wrap" FontSize="9" FontStyle="Normal" Foreground="Yellow" >
+						Профілі потрібні для збереження прогресу в кампанії та завантажень гри
+					</TextBlock>
+					<Label Foreground="Yellow" >New profile:</Label>
+					<Grid MinHeight="25">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="4*"/>
+							<ColumnDefinition Width="1*"/>
+							<ColumnDefinition Width="2*"/>
+						</Grid.ColumnDefinitions>
+						
+						<TextBox Text="Input your nickname"/>
+						<Button Click="Button_Click_Create_Profile" Style="{StaticResource MainWindowAutoSizeButton}" Content="Create" Grid.Column="2"/>
+					</Grid>
+				</StackPanel>
+
+				<DockPanel LastChildFill="True" Margin="0 10 0 4">
+					<Label Foreground="Yellow" DockPanel.Dock="Top">Created profiles:</Label>
+
+					<ListView>
+
+					</ListView>
+				</DockPanel>
+				
+				
+			</DockPanel>
+			
+		</Grid>
+		
+	</DockPanel>
+</Window>
+

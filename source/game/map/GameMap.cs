@@ -4,51 +4,67 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TownsAndWarriors {
+using taw.game;
+using taw.game.settings;
+
+using taw.game.city;
+using taw.game.unit;
+using taw.game.controlable.botControl;
+
+namespace taw.game.map {
 	public partial class GameMap {
 		//---------------------------------------------- Fields ----------------------------------------------
 		int sizeX, sizeY;
+
 		List<List<GameCell>> map;
-		List<BasicSity> sities;
+		List<BasicCity> cities;
+		List<BasicUnit> units;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-
+		public List<BasicCity> Cities { get => cities; set => cities = value; }
+		public List<BasicUnit> Units => units;
+		public List<List<GameCell>> Map => map;
+		public int SizeX => sizeX;
+		public int SizeY => sizeY;
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		private GameMap(int SizeX, int SizeY) {
+		public GameMap(int SizeX, int SizeY) {
 			sizeX = SizeX; sizeY = SizeY;
 			map = new List<List<GameCell>>(sizeY);
 			for (int i = 0; i < sizeY; ++i) {
 				map.Add(new List<GameCell>(sizeX));
-				for (int j = 0; j < sizeX; ++j)
+				for (int j = 0; j < sizeX; ++j) 
 					map[i].Add(new GameCell());
 			}
 
-			sities = new List<BasicSity>(settings.locateMemorySizeForTowns);
+			cities = new List<BasicCity>();
+			units = new List<BasicUnit>();
+
+			BasicCity.gameMap = this;
 		}
 
-
 		//---------------------------------------------- Methods ----------------------------------------------
-		static public GameMap GenerateRandomMap(int seed, int SizeX, int SizeY) {
-			GameMap m = new GameMap(SizeX, SizeY);
-			Random rnd = new Random(seed);
+		public void Tick() {
+			foreach (var sity in cities)
+				sity.TickReact();
 
-			for (int i = 0; i < m.sizeX; ++i)
-				m.map[0][i].IsOpenLeft = m.map[0][i].IsOpenRight = true;
-			for (int i = 0; i < m.sizeY; ++i)
-				m.map[i][m.sizeX - 1].IsOpenTop = m.map[i][m.sizeX - 1].IsOpenBottom = true;
+			REPEAT_UNITS_TURN:
+			foreach (var unit in units) {
+				if (unit.TickReact())
+					goto REPEAT_UNITS_TURN;
+			}
+		}
 
-			m.map[0][0].IsOpenLeft = m.map[0][m.sizeX - 1].IsOpenRight = false;
-			m.map[0][0].IsOpenTop = m.map[m.sizeY - 1][m.sizeX - 1].IsOpenBottom = false;
+    	public void SendWarriors(BasicCity from, BasicCity to) {
+			if (from == to)
+				return;
 
-			m.sities.Add(new BasicSity());
-			m.sities.Add(new BasicSity());
+			var unit = from.SendUnit(to);
 
-			m.map[0][0].Sity = m.sities[0];
-			m.map[m.sizeY - 1][m.sizeX - 1].Sity = m.sities[1];
+			if (unit== null)
+				return;
 
-
-			return m;
+			units.Add(unit);
 		}
 	}
 }

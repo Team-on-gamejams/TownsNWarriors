@@ -13,44 +13,94 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TownsAndWarriors.window;
 
-namespace TownsAndWarriors {
-	public class Game {
+using taw.window;
+using taw.game.map;
+
+using taw.game.output;
+using taw.game.controlable.botControl;
+using taw.game.controlable.playerControl;
+using taw.game.settings;
+
+namespace taw.game {
+	public class Game : basicInterfaces.ISettingable {
 		//---------------------------------------------- Fields ----------------------------------------------
 		GameMap gameMap;
-		Grid mainGrid;
+
+		System.Windows.Forms.Timer loopTimer = new System.Windows.Forms.Timer();
+
+		bool isPlay;
+
+		private int y;
+		private int x;
+
+		List<controlable.Controlable> controlsInput;
+		BasicOutput output;
 
 		//---------------------------------------------- Properties ----------------------------------------------
-
+		public int X { get => x; set => x = value; }
+		public int Y { get => y; set => y = value; }
+		public GameMap GameMap { get => gameMap; set => gameMap = value; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public Game(GameWindow IOWindow) {
-			mainGrid = IOWindow.mainGameGrid;
+		public Game() {
+			SetSettings(CreateLinkedSetting());
 
-			int x = 5, y = 4;
-			for(int i = 0; i < x; ++i)
-				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-			for (int i = 0; i < y; ++i)
-				mainGrid.RowDefinitions.Add(new RowDefinition());
+			isPlay = true;
 
-			gameMap = GameMap.GenerateRandomMap(0, x, y);
+			loopTimer.Interval = GlobalGameInfo.milisecondsPerTick;
+			loopTimer.Tick += (a, b) => {
+				if (isPlay) {
+					Loop();
+				}
+			};
 		}
-
 
 		//---------------------------------------------- Methods ----------------------------------------------
-		public void Play() {
-			Init();
-			Loop();
+		public void Play(output.BasicOutput output, List<controlable.Controlable> controlables) {
+			isPlay = true;
+			game.GlobalGameInfo.tick = 1;
+
+			this.output = output;
+
+			controlsInput = controlables;
+
+			loopTimer.Start();
 		}
 
-		void Init() {
-			gameMap.DrawStatic(mainGrid);
+		public void CreateGameMap(game.map.generators.map.BasicMapGenerator mapGenerator,
+			game.map.generators.city.BasicCityPlacer sityPlacer,
+			game.map.generators.idSetters.BasicIdSetter idSetter
+			) {
+			GameMap = new GameMap(X, Y);
+
+			mapGenerator.SetGameMap(GameMap);
+			mapGenerator.GenerateRandomMap();
+
+			sityPlacer.SetGameMap(GameMap);
+			sityPlacer.PlaceSities();
+
+			idSetter.SetGameMap(GameMap);
+			idSetter.SetId();
 		}
 
 		void Loop() {
-			gameMap.UpdateMap();
+			GameMap.Tick();
+
+			foreach (var control in controlsInput)
+				if (control != null)
+					control.TickReact();
+
+			++game.GlobalGameInfo.tick;
+			output.TickReact();
+		}
+		//---------------------------------------------- Settingable ----------------------------------------------
+		public void SetSettings(SettinsSetter settingsSetter) {
+			settingsSetter.SetSettings(this);
 		}
 
+		public SettinsSetter CreateLinkedSetting() {
+			return new settings.game.GameSettings();
+		}
 	}
 }

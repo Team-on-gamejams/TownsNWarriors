@@ -1,0 +1,93 @@
+﻿<Window x:Class="taw.window.GameLobbyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:taw.window"
+        mc:Ignorable="d"
+        Title="GameLobbyWindow" Height="300" Width="300">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Image Grid.Column="0" Source="img\window\lobby\background.jpg"/>
+		<Image Grid.Column="1" Source="img\window\lobby\background.jpg"/>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<TextBlock FontWeight="UltraBold" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="Nickname" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<TextBlock FontWeight="UltraBold" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Text="Image" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<TextBox Grid.Row="2" Grid.ColumnSpan="2" Text="Nickname" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<TextBlock FontWeight="UltraBold" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Text="Color" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<ComboBox Name="color" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Height="20" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<Image Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2"/>
+
+			<TextBlock FontWeight="UltraBold" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Text="Color" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<ComboBox Name="colors" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Height="20" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<TextBlock FontWeight="UltraBold" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="2" Text="Hard" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<ComboBox Grid.Column="3" Grid.Row="5" Grid.ColumnSpan="2" Height="20" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
+		</Grid>
+
+		<Grid Grid.Column="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<TextBlock FontWeight="UltraBold" Text="Size: " Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<Image Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="4"/>
+			<TextBlock FontWeight="UltraBold" Text="Count houses: " Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<TextBlock FontWeight="UltraBold" Text="Count bots: " Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<TextBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80"/>
+			<TextBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="8" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80"/>
+			<Grid Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<TextBlock FontWeight="UltraBold" Grid.Column="0" Text="X:" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				<TextBlock FontWeight="UltraBold" Grid.Column="2" Text="Y:" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				<TextBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30"/>
+				<TextBox Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30"/>
+			</Grid>
+		</Grid>
+
+
+	</Grid>
+</Window>
