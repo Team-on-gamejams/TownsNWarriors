@@ -15,8 +15,9 @@ using System.Windows.Shapes;
 
 using taw.game;
 using taw.game.controlable.botControl;
-using taw.game.controlable.botControl.parts;
+
 using taw.game.controlable.botControl.parts.attack;
+using taw.game.controlable.botControl.parts.defence;
 
 namespace taw.window {
 	/// <summary>
@@ -67,7 +68,7 @@ namespace taw.window {
 					controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer((byte)(i + 1), game, gameWindow));
 			else if(i == 1) {
 				var partBot = new BasicPartsBot(game.GameMap, (byte)(i + 1));
-				partBot.AddPart(new CaptureNeutral(), 100);
+				partBot.AddPart(new CaptureNeutral(100));
 				controlsInput.Add(partBot);
 			}
 			else

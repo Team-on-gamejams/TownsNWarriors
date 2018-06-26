@@ -21,7 +21,7 @@ namespace taw.game.settings.controlable.botControl {
 			bot.dropOvercapacityUnit = true;
 			bot.dropOvercapacityUnit_Nearby = 1;
 
-			bot.moveUnitsToWeakSities = true;
+			bot.moveUnitsToWeakCities = true;
 
 			bot.rushWithMinimumMoreUnits = 1;
 			bot.rushChances = new List<KeyValuePair<byte, byte>>() {

@@ -5,17 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 
 using taw.game.basicInterfaces;
+using taw.game.city;
+using taw.game.map;
+using taw.game.unit;
+using taw.game.controlable.botControl.parts;
+using taw.game.controlable.botControl.support;
 
 namespace taw.game.controlable.botControl.parts {
-	public abstract class BasicPart : ITickable, IWithPlayerId {
-		//------------------------------------------- Fields -------------------------------------------
-		protected PartCommand TickReactResult;
+	abstract class BasicPart : ITickable, IWithPlayerId {
+		protected Command command;
+		public ushort priority;
 
-		//------------------------------------------- Properties -------------------------------------------
 		public byte PlayerId { get; set; }
 
-		//------------------------------------------- Methods -------------------------------------------
+		public BasicPart(ushort Priority) {
+			priority = Priority;
+		}
+
 		public abstract bool TickReact();
-		public PartCommand GetTickReactResult() => TickReactResult;
+		Command GetRezult() => command;
 	}
 }

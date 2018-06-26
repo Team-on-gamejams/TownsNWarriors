@@ -1,51 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using taw.game.city;
 using taw.game.map;
 using taw.game.unit;
 
 using taw.game.controlable.botControl.parts;
+using taw.game.controlable.botControl.support;
 
 namespace taw.game.controlable.botControl {
 	class BasicPartsBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
-		List<PartWithPriority> parts;
-		List<PartCommandWithPriority> commands;
+		List<BasicPart> parts;
+
+		List<Command> currCommands;
+		List<Command> longTimeCommands;
+
 
 		//---------------------------------------------- Properties ----------------------------------------------
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public BasicPartsBot(GameMap Map, byte botId) : base(Map, botId) {
-			parts = new List<PartWithPriority>();
-			commands = new List<PartCommandWithPriority>();
+			currCommands = new List<Command>();
+			longTimeCommands = new List<Command>();
 		}
 
 		//---------------------------------------------- Methods - Main ----------------------------------------------
 		public override bool TickReact() {
-			if (GlobalGameInfo.tick > ignoreFirstNTicks && GlobalGameInfo.tick % tickReact == 0) {
-				commands.Clear();
-				foreach (var part in parts)
-					if (part.Part.TickReact())
-						commands.Add(new PartCommandWithPriority(part.Priority, part.Part.GetTickReactResult()));
+			if (GlobalGameInfo.tick > ignoreFirstNTicks && GlobalGameInfo.tick % tickReact == 0 &&
+				LogicalPlayersSingletone.ControlInfoForParts[this.PlayerId].Count != 0) {
 
-				commands.Sort(new Comparison<PartCommandWithPriority>((a, b) => a.Priority - b.Priority));
-
-				//for (int i = 0; i < commands.Count; ++i) {
-				//	for (int j = 0; j < commands.Count; ++j) {
-				//		if (i != j) {
-				//			if (commands[i].Command.CityTo == commands[j].Command.CityTo) {
-				//				//Обєднати команди
-				//			}
-				//		}
-				//	}
-				//}
-
-				if (commands.Count != 0)
-					ExecuteCommand(commands[0].Command);
 
 
 				return true;
@@ -53,20 +38,50 @@ namespace taw.game.controlable.botControl {
 			return false;
 		}
 
-		void ExecuteCommand(PartCommand command) {
+		void FillCommands() {
 
+		}
+
+		bool ExecuteCommand(Command c) {
+			SetWarriorsToRushes();
+
+			if (c.toType == Command.ToType.Direct && c.fromType == Command.FromType.Direct) {
+				c.from.SendUnit(c.to);
+			}
+
+			return false;
+
+			void SetWarriorsToRushes() {
+				if (c.warriorsType == Command.WarriorsType.Count) {
+					if (c.warriors < c.from.currWarriors) {
+						ushort rushes = 1;
+						while (GetSendByRushesCnt(c.from, rushes) < c.warriors)
+							++rushes;
+						c.warriorsType = Command.WarriorsType.Rushes;
+						c.warriors = rushes;
+					}
+				}
+			}
+
+			int GetSendByRushesCnt(BasicCity city, ushort rushesCnt) {
+				ushort sendWarriors = 0, currWarriors = city.currWarriors;
+				while (rushesCnt-- != 0) {
+					sendWarriors += (ushort)Math.Round(currWarriors * city.sendPersent * city.atkPersent);
+					currWarriors -= (ushort)(currWarriors * city.sendPersent);
+				}
+				return sendWarriors;
+			}
 		}
 
 		//---------------------------------------------- Methods - behavior ----------------------------------------------
-		public void AddPart(BasicPart part, short priority) => AddPart(new PartWithPriority(priority, part));
-		public void AddPart(PartWithPriority partWithPriority){
-			partWithPriority.Part.PlayerId = this.PlayerId;
-			parts.Add(partWithPriority);
+		public void AddPart(BasicPart part) {
+			part.PlayerId = this.PlayerId;
+			parts.Add(part);
 		}
 		public void GetPartEnumerator() => parts.GetEnumerator();
-		public void RemovePart(PartWithPriority partWithPriority) => parts.Remove(partWithPriority);
-		public void ClearParts(PartWithPriority partWithPriority) => parts.Clear();
-
+		public void RemovePart(BasicPart part) => parts.Remove(part);
+		public void ClearParts() => parts.Clear();
+		
 
 		//---------------------------------------------- Methods - Support  ----------------------------------------------
 	}

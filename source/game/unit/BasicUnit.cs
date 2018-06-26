@@ -18,6 +18,7 @@ namespace taw.game.unit {
 
 		public ushort warriorsCnt;
 		public BasicCity destination;
+		public BasicCity planedDestination;
 
 		//Load from settings
 		public ushort tickPerTurn;
@@ -48,7 +49,7 @@ namespace taw.game.unit {
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicCity destination) {
+		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicCity destination, BasicCity PlanedDestination) {
 			this.warriorsCnt = warriorsCnt;
 			this.PlayerId = PlayerId;
 			path = Path;
@@ -83,13 +84,15 @@ namespace taw.game.unit {
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key]
 					));
 
-				if ( (BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity != null &&
-					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.PlayerId != this.PlayerId) ||
+				if ( (BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].City != null &&
+					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].City.PlayerId != this.PlayerId) ||
 					(currPathIndex == path.Count - 1)
 					) {
+
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
-					ReachDestination?.Invoke(new UnitReachDestinationEvent(basicUnitEvent, BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity));
-					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Sity.GetUnits(this);
+					ReachDestination?.Invoke(new UnitReachDestinationEvent(basicUnitEvent, BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].City));
+					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].City.GetUnits(this);
+
 					return true;
 				}
 			}

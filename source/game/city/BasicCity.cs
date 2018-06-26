@@ -26,6 +26,8 @@ namespace taw.game.city {
 		public bool equalsMeanCaptured;
 		public bool equalsMeanCapturedForNeutral;
 
+		Dictionary<BasicCity, List<KeyValuePair<int, int>>> hashedPath;
+
 		//---------------------------------------------- Properties ----------------------------------------------
 		public byte PlayerId { get; set; }
 		public int X { get; set; }
@@ -55,6 +57,7 @@ namespace taw.game.city {
 		public BasicCity() {
 			this.SetSettings(this.CreateLinkedSetting());
 			basicCityEvent = new BasicCityEvent(this);
+			hashedPath = new Dictionary<BasicCity, List<KeyValuePair<int, int>>>();
 		}
 
 		//---------------------------------------------- Methods ----------------------------------------------
@@ -89,17 +92,19 @@ namespace taw.game.city {
 		public ushort GetDefWarriors() => (ushort)Math.Round(currWarriors * defPersent);
 
 		//Створює юніта і задає йому шлях для руху
-		public BasicUnit SendUnit(BasicCity to) {
+		public void SendUnit(BasicCity to) {
 			ushort sendWarriors = GetAtkWarriorsWithoutAtk();
-			if(sendWarriors == 0) 
-				return null;
+			if(sendWarriors == 0 || to == this) 
+				return;
 			
 			currWarriors -= sendWarriors;
 			sendWarriors = (ushort)Math.Round(sendWarriors * atkPersent);
 
 			BasicUnit unit = CreateLinkedUnit(sendWarriors, to);
-			UnitSend?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
-			return unit;
+			if (unit != null) {
+				UnitSend?.Invoke(new CityUnitsEvent(basicCityEvent, unit));
+				gameMap.Units.Add(unit);
+			}
 		}
 
 		//Опрацьовує юніта, який зайшов у місто
@@ -140,13 +145,16 @@ namespace taw.game.city {
 		//Повертає шлях до міста. є 2 типи шляхів
 		//1) Шлях в обхід всіх ворожих міст
 		//2) Шлях напролом. Створюється якщо не існує шляху1.
-		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicCity to, out bool isDirectly) {
+		public List<KeyValuePair<int, int>> BuildOptimalPath(BasicCity to, out BasicCity realDestination) {
+			realDestination = to;
 			if (to == null) {
-				isDirectly = false;
 				return null;
 			}
 
-			isDirectly = true;
+			if (hashedPath.ContainsKey(to)) {
+				return hashedPath[to];
+			}
+
 			int minFindValue = int.MaxValue;
 			PathFinderCell[,] finder = new PathFinderCell[gameMap.Map.Count, gameMap.Map[0].Count];
 			List<KeyValuePair<int, int>> reversedPath = new List<KeyValuePair<int, int>>();
@@ -155,12 +163,13 @@ namespace taw.game.city {
 				for (int j = 0; j < finder.GetLength(1); ++j)
 					finder[i, j] = new PathFinderCell(gameMap.Map[i][j]);
 
+			bool isUnoptimal = false;
 			UNOPTIMAL_PATH_FINDER:
 
 			var recQueue = new Queue<RecInfo>();
 			recQueue.Enqueue(new RecInfo() { x = X, y = Y, value = 0 });
 			while (recQueue.Count != 0) {
-				if (isDirectly)
+				if (!isUnoptimal)
 					RecAvoidEnemyCities(recQueue.Dequeue());
 				else
 					RecThroughEnemyCities(recQueue.Dequeue());
@@ -169,18 +178,28 @@ namespace taw.game.city {
 			BuildBackPath(to.X, to.Y, finder[to.Y, to.X].num);
 			reversedPath.Reverse();
 
-			if (reversedPath.Count == 0 && isDirectly) {
-				isDirectly = false;
+			if (reversedPath.Count == 0 && realDestination == to) {
 				recQueue.Clear();
 				for (int i = 0; i < finder.GetLength(0); ++i)
 					for (int j = 0; j < finder.GetLength(1); ++j)
 						finder[i, j].num = -1;
+				isUnoptimal = true;
 				goto UNOPTIMAL_PATH_FINDER;
 			}
 
-			if (reversedPath.Count != 0 && !isDirectly) 
-				SetNewDestination();
-			
+			//Якщо послали в місто куди нема прямого шляху, то встановить новий Destination. Гравцю шо з цим методом, шо без нього, все одно нічого не помітно. 
+			//Але крепко воно діє на бота. Бот бачить що його рашать, і пробує щось робити, а ворог навіть не дійшов)
+			if (reversedPath.Count != 0 && isUnoptimal) {
+				for (int i = 0; i < reversedPath.Count - 1; ++i) {
+					if (gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City != null &&
+						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City.PlayerId != this.PlayerId) {
+						realDestination = gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City;
+						reversedPath.RemoveRange(i + 1, reversedPath.Count - i - 1);
+						break;
+					}
+				}
+			}
+
 
 			//------------------------------- Inner methods ---------------------------------------
 			//Пошук шляху в обхід ворога
@@ -189,7 +208,7 @@ namespace taw.game.city {
 				if ((finder[y, x].num != -1 && finder[y, x].num <= info.value) ||
 					(info.value >= minFindValue) ||
 					(
-						gameMap.Map[y][x].Sity != null && gameMap.Map[y][x].Sity.PlayerId != this.PlayerId && 
+						gameMap.Map[y][x].City != null && gameMap.Map[y][x].City.PlayerId != this.PlayerId && 
 						(x != to.X || y != to.Y)
 					)
 				)
@@ -259,22 +278,13 @@ namespace taw.game.city {
 				return false;
 			}
 
-			//Якщо послали в місто куди нема прямого шляху, то встановить новий Destination. Гравцю шо з цим методом, шо без нього, все одно нічого не помітно. 
-			//Але крепко воно діє на бота. Бот бачить що його рашать, і пробує щось робити, а ворог навіть не дійшов)
-			void SetNewDestination() {
-				for(int i = 0; i < reversedPath.Count; ++i) {
-					if(gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity != null &&
-						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].Sity.PlayerId != this.PlayerId) {
-						reversedPath.RemoveRange(i + 1, reversedPath.Count - i - 1);
-						break;
-					}
-
-				}
-			}
 			//------------------------------- END of Inner methods ---------------------------------------
 
-			if (reversedPath.Count != 0)
+			if (reversedPath.Count != 0) {
+				if(!hashedPath.ContainsKey(to))
+					hashedPath.Add(to, new List<KeyValuePair<int, int>>(reversedPath));
 				return reversedPath;
+			}
 			return null;
 		}
 
@@ -283,8 +293,12 @@ namespace taw.game.city {
 		public virtual SettinsSetter CreateLinkedSetting() => new settings.city.BasicCitySettings();
 
 		//Створює юнита, якого посилатиме це місто
-		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) =>
-			new BasicUnit(sendWarriors, this.PlayerId, BuildOptimalPath(to, out bool b), to);
+		public virtual BasicUnit CreateLinkedUnit(ushort sendWarriors, BasicCity to) {
+			var path = BuildOptimalPath(to, out BasicCity realDest);
+			return new BasicUnit(sendWarriors, this.PlayerId, path, realDest);
+		}
+
+		public void ClearHashedPath() => hashedPath.Clear();
 
 		//////////////////////////////////////////////////////////////////////////
 

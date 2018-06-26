@@ -1,14 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-using taw.game.controlable.botControl.parts;
-using taw.game.controlable.botControl.support;
+using lp=taw.game.controlable.botControl.support.LogicalPlayersSingletone;
+using taw.game.city;
 
 namespace taw.game.controlable.botControl.parts.attack {
 	class CaptureNeutral : BasicPart {
-		public override bool TickReact() {
-			//LogicalPlayersSingletone.ControlInfoForParts[PlayerId];
+		public CaptureNeutral(ushort Priority) : base(Priority) {
 
-			TickReactResult = new PartCommand(null, null, -1, 0, false);
+		}
+
+		public override bool TickReact() {
+			if (lp.ControlInfoForParts[0].Count != 0) {
+				command = new Command {
+					fromType = Command.FromType.Direct,
+					toType = Command.ToType.Direct,
+				};
+
+				BasicCity from;
+
+				BasicCity to;
+				foreach (var city in lp.ControlInfoForParts[0].Keys) {
+				}
+			}
 			return false;
 		}
 	}
