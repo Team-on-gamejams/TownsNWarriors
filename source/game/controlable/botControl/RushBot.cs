@@ -112,8 +112,8 @@ namespace taw.game.controlable.botControl {
 				if (!botCities.Contains(city)) {
 					bool directly = false;
 					foreach (var bs in botCities) {
-						bs.BuildOptimalPath(city, out bool tmp);
-						if (tmp) {
+						bs.BuildOptimalPath(city, out BasicCity realDest);
+						if (realDest == city) {
 							directly = true;
 							break;
 						}
@@ -288,7 +288,7 @@ namespace taw.game.controlable.botControl {
 			double avg = 0;
 
 			foreach (var bs in botCities) {
-				avg += bs.BuildOptimalPath(city, out bool b).Count;
+				avg += bs.BuildOptimalPath(city, out BasicCity realDest).Count;
 			}
 			avg /= botCities.Count();
 

@@ -87,9 +87,11 @@ namespace taw.game.unit {
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].City.PlayerId != this.PlayerId) ||
 					(currPathIndex == path.Count - 1)
 					) {
+
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].Units.Remove(this);
 					ReachDestination?.Invoke(new UnitReachDestinationEvent(basicUnitEvent, BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].City));
 					BasicCity.gameMap.Map[path[currPathIndex].Value][path[currPathIndex].Key].City.GetUnits(this);
+
 					return true;
 				}
 			}
