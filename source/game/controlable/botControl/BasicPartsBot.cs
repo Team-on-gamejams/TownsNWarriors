@@ -11,6 +11,8 @@ using taw.game.controlable.botControl.support;
 namespace taw.game.controlable.botControl {
 	class BasicPartsBot : BasicBot {
 		//---------------------------------------------- Fields ----------------------------------------------
+		List<BasicPart> parts;
+
 		List<Command> currCommands;
 		List<Command> longTimeCommands;
 
@@ -72,11 +74,14 @@ namespace taw.game.controlable.botControl {
 		}
 
 		//---------------------------------------------- Methods - behavior ----------------------------------------------
-		/*public void AddPart(BasicPart part, short priority) => AddPart(new PartWithPriority(priority, part));
+		public void AddPart(BasicPart part) {
+			part.PlayerId = this.PlayerId;
+			parts.Add(part);
+		}
 		public void GetPartEnumerator() => parts.GetEnumerator();
-		public void RemovePart(PartWithPriority partWithPriority) => parts.Remove(partWithPriority);
-		public void ClearParts(PartWithPriority partWithPriority) => parts.Clear();
-		*/
+		public void RemovePart(BasicPart part) => parts.Remove(part);
+		public void ClearParts() => parts.Clear();
+		
 
 		//---------------------------------------------- Methods - Support  ----------------------------------------------
 	}

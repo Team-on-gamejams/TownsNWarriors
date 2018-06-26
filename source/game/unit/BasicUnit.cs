@@ -18,6 +18,7 @@ namespace taw.game.unit {
 
 		public ushort warriorsCnt;
 		public BasicCity destination;
+		public BasicCity planedDestination;
 
 		//Load from settings
 		public ushort tickPerTurn;
@@ -48,7 +49,7 @@ namespace taw.game.unit {
 
 
 		//---------------------------------------------- Ctor ----------------------------------------------
-		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicCity destination) {
+		public BasicUnit(ushort warriorsCnt, byte PlayerId, List<KeyValuePair<int, int>> Path, BasicCity destination, BasicCity PlanedDestination) {
 			this.warriorsCnt = warriorsCnt;
 			this.PlayerId = PlayerId;
 			path = Path;

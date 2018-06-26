@@ -187,9 +187,17 @@ namespace taw.game.city {
 				goto UNOPTIMAL_PATH_FINDER;
 			}
 
+			//Якщо послали в місто куди нема прямого шляху, то встановить новий Destination. Гравцю шо з цим методом, шо без нього, все одно нічого не помітно. 
+			//Але крепко воно діє на бота. Бот бачить що його рашать, і пробує щось робити, а ворог навіть не дійшов)
 			if (reversedPath.Count != 0 && isUnoptimal) {
-				SetNewDestination();
-				realDestination = to;
+				for (int i = 0; i < reversedPath.Count - 1; ++i) {
+					if (gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City != null &&
+						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City.PlayerId != this.PlayerId) {
+						realDestination = gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City;
+						reversedPath.RemoveRange(i + 1, reversedPath.Count - i - 1);
+						break;
+					}
+				}
 			}
 
 
@@ -270,18 +278,6 @@ namespace taw.game.city {
 				return false;
 			}
 
-			//Якщо послали в місто куди нема прямого шляху, то встановить новий Destination. Гравцю шо з цим методом, шо без нього, все одно нічого не помітно. 
-			//Але крепко воно діє на бота. Бот бачить що його рашать, і пробує щось робити, а ворог навіть не дійшов)
-			void SetNewDestination() {
-				for(int i = 0; i < reversedPath.Count - 1; ++i) {
-					if(gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City != null &&
-						gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City.PlayerId != this.PlayerId) {
-						to = gameMap.Map[reversedPath[i].Value][reversedPath[i].Key].City;
-						reversedPath.RemoveRange(i + 1, reversedPath.Count - i - 1);
-						break;
-					}
-				}
-			}
 			//------------------------------- END of Inner methods ---------------------------------------
 
 			if (reversedPath.Count != 0) {
