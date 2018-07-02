@@ -14,18 +14,38 @@ namespace taw.game.controlable.botControl.parts.attack {
 		}
 
 		public override bool TickReact() {
-			//if (lp.ControlInfoForParts[0].Count != 0) {
-			//	command = new Command {
-			//		fromType = Command.FromType.Direct,
-			//		toType = Command.ToType.Direct,
-			//	};
+			if (lp.ControlInfoForParts[0].Count != 0) {
+				command = new Command {
+					fromType = Command.FromType.Direct,
+					toType = Command.ToType.Direct,
+				};
+				BasicCity from = null;
+				BasicCity to = null;
 
-			//	BasicCity from;
+				bool findFirst = false;
+				foreach (var fromCity in lp.ControlInfoForParts[this.PlayerId].Keys) {
+					from = fromCity;
+					foreach (var city in lp.ControlInfoForParts[0].Keys) {
+						from.BuildOptimalPath(city, out BasicCity real);
+						if (real == city && from.currWarriors * from.sendPersent * 3 * from.atkPersent > city.GetDefWarriors()) {
+							to = city;
+							findFirst = true;
+							break;
+						}
+					}
+					if (findFirst)
+						break;
+				}
 
-			//	BasicCity to;
-			//	foreach (var city in lp.ControlInfoForParts[0].Keys) {
-			//	}
-			//}
+				if(to != null) {
+					command.to = to;
+					command.from = from;
+					command.warriorsType = Command.WarriorsType.Count;
+					command.warriors = (ushort)(to.currWarriors);
+					return true;
+				}
+
+			}
 			return false;
 		}
 	}

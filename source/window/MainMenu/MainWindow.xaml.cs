@@ -68,7 +68,8 @@ namespace taw.window {
 					controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer((byte)(i + 1), game, gameWindow));
 			else if(i == 1) {
 				var partBot = new BasicPartsBot(game.GameMap, (byte)(i + 1));
-				partBot.AddPart(new CaptureNeutral(100));
+				//partBot.AddPart(new CaptureNeutral(100));
+				partBot.AddPart(new RushWeakestCity(100));
 				controlsInput.Add(partBot);
 			}
 			else
