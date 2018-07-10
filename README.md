@@ -22,12 +22,12 @@ Master: [![Build status](https://build.appcenter.ms/v0.1/apps/36d955f0-f88c-4429
 	
 ## Зроблено в команді з:
  * [Gigi220](https://github.com/Gigi220) 
-  * Ідея
-  * Ввід та вивід на ранніх стадіях
-  * Правив баги 
+	* Ідея
+	* Ввід та вивід на ранніх стадіях
+	* Правив баги 
  * [Shafranskyi](https://github.com/Shafranskyi) 
-  * Вікна
-  * Стилі
+	* Вікна
+	* Стилі
 	
 ## Зроблено на
  * С#
