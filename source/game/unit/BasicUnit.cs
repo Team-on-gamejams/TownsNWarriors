@@ -9,6 +9,8 @@ using taw.game.city;
 using taw.game.settings;
 using taw.game.unit.events;
 
+using lp = taw.game.controlable.botControl.support.LogicalPlayersSingletone;
+
 namespace taw.game.unit {
 	public partial class BasicUnit : ITickable, IWithPlayerId, ISettingable, IOutputable {
 		//---------------------------------------------- Fields ----------------------------------------------
@@ -119,6 +121,18 @@ namespace taw.game.unit {
 
 		public virtual settings.SettinsSetter CreateLinkedSetting() {
 			return new settings.unit.BasicUnitSettings();
+		}
+
+		public void DestroyUnit() {
+			if (destination.PlayerId == this.PlayerId)
+				lp.ControlInfoForParts[this.destination.PlayerId][this.destination]
+				.AllyUnitsMovingToCity.Remove(this);
+			else
+				lp.ControlInfoForParts[this.destination.PlayerId][this.destination]
+				.EnemyUnitsMovingToCity.Remove(this);
+
+			BasicCity.gameMap.Units.Remove(this);
+			BasicCity.gameMap.Map[Y][X].Units.Remove(this);
 		}
 	}
 }

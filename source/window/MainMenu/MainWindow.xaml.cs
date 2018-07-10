@@ -66,14 +66,14 @@ namespace taw.window {
 			for (int i = 0; i < idGen.ControlsCnt; ++i)
 				if(i == 0)
 					controlsInput.Add(new game.controlable.playerControl.WPFLocalPlayer((byte)(i + 1), game, gameWindow));
-			else if(i == 1) {
-				var partBot = new BasicPartsBot(game.GameMap, (byte)(i + 1));
+			//else if(i == 1) {
+				//var partBot = new BasicPartsBot(game.GameMap, (byte)(i + 1));
 				//partBot.AddPart(new CaptureNeutral(100));
-				partBot.AddPart(new RushWeakestCity(100));
-				controlsInput.Add(partBot);
-			}
-			else
-				controlsInput.Add(new RushBot(game.GameMap, (byte)(i + 1)));
+				//partBot.AddPart(new RushWeakestCity(100));
+				//controlsInput.Add(partBot);
+			//}
+			//else
+				//controlsInput.Add(new RushBot(game.GameMap, (byte)(i + 1)));
 
 			taw.game.controlable.botControl.support.LogicalPlayersSingletone.Init(game.GameMap, idGen.ControlsCnt);
 
