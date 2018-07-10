@@ -12,47 +12,53 @@ namespace taw.game.map.generators.idSetters {
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public IdSetterDiffCorners() {
-			this.SetSettings(this.CreateLinkedSetting());
 		}
 
 		//------------------------------------------ Inharitated methods ------------------------------------------
 		public override void SetId() {
-			int playerTowns = townsPerPlayer;
-			while (playerTowns-- != 0) {
-				int mini = gameMap.SizeY, minj = gameMap.SizeX;
-				for (int i = 0; i < gameMap.SizeY; ++i) 
-					for (int j = 0; j < gameMap.SizeX; ++j) 
-						if (gameMap.Map[i][j].Sity != null && gameMap.Map[i][j].Sity.PlayerId == 0 && mini + minj > i + j) {
-							mini = i;
-							minj = j;
-						}
-				gameMap.Map[mini][minj].Sity.PlayerId = 1;
-			}
-
 			bool end = false;
-			for(int botNum = 0; botNum < bots; ++botNum) {
-				int BotsTowns = townsPerBot[botNum];
-				while (BotsTowns-- != 0) {
-					int maxi = 0, maxj = 0;
-					for (int i = gameMap.SizeY - 1; i >= 0; --i)
+			for(int controlNum = 0; controlNum < townsPerControl.Count; ++controlNum) {
+				int townsCnt = townsPerControl[controlNum];
+				while (townsCnt-- != 0) {
+
+					int needI = -1, needJ = -1;
+					for (int i = gameMap.SizeY - 1; i >= 0; --i) {
 						for (int j = gameMap.SizeX - 1; j >= 0; --j)
-							if (gameMap.Map[i][j].Sity != null && gameMap.Map[i][j].Sity.PlayerId == 0 && maxi + maxj < i + j) {
-								maxi = i;
-								maxj = j;
+							if (gameMap.Map[i][j].City != null &&
+								gameMap.Map[i][j].City.PlayerId == 0 && 
+								(
+								((controlNum + 1) % 4 == 1 && IsNearbyLeftTop(needI, needJ, i, j)) ||
+								((controlNum + 1) % 4 == 2 && IsNearbyRightTop(needI, needJ, i, j)) ||
+								((controlNum + 1) % 4 == 3 && IsNearbyRightBottom(needI, needJ, i, j)) ||
+								((controlNum + 1) % 4 == 0 && IsNearbyLeftBottom(needI, needJ, i, j)) 
+								)
+							) {
+								needI = i;
+								needJ = j;
 							}
-					if (maxi == 0 && maxj == 0 && gameMap.Map[maxi][maxj].Sity == null) {
+					}
+
+					if (needI == -1 || needJ == -1) {
 						end = true;
 						break;
 					}
-					gameMap.Map[maxi][maxj].Sity.PlayerId = (byte)(botNum + 2);
+
+
+					gameMap.Map[needI][needJ].City.PlayerId = (byte)(controlNum + 1);
 				}
+
 				if (end)
 					break;
 			}
 		}
 
+		bool IsNearbyLeftTop(int ni, int nj, int i, int j) => (((ni & nj & -0x1) == -1)? true : (ni + nj > i + j));
+		bool IsNearbyLeftBottom(int ni, int nj, int i, int j) => (((ni & nj & -0x1) == -1)? true : (nj - ni > j - i));
+		bool IsNearbyRightTop(int ni, int nj, int i, int j) => (((ni & nj & -0x1) == -1)? true : (ni - nj > i - j));
+		bool IsNearbyRightBottom(int ni, int nj, int i, int j) => (((ni & nj & -0x1) == -1)? true : (ni + nj < i + j));
+
 		public override SettinsSetter CreateLinkedSetting() {
-			return new taw.game.settings.generators.BasicIdSetterSettings();
+			return new taw.game.settings.generators.IdSetterDiffCornersSettings();
 		}
 
 		//------------------------------------------ Support methods ------------------------------------------

@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="collection\ListWithEvents.cs" />
     <Compile Include="game\basicInterfaces\GameEvent.cs" />
     <Compile Include="game\basicInterfaces\IInputable.cs" />
     <Compile Include="game\basicInterfaces\IOutputable.cs" />
@@ -78,6 +79,15 @@
     <Compile Include="game\city\events\CaptureCityEvent.cs" />
     <Compile Include="game\city\events\CityIncomeEvent.cs" />
     <Compile Include="game\city\events\CityUnitsEvent.cs" />
+    <Compile Include="game\controlable\botControl\BasicPartsBot.cs" />
+    <Compile Include="game\controlable\botControl\parts\attack\CaptureNeutral.cs" />
+    <Compile Include="game\controlable\botControl\parts\attack\RushWeakestCity.cs" />
+    <Compile Include="game\controlable\botControl\parts\attack\RushWeakestPlayer.cs" />
+    <Compile Include="game\controlable\botControl\parts\BasicPart.cs" />
+    <Compile Include="game\controlable\botControl\parts\Command.cs" />
+    <Compile Include="game\controlable\botControl\parts\defence\WaitIfWeakest.cs" />
+    <Compile Include="game\controlable\botControl\support\UnitsMovingToCity.cs" />
+    <Compile Include="game\controlable\botControl\support\LogicalPlayersSingletone.cs" />
     <Compile Include="game\controlable\Controlable.cs" />
     <Compile Include="game\controlable\playerControl\BasicPlayer.cs" />
     <Compile Include="game\controlable\playerControl\WPFLocalPlayer.cs" />
@@ -157,7 +167,7 @@
     <Compile Include="game\basicInterfaces\IWithPlayerId.cs" />
     <Compile Include="game\controlable\botControl\BasicBot.cs" />
     <Compile Include="game\controlable\botControl\RushBot.cs" />
-    <Compile Include="game\globalGameInfo.cs" />
+    <Compile Include="game\GlobalGameInfo.cs" />
     <Compile Include="game\map\generators\idSetters\BasicIdSetter.cs" />
     <Compile Include="game\map\generators\idSetters\IdSetterDiffCorners.cs" />
     <Compile Include="game\map\generators\city\BasicCityPlacer.cs" />
@@ -223,7 +233,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="game\controlable\botControl\parts\other\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>

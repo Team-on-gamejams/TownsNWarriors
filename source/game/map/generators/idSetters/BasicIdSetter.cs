@@ -7,9 +7,9 @@ using taw.game.settings;
 
 namespace taw.game.map.generators.idSetters {
 	public abstract class BasicIdSetter : BasicGenerator, basicInterfaces.ISettingable {
-		public byte bots;
-		public List<byte> townsPerBot;
-		public byte townsPerPlayer;
+		public List<byte> townsPerControl;
+
+		public byte ControlsCnt => (byte)townsPerControl.Count;
 
 		public abstract void SetId();
 

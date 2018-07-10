@@ -50,9 +50,8 @@ namespace taw.game {
 
 			loopTimer.Interval = GlobalGameInfo.milisecondsPerTick;
 			loopTimer.Tick += (a, b) => {
-				if (isPlay) {
+				if (isPlay) 
 					Loop();
-				}
 			};
 		}
 
@@ -60,9 +59,7 @@ namespace taw.game {
 		public void Play(output.BasicOutput output, List<controlable.Controlable> controlables) {
 			isPlay = true;
 			game.GlobalGameInfo.tick = 1;
-
 			this.output = output;
-
 			controlsInput = controlables;
 
 			loopTimer.Start();
