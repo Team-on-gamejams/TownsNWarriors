@@ -10,7 +10,8 @@ using taw.game.unit;
 namespace taw.game.map {
 	public partial class GameCell : basicInterfaces.IOutputable {
 		//---------------------------------------------- Fields ----------------------------------------------
-		Lazy<List<BasicUnit>> units;
+		bool IsEventsCreated = false;
+		Lazy<collection.ListWithEvents<BasicUnit>> units;
 
 		//---------------------------------------------- Properties ----------------------------------------------
 		public bool IsOpenLeft { get; set; }
@@ -19,15 +20,42 @@ namespace taw.game.map {
 		public bool IsOpenBottom { get; set; }
 
 		public BasicCity City { get; set; }
-		public List<BasicUnit> Units => units.Value;
+		public List<BasicUnit> Units { get { InitEvents(); return units.Value; } } 
 
 		public object OutputInfo { get; set; }
 
 		//---------------------------------------------- Ctor ----------------------------------------------
 		public GameCell() {
 			IsOpenBottom = IsOpenLeft = IsOpenRight = IsOpenTop = false;
-			units = new Lazy<List<BasicUnit>>();
+			units = new Lazy<collection.ListWithEvents<BasicUnit>>();
 			City = null;
+		}
+
+		void InitEvents() {
+			if (!IsEventsCreated) {
+				IsEventsCreated = true;
+				units.Value.AddItem += () => TryUnionUnits();
+			}
+		}
+
+		void TryUnionUnits() {
+			REPEAT:
+			for (int i = 0; i < units.Value.Count; ++i) {
+				for (int j = i + 1; j < units.Value.Count; ++j) {
+					if(units.Value[i].X == units.Value[j].X &&
+						units.Value[i].Y == units.Value[j].Y &&
+						units.Value[i].destination == units.Value[j].destination &&
+						units.Value[i].PlayerId == units.Value[j].PlayerId &&
+						units.Value[i].GetType() == units.Value[j].GetType()
+					) {
+						units.Value[i].currTickOnCell = (ushort)((units.Value[i].currTickOnCell + units.Value[j].currTickOnCell) / 2);
+						units.Value[i].warriorsCnt += units.Value[j].warriorsCnt;
+
+						units.Value[j].DestroyUnit();
+						goto REPEAT;
+					}
+				}
+			}
 		}
 	}
 }

@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="collection\ListWithEvents.cs" />
     <Compile Include="game\basicInterfaces\GameEvent.cs" />
     <Compile Include="game\basicInterfaces\IInputable.cs" />
     <Compile Include="game\basicInterfaces\IOutputable.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="game\city\events\CityUnitsEvent.cs" />
     <Compile Include="game\controlable\botControl\BasicPartsBot.cs" />
     <Compile Include="game\controlable\botControl\parts\attack\CaptureNeutral.cs" />
+    <Compile Include="game\controlable\botControl\parts\attack\RushWeakestCity.cs" />
     <Compile Include="game\controlable\botControl\parts\attack\RushWeakestPlayer.cs" />
     <Compile Include="game\controlable\botControl\parts\BasicPart.cs" />
     <Compile Include="game\controlable\botControl\parts\Command.cs" />

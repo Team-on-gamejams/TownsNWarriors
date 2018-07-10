@@ -23,6 +23,6 @@ namespace taw.game.controlable.botControl.parts {
 		}
 
 		public abstract bool TickReact();
-		Command GetRezult() => command;
+		public Command GetRezult() => command;
 	}
 }

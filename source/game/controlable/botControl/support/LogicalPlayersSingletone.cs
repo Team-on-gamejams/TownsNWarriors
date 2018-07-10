@@ -60,7 +60,6 @@ namespace taw.game.controlable.botControl.support {
 						i.Key.ClearHashedPath();
 				};
 			}
-
 		}
 
 	}

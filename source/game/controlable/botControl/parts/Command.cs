@@ -9,8 +9,8 @@ using taw.game.map;
 using taw.game.unit;
 
 namespace taw.game.controlable.botControl.parts {
-	class Command {
-		public enum FromType : byte { Direct }
+	class Command : ICloneable{
+		public enum FromType : byte { Direct, NearestCity }
 		public enum ToType : byte { Direct }
 		public enum WarriorsType : byte { Rushes, Count }
 
@@ -22,5 +22,9 @@ namespace taw.game.controlable.botControl.parts {
 
 		public BasicCity from, to;
 		public ushort warriors;
+
+		public object Clone() {
+			return this.MemberwiseClone();
+		}
 	}
 }
