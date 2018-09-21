@@ -61,7 +61,7 @@ namespace taw.game.output {
 		public List<Brush> cityShapesColors;
 		public List<Brush> cityStrokesColors;
 		public double cityStrokeThickness;
-		
+
 		public double unitWarriorsCntRelativeMod;
 
 		public double cityWarriorsCntRelativeMod;
@@ -83,9 +83,9 @@ namespace taw.game.output {
 			window.Background = windowBackgroundColor;
 
 			mainGrid = window.mainGameGrid;
-			for (int i = 0; i < this.game.X; ++i)
+			for(int i = 0; i < this.game.X; ++i)
 				mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-			for (int i = 0; i < game.Y; ++i)
+			for(int i = 0; i < game.Y; ++i)
 				mainGrid.RowDefinitions.Add(new RowDefinition());
 
 			mainCanvas = new Canvas();
@@ -97,7 +97,7 @@ namespace taw.game.output {
 			ChangeLinkedToGridValues();
 			mainGrid.SizeChanged += (a, b) => ChangeLinkedToGridValues();
 
-			window.dominationBar.Children.Add(new TextBox() {Text = Rand.Seed.ToString() });
+			window.dominationBar.Children.Add(new TextBox() { Text = Rand.Seed.ToString() });
 
 			void ChangeLinkedToGridValues() {
 				cellSize = mainGrid.GetOneCellSize();
@@ -108,7 +108,7 @@ namespace taw.game.output {
 		}
 
 		void InitCityEvents() {
-			foreach (var city in game.GameMap.Cities) {
+			foreach(var city in game.GameMap.Cities) {
 				city.OutputInfo = new OutputInfoWPF();
 				city.FirstTick += City_InitGrid;
 				city.FirstTick += City_InitShape;
@@ -121,7 +121,7 @@ namespace taw.game.output {
 
 		void InitGameMapGrids() {
 			for(int i = 0; i < game.GameMap.Map.Count; ++i) {
-				for (int j = 0; j < game.GameMap.Map[i].Count; ++j) {
+				for(int j = 0; j < game.GameMap.Map[i].Count; ++j) {
 					Grid mapCellGrid = new Grid {
 						Background = gameGridBackgroundColor,
 					};
@@ -133,28 +133,28 @@ namespace taw.game.output {
 					var gameCell = game.GameMap.Map[i][j];
 					gameCell.OutputInfo = new OutputInfoWPF() { cityGrid = mapCellGrid };
 
-					if (gameCell.IsOpenLeft) {
+					if(gameCell.IsOpenLeft) {
 						Shape road = FormRoad();
 						road.Height *= roadHeightMod;
 						road.HorizontalAlignment = HorizontalAlignment.Left;
 						mapCellGrid.Children.Add(road);
 						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, heightMod: roadHeightMod);
 					}
-					if (gameCell.IsOpenRight) {
+					if(gameCell.IsOpenRight) {
 						Shape road = FormRoad();
 						road.Height *= roadHeightMod;
 						road.HorizontalAlignment = HorizontalAlignment.Right;
 						mapCellGrid.Children.Add(road);
 						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, heightMod: roadHeightMod);
 					}
-					if (gameCell.IsOpenTop) {
+					if(gameCell.IsOpenTop) {
 						Shape road = FormRoad();
 						road.Width *= roadWidthMod;
 						road.VerticalAlignment = VerticalAlignment.Top;
 						mapCellGrid.Children.Add(road);
 						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, widthMod: roadWidthMod);
 					}
-					if (gameCell.IsOpenBottom) {
+					if(gameCell.IsOpenBottom) {
 						Shape road = FormRoad();
 						road.Width *= roadWidthMod;
 						road.VerticalAlignment = VerticalAlignment.Bottom;
@@ -162,7 +162,7 @@ namespace taw.game.output {
 						mapCellGrid.SizeChanged += (a, b) => SetRoadSize(road, widthMod: roadWidthMod);
 					}
 
-					if ((gameCell.IsOpenLeft || gameCell.IsOpenRight) &&
+					if((gameCell.IsOpenLeft || gameCell.IsOpenRight) &&
 						(gameCell.IsOpenTop || gameCell.IsOpenBottom)
 						) {
 						Shape road = FormRoad();
@@ -206,7 +206,7 @@ namespace taw.game.output {
 
 			SetShapeStyle(shape, basicCityEvent.city.PlayerId);
 			basicCityEvent.city.Captured += (b) => SetShapeStyle(shape, basicCityEvent.city.PlayerId);
-		
+
 			ResizeCityShape(shape, this.citySizeMod);
 			cityOut.cityGrid.SizeChanged += (b, c) => ResizeCityShape(shape, this.citySizeMod);
 
@@ -267,7 +267,7 @@ namespace taw.game.output {
 
 		//---------------------------------------------- Events - unit ----------------------------------------------
 		void Unit_FirstTick(unit.events.BasicUnitEvent unitEvent) {
-			if (!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
+			if(!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
 				return;
 
 			Grid unitGrid = new Grid();
@@ -318,29 +318,29 @@ namespace taw.game.output {
 		}
 
 		void Unit_Tick(unit.events.BasicUnitEvent unitEvent) {
-			if (!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
+			if(!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
 				return;
 
 			double pixelPerTurnX = cellSize.X / unitEvent.unit.tickPerTurn;
 			double pixelPerTurnY = cellSize.Y / unitEvent.unit.tickPerTurn;
 
 			double length = UnitOutputInfoWPF.shiftX + unitEvent.unit.X * cellSize.X;
-			if (unitEvent.unit.X > unitEvent.unit.NextX)
+			if(unitEvent.unit.X > unitEvent.unit.NextX)
 				length -= unitEvent.unit.currTickOnCell * pixelPerTurnX;
-			else if (unitEvent.unit.X < unitEvent.unit.NextX)
+			else if(unitEvent.unit.X < unitEvent.unit.NextX)
 				length += unitEvent.unit.currTickOnCell * pixelPerTurnX;
 			Canvas.SetLeft(outInfo.grid, length);
 
 			length = UnitOutputInfoWPF.shiftY + unitEvent.unit.Y * cellSize.Y;
-			if (unitEvent.unit.Y > unitEvent.unit.NextY)
+			if(unitEvent.unit.Y > unitEvent.unit.NextY)
 				length -= unitEvent.unit.currTickOnCell * pixelPerTurnY;
-			else if (unitEvent.unit.Y < unitEvent.unit.NextY)
+			else if(unitEvent.unit.Y < unitEvent.unit.NextY)
 				length += unitEvent.unit.currTickOnCell * pixelPerTurnY;
 			Canvas.SetTop(outInfo.grid, length);
 		}
 
 		void Unit_ReachDestination(unit.events.UnitReachDestinationEvent unitEvent) {
-			if (!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
+			if(!(unitEvent.unit.OutputInfo is UnitOutputInfoWPF outInfo))
 				return;
 			mainCanvas.Children.Remove(outInfo.grid);
 		}
@@ -349,10 +349,10 @@ namespace taw.game.output {
 		Tuple<double, double> GetSizeWithMod(double mod, bool makeSquare) {
 			double citySizeX = cellSize.X * mod,
 			citySizeY = cellSize.Y * mod;
-			if (makeSquare) {
-				if (citySizeX > citySizeY)
+			if(makeSquare) {
+				if(citySizeX > citySizeY)
 					citySizeX = citySizeY;
-				else if (citySizeY > citySizeX)
+				else if(citySizeY > citySizeX)
 					citySizeY = citySizeX;
 			}
 
